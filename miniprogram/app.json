@@ -2,6 +2,8 @@
   "pages": [
     "pages/index/index",
     "pages/activity/activity",
+    "pages/activities/list",
+    "pages/activities/detail",
     "pages/create/create",
     "pages/messages/messages",
     "pages/profile/profile",

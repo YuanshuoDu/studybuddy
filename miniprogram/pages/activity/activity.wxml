@@ -8,8 +8,8 @@
   </block>
 
   <block wx:else>
-    <view class="activity__cover" wx:if="{{activity.cover}}">
-      <image src="{{activity.cover}}" mode="aspectFill" />
+    <view class="activity__cover" wx:if="{{activity.coverUrl}}">
+      <image src="{{activity.coverUrl}}" mode="aspectFill" />
     </view>
 
     <view class="activity__card">
@@ -20,23 +20,23 @@
         <text class="activity__icon">⏰</text>
         <view class="activity__row-text">
           <view>{{timeRange}}</view>
-          <view class="activity__row-sub">报名截止 {{deadlineText}}</view>
+          <view class="activity__row-sub">{{deadlineText}}</view>
         </view>
       </view>
 
       <view class="activity__row">
         <text class="activity__icon">📍</text>
         <view class="activity__row-text">
-          <view>{{activity.location.name}}</view>
-          <view class="activity__row-sub">{{activity.location.address}}</view>
+          <view>{{activity.locationName}}</view>
+          <view class="activity__row-sub">{{activity.locationAddr}}</view>
         </view>
       </view>
 
       <view class="activity__row">
         <text class="activity__icon">👥</text>
         <view class="activity__row-text">
-          <view>{{activity.currentParticipants}} / {{activity.maxParticipants}} 人</view>
-          <view class="activity__row-sub">{{activity.fee > 0 ? (activity.fee / 100) + ' 元/人' : '免费'}}</view>
+          <view>{{activity.currentCount}} / {{activity.maxParticipants}} 人</view>
+          <view class="activity__row-sub">{{statusLabel}}</view>
         </view>
       </view>
     </view>
@@ -48,35 +48,20 @@
         <view class="activity__tag" wx:for="{{activity.tags}}" wx:key="*this">#{{item}}</view>
       </view>
     </view>
-
-    <view class="activity__card">
-      <view class="activity__section-title">组织者</view>
-      <view class="activity__organizer">
-        <view class="activity__organizer-avatar">{{activity.organizer.nickname[0]}}</view>
-        <view class="activity__organizer-info">
-          <view class="activity__organizer-name">{{activity.organizer.nickname}}</view>
-          <view class="activity__organizer-sub">已发布 {{activity.organizer.id}}</view>
-        </view>
-      </view>
-    </view>
   </block>
 
   <!-- 底部操作栏 -->
   <view class="activity__footer">
     <view class="activity__footer-info">
-      <view class="activity__footer-price">
-        <text wx:if="{{activity.fee > 0}}" class="activity__footer-amount">¥{{activity.fee / 100}}</text>
-        <text wx:else class="activity__footer-free">免费</text>
-        <text class="activity__footer-unit">/人</text>
-      </view>
+      <view class="activity__footer-status">{{statusLabel}}</view>
     </view>
     <button
       class="btn-primary activity__footer-btn"
       bindtap="onSignup"
       loading="{{submitting}}"
-      disabled="{{submitting || activity.signedUp || activity.status !== 'recruiting'}}"
+      disabled="{{submitting || activity.isJoined || activity.status !== 'RECRUITING'}}"
     >
-      {{activity.signedUp ? '已报名' : activity.status !== 'recruiting' ? '已截止' : '立即报名'}}
+      {{activity.isJoined ? '已报名' : activity.status !== 'RECRUITING' ? '已截止' : '立即报名'}}
     </button>
   </view>
 </view>
