@@ -1,0 +1,55 @@
+.alist {
+  min-height: 100vh;
+  padding: 16rpx 32rpx 32rpx;
+  background: var(--color-bg);
+}
+
+.alist__chips {
+  white-space: nowrap;
+  padding: 8rpx 0 4rpx;
+}
+
+.alist__chips--sub {
+  padding: 0 0 16rpx;
+  border-bottom: 1rpx solid var(--color-divider);
+  margin-bottom: 16rpx;
+}
+
+.alist__chip {
+  display: inline-block;
+  padding: 12rpx 28rpx;
+  margin-right: 16rpx;
+  font-size: 26rpx;
+  color: var(--color-text-secondary);
+  background: var(--color-bg-card);
+  border-radius: 999rpx;
+  border: 1rpx solid var(--color-border);
+  line-height: 1.2;
+}
+
+.alist__chip--sub {
+  padding: 8rpx 22rpx;
+  font-size: 24rpx;
+}
+
+.alist__chip.is-active {
+  color: #fff;
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  font-weight: 500;
+}
+
+.alist__list {
+  padding-bottom: 32rpx;
+}
+
+.alist__empty {
+  padding: 96rpx 0;
+}
+
+.alist__footer {
+  text-align: center;
+  font-size: 24rpx;
+  color: var(--color-text-placeholder);
+  padding: 32rpx 0;
+}

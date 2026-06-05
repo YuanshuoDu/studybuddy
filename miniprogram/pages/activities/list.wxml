@@ -1,0 +1,54 @@
+<view class="alist">
+  <!-- 类型筛选 -->
+  <scroll-view scroll-x class="alist__chips" enable-flex>
+    <view
+      wx:for="{{typeFilters}}"
+      wx:key="value"
+      class="alist__chip {{activeType === item.value ? 'is-active' : ''}}"
+      data-value="{{item.value}}"
+      bindtap="onTypeFilter"
+    >
+      {{item.label}}
+    </view>
+  </scroll-view>
+
+  <!-- 状态筛选 -->
+  <scroll-view scroll-x class="alist__chips alist__chips--sub" enable-flex>
+    <view
+      wx:for="{{statusFilters}}"
+      wx:key="value"
+      class="alist__chip alist__chip--sub {{activeStatus === item.value ? 'is-active' : ''}}"
+      data-value="{{item.value}}"
+      bindtap="onStatusFilter"
+    >
+      {{item.label}}
+    </view>
+  </scroll-view>
+
+  <!-- 列表 -->
+  <view class="alist__list">
+    <loading-skeleton wx:if="{{loading && isFirstLoad}}" count="{{4}}" />
+
+    <view wx:elif="{{!loading && !list.length}}" class="alist__empty">
+      <empty-state
+        title="暂无活动"
+        desc="试试切换类型或下拉刷新"
+        icon="🔍"
+        actionText="重新加载"
+        bind:action="onRetry"
+      />
+    </view>
+
+    <block wx:else>
+      <activity-card
+        wx:for="{{list}}"
+        wx:key="id"
+        activity="{{item}}"
+        bind:tap="onCardTap"
+        bind:signup="onSignupTap"
+      />
+      <view class="alist__footer" wx:if="{{!hasMore && list.length}}">— 没有更多了 —</view>
+      <view class="alist__footer" wx:elif="{{loadingMore}}">加载中…</view>
+    </block>
+  </view>
+</view>
