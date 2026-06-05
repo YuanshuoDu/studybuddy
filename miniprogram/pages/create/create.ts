@@ -11,15 +11,9 @@ import { chooseLocation } from '../../utils/location';
 import { formatDateTime } from '../../utils/date';
 import { ApiError } from '../../utils/error';
 import type { ActivityType } from '../../types/activity';
+import { ACTIVITY_TYPE_LABEL } from '../../types/activity';
 
-const TYPE_LABEL: Record<ActivityType, string> = {
-  study: '自习',
-  group_buy: '拼单',
-  sport: '运动',
-  meal: '约饭',
-  project: '项目',
-  other: '其他',
-};
+const TYPE_LABEL = ACTIVITY_TYPE_LABEL;
 
 interface Form {
   type: ActivityType | '';
@@ -68,12 +62,11 @@ Page<CreateData, CreateCustom>({
     ],
     currentStep: 0,
     typeOptions: [
-      { id: 'study', label: '自习', icon: '📚' },
-      { id: 'group_buy', label: '拼单', icon: '🛒' },
-      { id: 'sport', label: '运动', icon: '🏃' },
-      { id: 'meal', label: '约饭', icon: '🍜' },
-      { id: 'project', label: '项目', icon: '💻' },
-      { id: 'other', label: '其他', icon: '✨' },
+      { id: 'STUDY', label: '自习', icon: '📚' },
+      { id: 'BOARD_GAME', label: '桌游', icon: '🎲' },
+      { id: 'SPORTS', label: '运动', icon: '🏃' },
+      { id: 'ONLINE_GAME', label: '开黑', icon: '🎮' },
+      { id: 'OTHER', label: '其他', icon: '✨' },
     ],
     form: {
       type: '',

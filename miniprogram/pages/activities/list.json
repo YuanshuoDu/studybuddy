@@ -1,0 +1,11 @@
+{
+  "navigationBarTitleText": "活动列表",
+  "navigationBarBackgroundColor": "#ffffff",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "light",
+  "usingComponents": {
+    "activity-card": "/components/activity-card/index",
+    "empty-state": "/components/empty-state/index",
+    "loading-skeleton": "/components/loading-skeleton/index"
+  }
+}
