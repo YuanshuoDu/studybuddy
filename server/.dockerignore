@@ -1,0 +1,43 @@
+# Exclude everything not needed at runtime / build time
+# Keep prune small — runtime image is < 200MB target.
+
+# Local state
+.git
+.gitignore
+.github
+
+# Editor / OS
+.vscode
+.idea
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs
+
+# Tests + dev artifacts
+tests
+coverage
+.nyc_output
+**/*.test.ts
+**/*.spec.ts
+
+# Source maps (kept in dist, but skip duplicate copies)
+**/*.map
+
+# Build output (will be re-produced inside image)
+dist
+
+# Env (don't bake secrets into the image; pass via env-file / compose)
+.env
+.env.*
+!.env.example
+
+# Prisma local artifacts
+prisma/*.db
+prisma/*.db-journal
+
+# Docs (not needed in image)
+README.md
+docs
