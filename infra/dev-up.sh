@@ -1,49 +1,105 @@
 #!/usr/bin/env bash
 # dev-up.sh — 本地开发环境一键启动
-# 启动 PostgreSQL（docker）+ 等待就绪 + 打印连接信息
+# 启动 PostgreSQL + Redis（docker），等待就绪，打印连接信息
+# 注意：只启动数据依赖；后端 app 用 `cd server && pnpm dev` 启。
 set -euo pipefail
+
+cd "$(dirname "$0")/.."  # → repo root
+REPO_ROOT="$(pwd)"
 
 echo "🚀 Pairhub 本地环境启动..."
 
-# 检查 docker
+# --- 检查 docker ---
 if ! command -v docker >/dev/null 2>&1; then
   echo "❌ docker 未安装，请先安装 Docker"
   exit 1
 fi
 
-# 启动 postgres 容器
-CONTAINER_NAME=pairhub-pg
-if ! docker ps -a --format '{{.Names}}' | grep -q "^${CONTAINER_NAME}$"; then
-  echo "📦 创建 postgres 容器..."
-  docker run -d \
-    --name ${CONTAINER_NAME} \
-    -e POSTGRES_USER=pairhub \
-    -e POSTGRES_PASSWORD=pairhub \
-    -e POSTGRES_DB=pairhub \
-    -p 5432:5432 \
-    -v pairhub_pgdata:/var/lib/postgresql/data \
-    postgres:16
-else
-  echo "📦 postgres 容器已存在，启动中..."
-  docker start ${CONTAINER_NAME}
-fi
+# --- 优先用 docker compose (一个命令起 PG + Redis) ---
+if docker compose version >/dev/null 2>&1; then
+  echo "📦 使用 docker compose 启动 postgres + redis ..."
+  docker compose -f "${REPO_ROOT}/infra/docker-compose.yml" up -d postgres redis
 
-# 等待就绪
-echo "⏳ 等待 PostgreSQL 就绪..."
-for i in {1..30}; do
-  if docker exec ${CONTAINER_NAME} pg_isready -U pairhub >/dev/null 2>&1; then
-    echo "✅ PostgreSQL 已就绪"
-    break
+  echo "⏳ 等待 PostgreSQL 就绪..."
+  for i in {1..30}; do
+    if docker exec pairhub-pg pg_isready -U pairhub >/dev/null 2>&1; then
+      echo "✅ PostgreSQL 已就绪"
+      break
+    fi
+    sleep 1
+  done
+
+  echo "⏳ 等待 Redis 就绪..."
+  for i in {1..30}; do
+    if docker exec pairhub-redis redis-cli ping >/dev/null 2>&1; then
+      echo "✅ Redis 已就绪"
+      break
+    fi
+    sleep 1
+  done
+else
+  # --- 退化路径：老版 docker-compose ---
+  echo "📦 docker compose plugin 未找到，用 docker run 启动 ..."
+  CONTAINER_PG=pairhub-pg
+  if ! docker ps -a --format '{{.Names}}' | grep -q "^${CONTAINER_PG}$"; then
+    docker run -d \
+      --name ${CONTAINER_PG} \
+      -e POSTGRES_USER=pairhub \
+      -e POSTGRES_PASSWORD=pairhub \
+      -e POSTGRES_DB=pairhub \
+      -p 5432:5432 \
+      -v pairhub_pgdata:/var/lib/postgresql/data \
+      postgres:16
+  else
+    docker start ${CONTAINER_PG}
   fi
-  sleep 1
-done
+
+  CONTAINER_REDIS=pairhub-redis
+  if ! docker ps -a --format '{{.Names}}' | grep -q "^${CONTAINER_REDIS}$"; then
+    docker run -d \
+      --name ${CONTAINER_REDIS} \
+      -p 6379:6379 \
+      redis:7
+  else
+    docker start ${CONTAINER_REDIS}
+  fi
+
+  echo "⏳ 等待 PostgreSQL 就绪..."
+  for i in {1..30}; do
+    if docker exec ${CONTAINER_PG} pg_isready -U pairhub >/dev/null 2>&1; then
+      echo "✅ PostgreSQL 已就绪"
+      break
+    fi
+    sleep 1
+  done
+
+  echo "⏳ 等待 Redis 就绪..."
+  for i in {1..30}; do
+    if docker exec ${CONTAINER_REDIS} redis-cli ping >/dev/null 2>&1; then
+      echo "✅ Redis 已就绪"
+      break
+    fi
+    sleep 1
+  done
+fi
 
 cat <<EOF
 
 🎉 本地环境就绪：
-  DATABASE_URL=postgres://pairhub:pairhub@localhost:5432/pairhub
+  DATABASE_URL=postgresql://pairhub:pairhub@localhost:5432/pairhub
+  REDIS_URL=redis://localhost:6379
 
 下一步：
-  cd server && pnpm install && pnpm dev
+  cd server
+  pnpm install
+  cp .env.example .env          # 记得改 JWT_SECRET
+  pnpm prisma:generate
+  pnpm prisma:migrate           # 首次需要给 migration 起名（如 init）
+  pnpm prisma:seed              # 可选：demo 数据
+  pnpm dev                      # http://localhost:3000
+
+验证：
+  curl http://localhost:3000/health
+  curl http://localhost:3000/ready
 
 EOF

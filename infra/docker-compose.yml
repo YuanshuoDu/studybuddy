@@ -1,0 +1,70 @@
+# docker-compose.yml — 本地一键起 (postgres + redis + app)
+# 用法：
+#   docker compose -f infra/docker-compose.yml up -d                    # 启动全部
+#   docker compose -f infra/docker-compose.yml up -d postgres redis     # 只起数据依赖
+#   docker compose -f infra/docker-compose.yml logs -f app              # 跟踪 app 日志
+#   docker compose -f infra/docker-compose.yml down                     # 停止（保留数据卷）
+#   docker compose -f infra/docker-compose.yml down -v                  # 停止 + 删除数据卷
+#
+# 生产部署请使用 CI 构建的镜像 + 反向代理（不在本文件内覆盖）。
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: pairhub-pg
+    environment:
+      POSTGRES_USER: pairhub
+      POSTGRES_PASSWORD: pairhub
+      POSTGRES_DB: pairhub
+    ports:
+      - "5432:5432"
+    volumes:
+      - pairhub_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pairhub"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: pairhub-redis
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - pairhub_redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+  app:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: pairhub-server
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      HOST: 0.0.0.0
+      LOG_LEVEL: info
+      DATABASE_URL: postgresql://pairhub:pairhub@postgres:5432/pairhub
+      REDIS_URL: redis://redis:6379
+      # Pass via .env at repo root, or your shell.
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET must be set (>= 32 chars). Generate with: openssl rand -base64 48}
+      CORS_ORIGIN: ${CORS_ORIGIN:-*}
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
+volumes:
+  pairhub_pgdata:
+  pairhub_redisdata:

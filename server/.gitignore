@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build
+dist/
+build/
+*.tsbuildinfo
+
+# Test
+coverage/
+.nyc_output/
+*.lcov
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-error.log*
+
+# Prisma local artifacts
+prisma/*.db
+prisma/*.db-journal
+
+# OS
+Thumbs.db
