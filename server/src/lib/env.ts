@@ -35,6 +35,17 @@ const envSchema = z.object({
   CORS_ORIGIN: z.string().default('*'),
   RATE_LIMIT_MAX: z.coerce.number().int().min(1).max(10_000).default(100),
   RATE_LIMIT_LOGIN_MAX: z.coerce.number().int().min(1).max(1_000).default(10),
+
+  // ---- Auth providers (optional in dev/test; enforced at route level) ----
+  WX_APPID: z.string().optional(),
+  WX_SECRET: z.string().optional(),
+  APPLE_CLIENT_ID: z.string().optional(),
+  APPLE_AUDIENCE: z.string().optional(),
+  GOOGLE_CLIENT_ID: z.string().optional(),
+
+  // ---- JWT lifetimes (M2 spec: access 15m, refresh 30d) ----
+  JWT_ACCESS_TTL: z.string().default('15m'),
+  JWT_REFRESH_TTL: z.string().default('30d'),
 });
 
 const parsed = envSchema.safeParse(process.env);

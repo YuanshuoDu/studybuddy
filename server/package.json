@@ -41,7 +41,9 @@
     "fastify": "^4.28.1",
     "fastify-plugin": "^4.5.1",
     "fastify-print-routes": "^1.0.1",
+    "google-auth-library": "^9.14.2",
     "ioredis": "^5.4.1",
+    "jose": "^5.9.6",
     "pino": "^9.4.0",
     "pino-pretty": "^11.2.2",
     "zod": "^3.23.8"
@@ -53,6 +55,7 @@
     "@vitest/coverage-v8": "^2.1.2",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.1.0",
+    "nock": "^14.0.0",
     "pino-pretty": "^11.2.2",
     "prettier": "^3.3.3",
     "prisma": "^5.20.0",

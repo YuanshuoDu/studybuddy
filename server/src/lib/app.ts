@@ -10,6 +10,13 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
 import Fastify, { type FastifyInstance } from 'fastify';
+// fastify-print-routes ships its types under `types/index.d.ts` but its
+// `package.json#exports` only re-exports the JS, so the TS resolver can't
+// pick up the .d.ts under `moduleResolution: "Bundler"`.  The plugin is
+// dev-only (only registered when NODE_ENV === 'development') so we type
+// it as `unknown` and trust its `app.register(...)` signature.
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore — see comment above
 import fastifyPrintRoutes from 'fastify-print-routes';
 import cookie from '@fastify/cookie';
 import helmet from '@fastify/helmet';
@@ -27,6 +34,7 @@ import errorHandlerPlugin from '@/plugins/error-handler.js';
 import rateLimitPlugin from '@/plugins/rate-limit.js';
 
 import { registerHealthModule } from '@/modules/health/index.js';
+import { registerAuthModule } from '@/modules/auth/index.js';
 
 export interface BuildAppOptions {
   /** Skip route printing (used in tests). */
@@ -65,6 +73,7 @@ export async function buildApp(options: BuildAppOptions = {}): Promise<FastifyIn
 
   // Routes
   await registerHealthModule(app);
+  await registerAuthModule(app);
 
   // Dev-only: pretty-print registered routes
   if (env.NODE_ENV === 'development' && !options.silent) {

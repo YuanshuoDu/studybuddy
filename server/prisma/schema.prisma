@@ -21,10 +21,26 @@ enum UserStatus {
   BANNED
 }
 
+/// Login provider. A user is linked to the platform they first logged in
+/// with; additional providers (e.g. phone + Apple) can be linked later via
+/// the multi-platform merge flow (see docs/architecture-v1.0.md §5.1).
+enum AuthProvider {
+  WECHAT
+  APPLE
+  GOOGLE
+  PHONE
+}
+
 model User {
   id        String     @id @default(cuid())
-  openid    String     @unique
-  unionid   String?    @unique
+  // ----- multi-platform identity (ADR-0003) -----
+  // `openid` is the WeChat openid; each platform id is unique on its own.
+  openid      String?       @unique
+  unionid     String?       @unique
+  appleSub    String?       @unique @map("apple_sub")
+  googleSub   String?       @unique @map("google_sub")
+  primaryProvider AuthProvider @default(WECHAT) @map("primary_provider")
+
   nickname  String
   avatar    String?
   school    String?
@@ -42,6 +58,7 @@ model User {
 
   @@index([school, grade])
   @@index([status])
+  @@index([phone])
   @@map("users")
 }
 

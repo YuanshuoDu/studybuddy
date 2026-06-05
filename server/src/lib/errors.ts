@@ -33,8 +33,8 @@ export class ValidationError extends AppError {
 }
 
 export class UnauthorizedError extends AppError {
-  constructor(message = '请先登录') {
-    super(401, 'UNAUTHORIZED', message);
+  constructor(message = '请先登录', code = 'UNAUTHORIZED') {
+    super(401, code, message);
   }
 }
 

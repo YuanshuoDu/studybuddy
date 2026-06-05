@@ -13,18 +13,18 @@ import { buildApp } from '@/lib/app.js';
 
 // Mock the ping helpers so we don't need a live DB / Redis.
 vi.mock('@/lib/prisma.js', async () => {
-  const actual = await vi.importActual<typeof import('@/lib/prisma.js')>('@/lib/prisma.js');
+  const actual = await vi.importActual<unknown>('@/lib/prisma.js');
   return {
-    ...actual,
+    ...(actual as Record<string, unknown>),
     pingPrisma: vi.fn(),
     closePrisma: vi.fn(),
   };
 });
 
 vi.mock('@/lib/redis.js', async () => {
-  const actual = await vi.importActual<typeof import('@/lib/redis.js')>('@/lib/redis.js');
+  const actual = await vi.importActual<unknown>('@/lib/redis.js');
   return {
-    ...actual,
+    ...(actual as Record<string, unknown>),
     pingRedis: vi.fn(),
     closeRedis: vi.fn(),
   };
