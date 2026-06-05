@@ -46,12 +46,11 @@
   color: #fff;
   background: var(--color-primary);
 }
-.ac__type--study { background: #4f8cff; }
-.ac__type--group_buy { background: #ff8a3d; }
-.ac__type--sport { background: #18bc6c; }
-.ac__type--meal { background: #f5a623; }
-.ac__type--project { background: #9b59b6; }
-.ac__type--other { background: #8a8a8a; }
+.ac__type--STUDY { background: #4f8cff; }
+.ac__type--SPORTS { background: #18bc6c; }
+.ac__type--BOARD_GAME { background: #f5a623; }
+.ac__type--ONLINE_GAME { background: #9b59b6; }
+.ac__type--OTHER { background: #8a8a8a; }
 
 .ac__signed {
   font-size: 20rpx;
@@ -140,4 +139,10 @@
 
 .ac__action.is-signed {
   background: var(--color-text-placeholder);
+}
+
+.ac__action.is-disabled {
+  background: var(--color-text-placeholder);
+  color: var(--color-text-inverse);
+  opacity: 0.7;
 }
