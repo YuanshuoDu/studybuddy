@@ -1,5 +1,12 @@
-version: '3.9'
-
+# docker-compose.yml — 本地一键起 (postgres + redis + app)
+# 用法：
+#   docker compose -f infra/docker-compose.yml up -d                    # 启动全部
+#   docker compose -f infra/docker-compose.yml up -d postgres redis     # 只起数据依赖
+#   docker compose -f infra/docker-compose.yml logs -f app              # 跟踪 app 日志
+#   docker compose -f infra/docker-compose.yml down                     # 停止（保留数据卷）
+#   docker compose -f infra/docker-compose.yml down -v                  # 停止 + 删除数据卷
+#
+# 生产部署请使用 CI 构建的镜像 + 反向代理（不在本文件内覆盖）。
 services:
   postgres:
     image: postgres:16-alpine
@@ -17,19 +24,24 @@ services:
       interval: 5s
       timeout: 3s
       retries: 5
+    restart: unless-stopped
 
   redis:
     image: redis:7-alpine
     container_name: pairhub-redis
+    command: ["redis-server", "--appendonly", "yes"]
     ports:
       - "6379:6379"
+    volumes:
+      - pairhub_redisdata:/data
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
       timeout: 3s
       retries: 5
+    restart: unless-stopped
 
-  server:
+  app:
     build:
       context: ./server
       dockerfile: Dockerfile
@@ -42,14 +54,17 @@ services:
     environment:
       NODE_ENV: production
       PORT: 3000
+      HOST: 0.0.0.0
+      LOG_LEVEL: info
       DATABASE_URL: postgresql://pairhub:pairhub@postgres:5432/pairhub
       REDIS_URL: redis://redis:6379
-      JWT_SECRET: ${JWT_SECRET:-change-me-in-production-min-32-chars}
-      WX_APPID: ${WX_APPID:-}
-      WX_SECRET: ${WX_SECRET:-}
+      # Pass via .env at repo root, or your shell.
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET must be set (>= 32 chars). Generate with: openssl rand -base64 48}
+      CORS_ORIGIN: ${CORS_ORIGIN:-*}
     ports:
       - "3000:3000"
     restart: unless-stopped
 
 volumes:
   pairhub_pgdata:
+  pairhub_redisdata:

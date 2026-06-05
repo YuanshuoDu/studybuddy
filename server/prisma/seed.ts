@@ -1,13 +1,17 @@
 /**
- * Seed data for local dev
+ * Seed data for local dev.
  * Run: pnpm prisma:seed
+ *
+ * Idempotent — uses upsert with stable IDs, safe to re-run.
  */
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-async function main() {
-  const user1 = await prisma.user.upsert({
+const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+
+async function main(): Promise<void> {
+  const alice = await prisma.user.upsert({
     where: { openid: 'demo-openid-alice' },
     update: {},
     create: {
@@ -21,7 +25,7 @@ async function main() {
     },
   });
 
-  const user2 = await prisma.user.upsert({
+  const bob = await prisma.user.upsert({
     where: { openid: 'demo-openid-bob' },
     update: {},
     create: {
@@ -34,15 +38,31 @@ async function main() {
     },
   });
 
-  const now = new Date();
-  const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
-
-  const activity = await prisma.activity.upsert({
-    where: { id: 'demo-activity-1' },
+  const carol = await prisma.user.upsert({
+    where: { openid: 'demo-openid-carol' },
     update: {},
     create: {
-      id: 'demo-activity-1',
-      creatorId: user1.id,
+      openid: 'demo-openid-carol',
+      nickname: 'Carol',
+      avatar: 'https://i.pravatar.cc/150?img=3',
+      school: 'NYU',
+      major: 'Design',
+      grade: '2027',
+      bio: '桌游搭子 🎲',
+    },
+  });
+
+  const now = new Date();
+  const tomorrow = new Date(now.getTime() + ONE_DAY_MS);
+  const dayAfter = new Date(now.getTime() + 2 * ONE_DAY_MS);
+
+  // Sports demo activity
+  const sports = await prisma.activity.upsert({
+    where: { id: 'demo-activity-sports' },
+    update: {},
+    create: {
+      id: 'demo-activity-sports',
+      creatorId: alice.id,
       type: 'SPORTS',
       title: '周末羽毛球 3v3 (新手友好)',
       description: '求 3-4 个搭子，球馆空调够冷，自带球拍。',
@@ -60,27 +80,57 @@ async function main() {
     },
   });
 
-  await prisma.signup.upsert({
-    where: { activityId_userId: { activityId: activity.id, userId: user1.id } },
+  // Board game demo activity
+  const boardGame = await prisma.activity.upsert({
+    where: { id: 'demo-activity-boardgame' },
     update: {},
-    create: { activityId: activity.id, userId: user1.id, status: 'APPROVED' },
-  });
-  await prisma.signup.upsert({
-    where: { activityId_userId: { activityId: activity.id, userId: user2.id } },
-    update: {},
-    create: { activityId: activity.id, userId: user2.id, status: 'APPROVED' },
+    create: {
+      id: 'demo-activity-boardgame',
+      creatorId: carol.id,
+      type: 'BOARD_GAME',
+      title: '狼人杀夜场（会带新人局）',
+      description: '已经凑齐 4 人，再来 2-4 个。地点在静安寺附近的桌游吧。',
+      locationName: '静安寺桌游吧',
+      locationAddr: '上海市静安区南京西路 1788 号',
+      locationLat: 31.2236,
+      locationLng: 121.4456,
+      startTime: dayAfter,
+      endTime: new Date(dayAfter.getTime() + 4 * 60 * 60 * 1000),
+      maxParticipants: 10,
+      currentCount: 4,
+      tags: ['狼人杀', '桌游'],
+      status: 'RECRUITING',
+      contentCheck: 'PASS',
+    },
   });
 
-  // eslint-disable-next-line no-console
-  console.log('✅ Seed completed');
-  // eslint-disable-next-line no-console
-  console.log({ users: [user1.id, user2.id], activity: activity.id });
+  // Signups — pre-populated so the demo looks alive.
+  const signups = [
+    { activityId: sports.id, userId: alice.id, status: 'APPROVED' as const },
+    { activityId: sports.id, userId: bob.id, status: 'APPROVED' as const },
+    { activityId: boardGame.id, userId: carol.id, status: 'APPROVED' as const },
+    { activityId: boardGame.id, userId: bob.id, status: 'APPROVED' as const },
+  ];
+  for (const s of signups) {
+    await prisma.signup.upsert({
+      where: { activityId_userId: { activityId: s.activityId, userId: s.userId } },
+      update: {},
+      create: s,
+    });
+  }
+
+  console.info('✅ Seed completed');
+  console.info({
+    users: [alice.id, bob.id, carol.id],
+    activities: [sports.id, boardGame.id],
+  });
 }
 
 main()
   .catch((e) => {
-    // eslint-disable-next-line no-console
     console.error(e);
     process.exit(1);
   })
-  .finally(() => prisma.$disconnect());
+  .finally(() => {
+    void prisma.$disconnect();
+  });
