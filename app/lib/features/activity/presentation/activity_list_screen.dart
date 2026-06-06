@@ -89,7 +89,7 @@ class _ActivityListScreenState extends ConsumerState<ActivityListScreen> {
           Expanded(
             child: RefreshIndicator(
               onRefresh: () =>
-                  ref.read(activityListProvider(0)).notifier).refresh(),
+                  ref.read(activityListProvider(0).notifier).refresh(),
               child: _buildList(context, ref, async, query),
             ),
           ),
