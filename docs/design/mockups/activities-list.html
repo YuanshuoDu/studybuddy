@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>StudyBuddy · 活动列表 (Mockup)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --color-primary: #3B82F6;
+  --color-primary-container: #DBEAFE;
+  --color-on-primary: #FFFFFF;
+  --color-primary-active: #2563EB;
+  --color-success: #22C55E;
+  --color-success-bg: #DCFCE7;
+  --color-warning: #F59E0B;
+  --color-warning-bg: #FEF3C7;
+  --color-error: #EF4444;
+  --color-error-bg: #FEE2E2;
+  --color-info: #3B82F6;
+  --color-bg: #F8FAFC;
+  --color-surface: #FFFFFF;
+  --color-surface-variant: #F1F5F9;
+  --color-bg-card: #FFFFFF;
+  --color-divider: #E2E8F0;
+  --color-border: #CBD5E1;
+  --color-text-primary: #0F172A;
+  --color-text-secondary: #475569;
+  --color-text-placeholder: #94A3B8;
+  --color-on-surface-variant: #475569;
+  --color-activity-study: #3B82F6;
+  --color-activity-sport: #22C55E;
+  --color-activity-boardgame: #A855F7;
+  --color-activity-online-game: #EF4444;
+  --color-activity-other: #64748B;
+  --font-display-m: 18px;
+  --font-headline-l: 22px;
+  --font-title-l: 18px;
+  --font-title-m: 16px;
+  --font-body-l: 15px;
+  --font-body-m: 14px;
+  --font-body-s: 12px;
+  --font-label-l: 14px;
+  --font-label-m: 12px;
+  --line-snug: 1.30;
+  --line-cjk-body: 1.55;
+  --space-2xs: 2px;
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 24px;
+  --space-2xl: 32px;
+  --space-3xl: 48px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-pill: 999px;
+  --elevation-soft: 0 1px 2px rgba(0,0,0,0.04);
+  --elevation-medium: 0 2px 8px rgba(0,0,0,0.06);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text-primary);
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif;
+  font-size: var(--font-body-m);
+  line-height: var(--line-cjk-body);
+  padding: var(--space-3xl);
+  display: flex;
+  justify-content: center;
+}
+.frame {
+  background: var(--color-surface);
+  border-radius: 32px;
+  box-shadow: var(--elevation-medium);
+  width: 380px;
+  min-height: 700px;
+  overflow: hidden;
+  position: relative;
+}
+.toolbar {
+  background: var(--color-surface);
+  padding: var(--space-md) var(--space-lg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--color-divider);
+  font-size: var(--font-title-l);
+  font-weight: 600;
+}
+.toolbar .badge {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--font-label-m);
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+}
+.chips {
+  padding: var(--space-md) var(--space-lg) 0;
+  display: flex;
+  gap: var(--space-sm);
+  overflow-x: auto;
+  white-space: nowrap;
+}
+.chip {
+  padding: 6px 14px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  font-size: var(--font-body-s);
+  color: var(--color-text-secondary);
+  flex-shrink: 0;
+}
+.chip.active {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  border-color: var(--color-primary);
+  font-weight: 500;
+}
+.chip.active.study { background: var(--color-activity-study); border-color: var(--color-activity-study); }
+.chip.active.sport { background: var(--color-activity-sport); border-color: var(--color-activity-sport); }
+.chip.sub {
+  margin-top: var(--space-sm);
+  padding: 4px 10px;
+  font-size: 11px;
+}
+.list {
+  padding: var(--space-md) var(--space-lg) var(--space-2xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  box-shadow: var(--elevation-soft);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+.card-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+.type-badge {
+  padding: 2px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-on-primary);
+}
+.type-badge.study    { background: var(--color-activity-study); }
+.type-badge.sport    { background: var(--color-activity-sport); }
+.type-badge.board    { background: var(--color-activity-boardgame); }
+.type-badge.online   { background: var(--color-activity-online-game); }
+.type-badge.other    { background: var(--color-activity-other); }
+.status-badge {
+  padding: 2px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 11px;
+  font-weight: 600;
+}
+.status-badge.recruiting { background: var(--color-success-bg); color: var(--color-success); }
+.status-badge.full       { background: var(--color-warning-bg); color: var(--color-warning); }
+.status-badge.started    { background: var(--color-info); color: var(--color-on-primary); }
+.status-badge.ended      { background: var(--color-surface-variant); color: var(--color-on-surface-variant); }
+.status-badge.canceled   { background: var(--color-error-bg); color: var(--color-error); }
+.count {
+  margin-left: auto;
+  font-size: var(--font-body-s);
+  color: var(--color-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+.title {
+  font-size: var(--font-title-l);
+  font-weight: 600;
+  line-height: var(--line-snug);
+  color: var(--color-text-primary);
+}
+.meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--font-body-s);
+  color: var(--color-text-secondary);
+}
+.meta svg {
+  flex-shrink: 0;
+  color: var(--color-on-surface-variant);
+}
+.signup-btn {
+  align-self: stretch;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  border: none;
+  padding: 10px;
+  border-radius: var(--radius-pill);
+  font-size: var(--font-label-l);
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: var(--space-xs);
+  transition: background var(--motion-duration-fast, 120ms);
+}
+.signup-btn:active { background: var(--color-primary-active); }
+.signup-btn.joined { background: var(--color-primary-container); color: var(--color-primary); }
+.signup-btn.full   { background: var(--color-text-placeholder); cursor: not-allowed; }
+.caption {
+  margin-top: var(--space-xl);
+  padding: var(--space-md) var(--space-lg);
+  font-size: var(--font-label-m);
+  color: var(--color-text-placeholder);
+  border-top: 1px solid var(--color-divider);
+  background: var(--color-bg);
+  text-align: center;
+}
+</style>
+</head>
+<body>
+<div class="frame">
+  <div class="toolbar">StudyBuddy <span class="badge">3</span></div>
+
+  <div class="chips">
+    <span class="chip">全部</span>
+    <span class="chip active study">自习</span>
+    <span class="chip">运动</span>
+    <span class="chip">桌游</span>
+    <span class="chip">开黑</span>
+    <span class="chip">其他</span>
+  </div>
+  <div class="chips">
+    <span class="chip sub">全部</span>
+    <span class="chip sub active">招募中</span>
+    <span class="chip sub">已满员</span>
+    <span class="chip sub">进行中</span>
+    <span class="chip sub">已结束</span>
+  </div>
+
+  <div class="list">
+    <div class="card">
+      <div class="card-head">
+        <span class="type-badge study">自习</span>
+        <span class="status-badge recruiting">招募中</span>
+        <span class="count">3 / 6</span>
+      </div>
+      <div class="title">周六晚中央图书馆自习室相约</div>
+      <div class="meta">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        06-10 19:00 ~ 22:00
+      </div>
+      <div class="meta">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Central Library, Room 3F-08
+      </div>
+      <button class="signup-btn">立即报名</button>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <span class="type-badge sport">运动</span>
+        <span class="status-badge full">已满员</span>
+        <span class="count">8 / 8</span>
+      </div>
+      <div class="title">周日早晨公园慢跑 5km</div>
+      <div class="meta">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        06-11 07:00 ~ 08:30
+      </div>
+      <div class="meta">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Riverside Park (North gate)
+      </div>
+      <button class="signup-btn full">已满员</button>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <span class="type-badge board">桌游</span>
+        <span class="status-badge started">进行中</span>
+        <span class="count">5 / 6</span>
+      </div>
+      <div class="title">周日下午狼人杀局 (3 局连玩)</div>
+      <div class="meta">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        06-11 14:00 ~ 18:00
+      </div>
+      <div class="meta">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Board game cafe @ City Center
+      </div>
+      <button class="signup-btn joined">已报名</button>
+    </div>
+  </div>
+
+  <div class="caption">docs/design/mockups/activities-list.html · spec docs/design/system-v1.md</div>
+</div>
+</body>
+</html>
