@@ -146,6 +146,13 @@ describe('review module — HTTP integration', () => {
 
     vi.resetModules();
     resetMocks();
+    // vi.resetAllMocks wiped the $transaction mock implementation that
+    // the vi.mock factory installed. Re-apply it here so the review
+    // service's prisma.$transaction(cb) call still routes the callback
+    // back through the mock prisma state.
+    mockPrismaState.$transaction.mockImplementation(
+      async (cb: (tx: typeof mockPrismaState) => unknown) => cb(mockPrismaState),
+    );
 
     const mod = await import('@/lib/app.js');
     app = await mod.buildApp({ silent: true });
@@ -231,8 +238,12 @@ describe('review module — HTTP integration', () => {
       expect(r1.statusCode).toBe(201);
 
       // ---- bob → alice ----
-      // Reset, then return bob→alice row.
+      // Reset, then return bob→alice row. Re-apply $transaction since
+      // resetMocks() wipes its mock implementation along with the rest.
       resetMocks();
+      mockPrismaState.$transaction.mockImplementation(
+        async (cb: (tx: typeof mockPrismaState) => unknown) => cb(mockPrismaState),
+      );
       mockPrismaState.activity.findUnique.mockResolvedValue(ENDED_ACTIVITY);
       mockPrismaState.signup.findUnique.mockImplementation(async (args: { where: { activityId_userId: { userId: string } } }) => {
         // bob is not the creator, but has an APPROVED signup; alice is the creator
