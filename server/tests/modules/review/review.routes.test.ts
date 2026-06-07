@@ -252,7 +252,18 @@ describe('review module — HTTP integration', () => {
       });
       mockPrismaState.review.findUnique.mockResolvedValue(null);
       mockPrismaState.review.create.mockResolvedValue(
-        makeReviewRow({ id: 'rv_2', fromUserId: BOB.id, toUserId: ALICE.id, fromUser: BOB }),
+        makeReviewRow({
+          id: 'rv_2',
+          fromUserId: BOB.id,
+          toUserId: ALICE.id,
+          fromUser: BOB,
+          // createReview returns created.rating/created.comment from the
+          // row, not from the request input. Mirror the bob → alice
+          // payload here so the route's 201 body matches what the
+          // caller sent.
+          rating: 4,
+          comment: 'good organizer',
+        }),
       );
       mockPrismaState.user.findUniqueOrThrow.mockResolvedValue(BOB);
 
@@ -397,6 +408,15 @@ describe('review module — HTTP integration', () => {
         makeReviewRow({ id: 'rv_1', createdAt: new Date('2026-06-01'), fromUser: ALICE }),
       ];
       mockPrismaState.user.findUnique.mockResolvedValue({ id: BOB.id });
+      // listUserReviews does a batched `prisma.user.findMany` to hydrate
+      // reviewer display info. Re-stub in the test body too — the
+      // outer beforeEach's vi.resetAllMocks() can wipe the nested
+      // describe's beforeEach when vi.resetModules() re-imports the
+      // app between tests.
+      mockPrismaState.user.findMany.mockResolvedValue([
+        { id: ALICE.id, nickname: 'Alice', avatar: 'a.png' },
+        { id: BOB.id, nickname: 'Bob', avatar: 'b.png' },
+      ]);
       mockPrismaState.review.findMany.mockResolvedValue(items);
       mockPrismaState.review.count.mockResolvedValue(2);
 
