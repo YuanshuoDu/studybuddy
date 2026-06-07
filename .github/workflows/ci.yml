@@ -30,6 +30,15 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+    # server/src/lib/env.ts does a Zod parse at module import time. The
+    # vitest suite (including health.test.ts) does not set these per-test
+    # before importing @/lib/app, so they have to be in the runner env.
+    env:
+      NODE_ENV: test
+      DATABASE_URL: postgresql://studybuddy:studybuddy@localhost:5432/studybuddy_test
+      REDIS_URL: redis://localhost:6379
+      JWT_SECRET: ci-secret-please-replace-in-prod-min-32-chars-aaaaa
+      LOG_LEVEL: warn
     steps:
       - uses: actions/checkout@v4
       - run: |
@@ -48,6 +57,4 @@ jobs:
         run: pnpm lint
       - name: Test
         working-directory: server
-        env:
-          DATABASE_URL: postgres://studybuddy:studybuddy@localhost:5432/studybuddy_test
         run: pnpm test
