@@ -154,7 +154,9 @@ async function checkOneChunk(chunk: string): Promise<ContentCheckResult> {
 
   let res: Response;
   try {
-    res = await fetch(getMsgSecCheckUrl(), {
+    const url = new URL(getMsgSecCheckUrl());
+    url.searchParams.set('access_token', token);
+    res = await fetch(url.toString(), {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ content: chunk, version: 2, scene: 1 }),
