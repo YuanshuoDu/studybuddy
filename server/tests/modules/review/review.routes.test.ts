@@ -404,8 +404,20 @@ describe('review module — HTTP integration', () => {
 
     it('returns paginated list newest-first with fromUser projected to {id, nickname, avatar}', async () => {
       const items = [
-        makeReviewRow({ id: 'rv_2', createdAt: new Date('2026-06-02'), fromUser: BOB }),
-        makeReviewRow({ id: 'rv_1', createdAt: new Date('2026-06-01'), fromUser: ALICE }),
+        makeReviewRow({
+          id: 'rv_2',
+          createdAt: new Date('2026-06-02'),
+          fromUserId: BOB.id,
+          toUserId: ALICE.id,
+          fromUser: BOB,
+        }),
+        makeReviewRow({
+          id: 'rv_1',
+          createdAt: new Date('2026-06-01'),
+          fromUserId: ALICE.id,
+          toUserId: BOB.id,
+          fromUser: ALICE,
+        }),
       ];
       mockPrismaState.user.findUnique.mockResolvedValue({ id: BOB.id });
       // listUserReviews does a batched `prisma.user.findMany` to hydrate
