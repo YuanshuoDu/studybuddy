@@ -1,0 +1,972 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>StudyBuddy · Admin Liquid-Glass (Flutter, M3) — Mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+/* =========================================================================
+   StudyBuddy design tokens (mirrors app/lib/core/theme/design_tokens.dart
+   for the Flutter half and miniprogram/styles/tokens.wxss for the
+   miniprogram half). Names match the miniprogram brief verbatim.
+   ========================================================================= */
+:root {
+  --color-primary: #3B82F6;
+  --color-primary-container: #DBEAFE;
+  --color-success: #22C55E;
+  --color-success-bg: #DCFCE7;
+  --color-warning: #F59E0B;
+  --color-warning-bg: #FEF3C7;
+  --color-error: #EF4444;
+  --color-error-bg: #FEE2E2;
+  --color-info: #3B82F6;
+  --color-text-primary: #0F172A;
+  --color-text-secondary: #475569;
+  --color-text-placeholder: #94A3B8;
+
+  /* Glass */
+  --glass-bg-dark: rgba(255,255,255,0.08);
+  --glass-bg-deep-dark: rgba(0,0,0,0.30);
+  --glass-border-dark: rgba(255,255,255,0.18);
+  --glass-highlight-dark: rgba(255,255,255,0.12);
+  --glass-bg-light: rgba(255,255,255,0.55);
+  --glass-bg-deep-light: rgba(255,255,255,0.70);
+  --glass-border-light: rgba(255,255,255,0.65);
+  --glass-highlight-light: rgba(255,255,255,0.20);
+  --glass-blur-sm: 12px;
+  --glass-blur-md: 20px;
+  --glass-blur-lg: 32px;
+  --glass-radius: 20px;
+  --glass-radius-lg: 28px;
+  --glass-radius-pill: 999px;
+  --glass-shadow-1: 0 4px 16px rgba(0,0,0,0.18);
+  --glass-shadow-2: 0 8px 32px rgba(0,0,0,0.30);
+
+  /* Spacing */
+  --space-2xs: 2px;
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 24px;
+  --space-2xl: 32px;
+  --space-3xl: 48px;
+  --space-huge: 64px;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #0B1020;
+  color: #E2E8F0;
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif;
+  font-size: 14px;
+  line-height: 1.55;
+  padding: 48px 32px 96px;
+}
+h1, h2, h3, h4 { font-weight: 600; margin: 0; }
+h1 { font-size: 32px; letter-spacing: -0.5px; }
+h2 { font-size: 22px; margin-bottom: 4px; }
+h3 { font-size: 16px; }
+p { margin: 0; color: rgba(226,232,240,0.78); }
+.intro {
+  max-width: 980px;
+  margin: 0 auto 32px;
+  text-align: center;
+}
+.intro p { margin-top: 8px; }
+.eyebrow {
+  display: inline-block;
+  padding: 4px 12px;
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 999px;
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 16px;
+}
+main { max-width: 1280px; margin: 0 auto; }
+section.screen-block { margin-bottom: 80px; }
+section.screen-block header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.10);
+  padding-bottom: 12px;
+}
+section.screen-block header .num {
+  font-size: 13px;
+  letter-spacing: 1px;
+  color: rgba(255,255,255,0.55);
+  font-weight: 500;
+  font-family: 'JetBrains Mono', monospace;
+}
+.frames {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+.frame {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.frame .label {
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.55);
+  text-transform: uppercase;
+}
+.canvas {
+  position: relative;
+  width: 360px;
+  height: 760px;
+  border-radius: 44px;
+  overflow: hidden;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.05) inset,
+    0 30px 80px rgba(0,0,0,0.55),
+    0 0 0 6px rgba(0,0,0,0.6);
+  isolation: isolate;
+}
+.canvas.light { box-shadow: 0 30px 80px rgba(15,23,42,0.20), 0 0 0 6px rgba(15,23,42,0.04); }
+.canvas .notch {
+  position: absolute;
+  top: 6px; left: 50%;
+  transform: translateX(-50%);
+  width: 100px; height: 24px;
+  background: #000;
+  border-radius: 16px;
+  z-index: 30;
+}
+.canvas.light .notch { background: #fff; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.06); }
+
+/* Mesh */
+.mesh {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+}
+.mesh .blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  mix-blend-mode: screen;
+  opacity: 0.55;
+}
+.mesh .blob.b1 { background: #1E1B4B; width: 480px; height: 480px; top: -120px; left: -120px; }
+.mesh .blob.b2 { background: #312E81; width: 420px; height: 420px; top: -100px; right: -120px; }
+.mesh .blob.b3 { background: #0F766E; width: 460px; height: 460px; bottom: -160px; left: -80px; }
+.mesh .blob.b4 { background: #7C2D12; width: 440px; height: 440px; bottom: -180px; right: -120px; }
+.mesh.light .blob { mix-blend-mode: multiply; opacity: 0.50; }
+.mesh.light .blob.b1 { background: #E0F2FE; }
+.mesh.light .blob.b2 { background: #FCE7F3; }
+.mesh.light .blob.b3 { background: #DCFCE7; }
+.mesh.light .blob.b4 { background: #FEF3C7; }
+.mesh.light { background: #F6F8FB; }
+
+/* Glass surfaces */
+.glass {
+  position: relative;
+  border-radius: 20px;
+  background: var(--glass-bg-dark);
+  border: 1px solid var(--glass-border-dark);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.30);
+  overflow: hidden;
+  z-index: 1;
+}
+.glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, var(--glass-highlight-dark) 0%, transparent 50%);
+  pointer-events: none;
+  border-radius: inherit;
+}
+.glass.lg { border-radius: 28px; }
+.glass.sm { border-radius: 12px; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: 0 4px 16px rgba(0,0,0,0.18); }
+.glass.deep { background: var(--glass-bg-deep-dark); }
+.canvas.light .glass {
+  background: var(--glass-bg-light);
+  border: 1px solid var(--glass-border-light);
+  box-shadow: 0 8px 32px rgba(15,23,42,0.12);
+}
+.canvas.light .glass::before { background: linear-gradient(180deg, var(--glass-highlight-light) 0%, transparent 50%); }
+.canvas.light .glass.deep { background: var(--glass-bg-deep-light); }
+.canvas.light .glass.sm { box-shadow: 0 4px 16px rgba(15,23,42,0.08); }
+
+/* Text colors */
+.canvas h1, .canvas h2, .canvas h3, .canvas p, .canvas span, .canvas div {
+  font-weight: 400;
+}
+.canvas { color: #FFFFFF; }
+.canvas .ink { color: #FFFFFF; }
+.canvas .ink-2 { color: rgba(255,255,255,0.65); }
+.canvas.light { color: var(--color-text-primary); }
+.canvas.light .ink { color: var(--color-text-primary); }
+.canvas.light .ink-2 { color: var(--color-text-secondary); }
+.canvas .ink-mono { font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+.canvas .eyebrow-2 { font-size: 11px; letter-spacing: 3px; color: rgba(255,255,255,0.55); text-transform: uppercase; }
+.canvas.light .eyebrow-2 { color: rgba(15,23,42,0.55); }
+
+/* Generic row layout helpers */
+.pad-l { padding-left: 24px; }
+.pad-r { padding-right: 24px; }
+.pad-t { padding-top: 24px; }
+.row { display: flex; align-items: center; }
+.col { display: flex; flex-direction: column; }
+.gap-4 { gap: 4px; }
+.gap-8 { gap: 8px; }
+.gap-12 { gap: 12px; }
+.gap-16 { gap: 16px; }
+
+/* Status pills */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.18);
+}
+.pill.success { background: rgba(34,197,94,0.20); border-color: rgba(34,197,94,0.30); color: #4ADE80; }
+.pill.warning { background: rgba(245,158,11,0.20); border-color: rgba(245,158,11,0.30); color: #FBBF24; }
+.pill.error   { background: rgba(239,68,68,0.20);  border-color: rgba(239,68,68,0.30);  color: #F87171; }
+.pill.info    { background: rgba(59,130,246,0.20); border-color: rgba(59,130,246,0.30); color: #60A5FA; }
+.pill.neutral { background: rgba(148,163,184,0.20); border-color: rgba(148,163,184,0.30); color: #CBD5E1; }
+.canvas.light .pill.success { color: #15803D; }
+.canvas.light .pill.warning { color: #B45309; }
+.canvas.light .pill.error   { color: #B91C1C; }
+.canvas.light .pill.info    { color: #1D4ED8; }
+.canvas.light .pill.neutral { color: #475569; }
+.pill .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+
+/* Buttons */
+.btn-glass {
+  height: 44px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.18);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #fff;
+  cursor: pointer;
+}
+.btn-glass.solid-success { background: rgba(34,197,94,0.85); border-color: transparent; }
+.btn-glass.solid-error   { background: rgba(239,68,68,0.85);  border-color: transparent; }
+.btn-glass.outline-error { color: #FCA5A5; border-color: rgba(239,68,68,0.55); background: transparent; }
+.canvas.light .btn-glass { color: var(--color-text-primary); }
+.canvas.light .btn-glass.solid-success { color: #fff; }
+.canvas.light .btn-glass.outline-error { color: #B91C1C; border-color: rgba(239,68,68,0.55); }
+
+/* Code block (under each pair) */
+.code {
+  margin-top: 28px;
+  border-radius: 16px;
+  background: #0F172A;
+  border: 1px solid rgba(255,255,255,0.10);
+  padding: 18px 20px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  color: rgba(226,232,240,0.85);
+  overflow-x: auto;
+}
+.code .k { color: #93C5FD; }
+.code .s { color: #FCA5A5; }
+.code .c { color: rgba(148,163,184,0.7); font-style: italic; }
+.code .t { color: #FCD34D; }
+.code .v { color: #A7F3D0; }
+
+/* Screen 1 — gate */
+#gate .canvas { padding-top: 64px; }
+#gate .canvas .eyebrow-2 { padding: 0 24px; }
+#gate .canvas h1 { padding: 0 24px 8px; font-size: 36px; font-weight: 700; }
+#gate .canvas p.lead { padding: 0 24px 32px; }
+#gate .gate-card {
+  margin: 0 24px;
+  padding: 24px;
+}
+#gate .gate-card .sql {
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  line-height: 1.4;
+  display: flex;
+  gap: 12px;
+}
+#gate .gate-card .sql .copy {
+  flex-shrink: 0;
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.08);
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* Screen 2 — activities queue */
+#activities .canvas .header { padding: 56px 24px 16px; }
+#activities .canvas .header .row { gap: 12px; }
+#activities .canvas .back { width: 36px; height: 36px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.10); }
+#activities .canvas .filter-row { display: flex; gap: 8px; padding: 0 24px 16px; overflow: hidden; }
+#activities .canvas .filter-row .pill { flex-shrink: 0; }
+#activities .canvas .list { padding: 0 24px; display: flex; flex-direction: column; gap: 12px; }
+#activities .canvas .row-card { padding: 16px; }
+#activities .canvas .row-card .meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+#activities .canvas .row-card .title { font-size: 16px; font-weight: 600; margin-bottom: 6px; line-height: 1.3; }
+#activities .canvas .row-card .info-row { display: flex; align-items: center; gap: 4px; font-size: 12px; opacity: 0.7; margin-bottom: 2px; }
+#activities .canvas .row-card .actions { display: flex; gap: 8px; margin-top: 14px; }
+
+/* Screen 3 — activity detail */
+#detail .canvas { padding-top: 56px; }
+#detail .canvas .header-row { padding: 0 24px 8px; display: flex; gap: 12px; align-items: center; }
+#detail .canvas .body-card { margin: 16px 24px 0; padding: 24px; }
+#detail .canvas .body-card h3 { font-size: 22px; font-weight: 700; margin: 12px 0 16px; line-height: 1.3; }
+#detail .canvas .body-card .info { display: flex; flex-direction: column; gap: 6px; }
+#detail .canvas .body-card .info .row { display: flex; gap: 12px; align-items: center; font-size: 13px; }
+#detail .canvas .body-card .info .label { width: 56px; opacity: 0.65; font-size: 12px; }
+#detail .canvas .action-bar { position: absolute; bottom: 24px; left: 16px; right: 16px; padding: 12px; display: flex; gap: 12px; }
+#detail .canvas .action-bar .btn-glass { flex: 1; }
+
+/* Screen 4 — users search */
+#users .canvas { padding-top: 56px; }
+#users .canvas .header-row { padding: 0 24px 16px; }
+#users .canvas .header-row .row { gap: 12px; }
+#users .canvas .search { margin: 0 24px 12px; padding: 0 12px; height: 44px; display: flex; align-items: center; gap: 8px; }
+#users .canvas .search input { background: transparent; border: 0; outline: 0; color: inherit; font: inherit; flex: 1; }
+#users .canvas .filters { display: flex; gap: 8px; padding: 0 24px 16px; }
+#users .canvas .user-row { margin: 0 24px 12px; padding: 16px; display: flex; align-items: center; gap: 12px; }
+#users .canvas .user-row .avatar { width: 44px; height: 44px; border-radius: 50%; background: rgba(59,130,246,0.20); display: flex; align-items: center; justify-content: center; }
+#users .canvas .user-row .body { flex: 1; min-width: 0; }
+#users .canvas .user-row .body .name { font-size: 15px; font-weight: 600; }
+#users .canvas .user-row .body .meta { font-size: 12px; opacity: 0.65; }
+
+/* Screen 5 — dashboard */
+#dashboard .canvas { padding-top: 56px; }
+#dashboard .canvas .header { padding: 0 24px 24px; }
+#dashboard .canvas .grid { padding: 0 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+#dashboard .canvas .tile { padding: 16px; aspect-ratio: 1.05; display: flex; flex-direction: column; justify-content: space-between; }
+#dashboard .canvas .tile .icon { width: 32px; height: 32px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+#dashboard .canvas .tile .icon.s-info { background: rgba(59,130,246,0.25); color: #60A5FA; }
+#dashboard .canvas .tile .icon.s-success { background: rgba(34,197,94,0.25); color: #4ADE80; }
+#dashboard .canvas .tile .icon.s-warning { background: rgba(245,158,11,0.25); color: #FBBF24; }
+#dashboard .canvas .tile .icon.s-neutral { background: rgba(148,163,184,0.25); color: #CBD5E1; }
+#dashboard .canvas .tile .value { font-size: 32px; font-weight: 700; line-height: 1.1; }
+#dashboard .canvas .tile .title { font-size: 14px; font-weight: 600; margin-top: 4px; }
+#dashboard .canvas .tile .hint { font-size: 11px; opacity: 0.65; margin-top: 2px; }
+#dashboard .canvas .quick { padding: 24px; }
+#dashboard .canvas .quick .row { display: flex; gap: 12px; margin-top: 12px; }
+#dashboard .canvas .quick .btn-glass { flex: 1; }
+
+footer.foot {
+  max-width: 980px;
+  margin: 96px auto 0;
+  text-align: center;
+  font-size: 12px;
+  color: rgba(255,255,255,0.45);
+}
+footer.foot a { color: inherit; }
+</style>
+</head>
+<body>
+<div class="intro">
+  <span class="eyebrow">ISSUE #32 · M3 LAUNCH · LIQUID GLASS</span>
+  <h1>StudyBuddy Admin — Flutter</h1>
+  <p>5 屏幕 · 暗色默认 · 亮色对照 · Liquid Glass 视觉规范 · 严格新增到 <code>app/lib/features/admin/</code></p>
+  <p style="font-size:12px;opacity:0.6;margin-top:12px">
+    Each pair = dark (left) + light (right). The Flutter source under <code>app/lib/features/admin/presentation/</code> renders the same hierarchy on device; this file is the visual proof for review.
+  </p>
+</div>
+<main>
+
+<!-- ============================================================ SCREEN 1 -->
+<section class="screen-block" id="gate">
+<header>
+  <div>
+    <h2>1 · Admin Gate</h2>
+    <p>未授权用户落地的玻璃卡片页面，附 SQL 一行命令可直接复制。</p>
+  </div>
+  <span class="num">gate_page.dart</span>
+</header>
+<div class="frames">
+  <div class="frame">
+    <span class="label">Dark · Default</span>
+    <div class="canvas">
+      <div class="notch"></div>
+      <div class="mesh">
+        <span class="blob b1"></span><span class="blob b2"></span>
+        <span class="blob b3"></span><span class="blob b4"></span>
+      </div>
+      <div class="eyebrow-2" style="padding: 64px 24px 0;">STUDYBUDDY</div>
+      <h1 style="padding: 8px 24px 0; font-size: 36px;">运营后台</h1>
+      <p class="lead ink-2" style="padding: 6px 24px 0;">欢迎回来，@dora。这里是审核和管理控制台。</p>
+
+      <div class="glass gate-card" style="margin-top: 32px;">
+        <h3 style="font-size: 18px; font-weight: 600;">需要管理员权限</h3>
+        <p class="ink-2" style="font-size: 13px; margin-top: 8px;">当前账号没有访问后台的权限。请联系现有管理员，将你的 User ID 升级为 ADMIN。</p>
+        <div class="sql">
+          <div style="flex: 1;">
+            <span style="opacity:0.7">UPDATE </span>"User" SET role = 'ADMIN' WHERE id = '&lt;paste-user-id-here&gt;';
+          </div>
+          <div class="copy">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+          </div>
+        </div>
+        <p class="ink-2" style="font-size: 11px; margin-top: 16px;">你的 User ID：usr_8d2b1c…</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="frame">
+    <span class="label">Light · Parity</span>
+    <div class="canvas light">
+      <div class="notch"></div>
+      <div class="mesh light">
+        <span class="blob b1"></span><span class="blob b2"></span>
+        <span class="blob b3"></span><span class="blob b4"></span>
+      </div>
+      <div class="eyebrow-2" style="padding: 64px 24px 0;">STUDYBUDDY</div>
+      <h1 style="padding: 8px 24px 0; font-size: 36px; color: var(--color-text-primary);">运营后台</h1>
+      <p class="lead" style="padding: 6px 24px 0; color: var(--color-text-secondary);">欢迎回来，@dora。这里是审核和管理控制台。</p>
+
+      <div class="glass gate-card" style="margin-top: 32px;">
+        <h3 style="font-size: 18px; font-weight: 600; color: var(--color-text-primary);">需要管理员权限</h3>
+        <p style="font-size: 13px; margin-top: 8px; color: var(--color-text-secondary);">当前账号没有访问后台的权限。请联系现有管理员，将你的 User ID 升级为 ADMIN。</p>
+        <div class="sql">
+          <div style="flex: 1; color: var(--color-text-primary);">
+            <span style="opacity:0.7">UPDATE </span>"User" SET role = 'ADMIN' WHERE id = '&lt;paste-user-id-here&gt;';
+          </div>
+          <div class="copy" style="background: rgba(0,0,0,0.05); color: var(--color-text-primary);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+          </div>
+        </div>
+        <p style="font-size: 11px; margin-top: 16px; color: var(--color-text-secondary);">你的 User ID：usr_8d2b1c…</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="code">
+<span class="c">// gate_page.dart — strictly additive. isAdminProvider derives from authStateProvider.</span>
+<span class="t">class</span> <span class="t">AdminGatePage</span> <span class="t">extends</span> ConsumerStatefulWidget { ... }
+
+<span class="c">// Redirect admins straight to the dashboard:</span>
+WidgetsBinding.instance.addPostFrameCallback((_) {
+  <span class="k">if</span> (ref.read(isAdminProvider)) context.go(AdminDashboardPage.routePath);
+});
+</div>
+</section>
+
+<!-- ============================================================ SCREEN 2 -->
+<section class="screen-block" id="activities">
+<header>
+  <div>
+    <h2>2 · Activities Review Queue</h2>
+    <p>PENDING_REVIEW 默认 + 状态/类型过滤；每行玻璃卡片内嵌 Approve / Reject 按钮。</p>
+  </div>
+  <span class="num">activities_page.dart</span>
+</header>
+<div class="frames">
+  <div class="frame">
+    <span class="label">Dark · Default</span>
+    <div class="canvas">
+      <div class="notch"></div>
+      <div class="mesh">
+        <span class="blob b1"></span><span class="blob b2"></span>
+        <span class="blob b3"></span><span class="blob b4"></span>
+      </div>
+      <div class="header">
+        <div class="row">
+          <div class="back"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg></div>
+          <div class="col">
+            <h3 style="font-weight: 600;">审核队列</h3>
+            <span class="ink-2" style="font-size: 12px;">共 7 条待处理</span>
+          </div>
+        </div>
+      </div>
+      <div class="filter-row">
+        <span class="pill warning"><span class="dot"></span>待审核</span>
+        <span class="pill">招募中</span>
+        <span class="pill error">已驳回</span>
+        <span class="pill neutral">已取消</span>
+      </div>
+      <div class="filter-row">
+        <span class="pill info">全部类型</span>
+        <span class="pill">自习</span>
+        <span class="pill">运动</span>
+        <span class="pill">桌游</span>
+      </div>
+      <div class="list">
+        <div class="glass row-card">
+          <div class="meta">
+            <div class="row gap-8">
+              <span class="pill warning"><span class="dot"></span>待审核</span>
+              <span class="pill info">自习</span>
+            </div>
+            <span class="ink-2" style="font-size: 12px;">2026-06-08</span>
+          </div>
+          <div class="title">周末图书馆刷夜学习</div>
+          <div class="info-row"><span style="opacity:0.6;">@</span> &nbsp;@zhang_wei</div>
+          <div class="info-row">📍 复旦图书馆三楼</div>
+          <div class="info-row">👥 12/30</div>
+          <div class="actions">
+            <button class="btn-glass outline-error" style="flex: 1; height: 36px; font-size: 12px;">✕ 驳回</button>
+            <button class="btn-glass solid-success" style="flex: 1; height: 36px; font-size: 12px;">✓ 通过</button>
+          </div>
+        </div>
+        <div class="glass row-card">
+          <div class="meta">
+            <div class="row gap-8">
+              <span class="pill warning"><span class="dot"></span>待审核</span>
+              <span class="pill info">运动</span>
+            </div>
+            <span class="ink-2" style="font-size: 12px;">2026-06-08</span>
+          </div>
+          <div class="title">周六晨跑 + 早餐</div>
+          <div class="info-row">@xiaolu_99</div>
+          <div class="info-row">📍 世纪公园南门</div>
+          <div class="info-row">👥 5/12</div>
+          <div class="actions">
+            <button class="btn-glass outline-error" style="flex: 1; height: 36px; font-size: 12px;">✕ 驳回</button>
+            <button class="btn-glass solid-success" style="flex: 1; height: 36px; font-size: 12px;">✓ 通过</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="frame">
+    <span class="label">Light · Parity</span>
+    <div class="canvas light">
+      <div class="notch"></div>
+      <div class="mesh light">
+        <span class="blob b1"></span><span class="blob b2"></span>
+        <span class="blob b3"></span><span class="blob b4"></span>
+      </div>
+      <div class="header">
+        <div class="row">
+          <div class="back" style="background: rgba(0,0,0,0.05);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg></div>
+          <div class="col">
+            <h3 style="font-weight: 600; color: var(--color-text-primary);">审核队列</h3>
+            <span style="font-size: 12px; color: var(--color-text-secondary);">共 7 条待处理</span>
+          </div>
+        </div>
+      </div>
+      <div class="filter-row">
+        <span class="pill warning"><span class="dot"></span>待审核</span>
+        <span class="pill">招募中</span>
+        <span class="pill error">已驳回</span>
+        <span class="pill neutral">已取消</span>
+      </div>
+      <div class="list">
+        <div class="glass row-card">
+          <div class="meta">
+            <div class="row gap-8">
+              <span class="pill warning"><span class="dot"></span>待审核</span>
+              <span class="pill info">自习</span>
+            </div>
+            <span style="font-size: 12px; color: var(--color-text-secondary);">2026-06-08</span>
+          </div>
+          <div class="title" style="color: var(--color-text-primary);">周末图书馆刷夜学习</div>
+          <div class="info-row" style="color: var(--color-text-secondary);">@zhang_wei</div>
+          <div class="info-row" style="color: var(--color-text-secondary);">📍 复旦图书馆三楼</div>
+          <div class="info-row" style="color: var(--color-text-secondary);">👥 12/30</div>
+          <div class="actions">
+            <button class="btn-glass outline-error" style="flex: 1; height: 36px; font-size: 12px;">✕ 驳回</button>
+            <button class="btn-glass solid-success" style="flex: 1; height: 36px; font-size: 12px;">✓ 通过</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="code">
+<span class="c">// activities_page.dart — autoDispose FamilyAsyncNotifier refetches on filter change.</span>
+<span class="t">final</span> adminActivitiesListProvider =
+    AsyncNotifierProvider.autoDispose&lt;AdminActivityListController,
+        AdminActivityListState&gt;(AdminActivityListController.<span class="k">new</span>);
+
+<span class="c">// Each row is a GlassCard with inline _ActionButton × 2 (44pt target).</span>
+</div>
+</section>
+
+<!-- ============================================================ SCREEN 3 -->
+<section class="screen-block" id="detail">
+<header>
+  <div>
+    <h2>3 · Activity Detail (Moderation)</h2>
+    <p>完整活动视图 + 底部粘性玻璃操作栏；驳回弹出玻璃底页 + TextField。</p>
+  </div>
+  <span class="num">activity_detail_page.dart</span>
+</header>
+<div class="frames">
+  <div class="frame">
+    <span class="label">Dark · Default</span>
+    <div class="canvas">
+      <div class="notch"></div>
+      <div class="mesh">
+        <span class="blob b1"></span><span class="blob b2"></span>
+        <span class="blob b3"></span><span class="blob b4"></span>
+      </div>
+      <div class="header-row" style="padding-top: 56px;">
+        <div class="back"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg></div>
+        <h3 style="font-weight: 600;">活动详情</h3>
+      </div>
+      <div class="glass body-card">
+        <div class="row gap-8">
+          <span class="pill warning"><span class="dot"></span>待审核</span>
+          <span class="pill info">自习</span>
+        </div>
+        <h3>周末图书馆刷夜学习</h3>
+        <div class="info">
+          <div class="row"><span class="label ink-2">创建者</span><span>@zhang_wei</span></div>
+          <div class="row"><span class="label ink-2">学校</span><span>复旦大学</span></div>
+          <div class="row"><span class="label ink-2">开始</span><span>2026-06-13 19:00</span></div>
+          <div class="row"><span class="label ink-2">地点</span><span>复旦图书馆三楼</span></div>
+          <div class="row"><span class="label ink-2">参与</span><span>12 / 30</span></div>
+        </div>
+      </div>
+      <div class="glass lg action-bar">
+        <button class="btn-glass outline-error">✕ 驳回</button>
+        <button class="btn-glass solid-success">✓ 通过</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="frame">
+    <span class="label">Light · Parity</span>
+    <div class="canvas light">
+      <div class="notch"></div>
+      <div class="mesh light">
+        <span class="blob b1"></span><span class="blob b2"></span>
+        <span class="blob b3"></span><span class="blob b4"></span>
+      </div>
+      <div class="header-row" style="padding-top: 56px;">
+        <div class="back" style="background: rgba(0,0,0,0.05);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg></div>
+        <h3 style="font-weight: 600; color: var(--color-text-primary);">活动详情</h3>
+      </div>
+      <div class="glass body-card">
+        <div class="row gap-8">
+          <span class="pill warning"><span class="dot"></span>待审核</span>
+          <span class="pill info">自习</span>
+        </div>
+        <h3 style="color: var(--color-text-primary);">周末图书馆刷夜学习</h3>
+        <div class="info">
+          <div class="row" style="color: var(--color-text-primary);"><span class="label" style="color: var(--color-text-secondary);">创建者</span><span>@zhang_wei</span></div>
+          <div class="row" style="color: var(--color-text-primary);"><span class="label" style="color: var(--color-text-secondary);">学校</span><span>复旦大学</span></div>
+          <div class="row" style="color: var(--color-text-primary);"><span class="label" style="color: var(--color-text-secondary);">开始</span><span>2026-06-13 19:00</span></div>
+          <div class="row" style="color: var(--color-text-primary);"><span class="label" style="color: var(--color-text-secondary);">地点</span><span>复旦图书馆三楼</span></div>
+          <div class="row" style="color: var(--color-text-primary);"><span class="label" style="color: var(--color-text-secondary);">参与</span><span>12 / 30</span></div>
+        </div>
+      </div>
+      <div class="glass lg action-bar">
+        <button class="btn-glass outline-error">✕ 驳回</button>
+        <button class="btn-glass solid-success">✓ 通过</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="code">
+<span class="c">// Reject sheet is a GlassSheet (28px radius, deep tint) over a transparent barrier.</span>
+Future&lt;String?&gt; _showRejectSheet(BuildContext context) {
+  <span class="k">return</span> showModalBottomSheet&lt;String&gt;(
+    context: context,
+    backgroundColor: <span class="k">const</span> Color(0x00000000),
+    isScrollControlled: <span class="k">true</span>,
+    builder: (ctx) =&gt; <span class="k">const</span> _RejectSheet(),
+  );
+}
+</div>
+</section>
+
+<!-- ============================================================ SCREEN 4 -->
+<section class="screen-block" id="users">
+<header>
+  <div>
+    <h2>4 · Users Search</h2>
+    <p>玻璃搜索框 + 状态过滤；每行带状态 pill，长按弹出玻璃动作栏（封禁/解封 + 复制 ID）。</p>
+  </div>
+  <span class="num">users_page.dart</span>
+</header>
+<div class="frames">
+  <div class="frame">
+    <span class="label">Dark · Default</span>
+    <div class="canvas">
+      <div class="notch"></div>
+      <div class="mesh">
+        <span class="blob b1"></span><span class="blob b2"></span>
+        <span class="blob b3"></span><span class="blob b4"></span>
+      </div>
+      <div class="header-row" style="padding-top: 56px;">
+        <div class="row">
+          <div class="back"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg></div>
+          <div class="col">
+            <h3 style="font-weight: 600;">用户管理</h3>
+            <span class="ink-2" style="font-size: 12px;">匹配 24 条</span>
+          </div>
+        </div>
+      </div>
+      <div class="glass sm search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:0.6"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input placeholder="昵称 / 手机号 / ID" value="dora" />
+      </div>
+      <div class="filters">
+        <span class="pill">全部</span>
+        <span class="pill success"><span class="dot"></span>正常</span>
+        <span class="pill error"><span class="dot"></span>已封禁</span>
+      </div>
+      <div class="user-row glass">
+        <div class="avatar">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: #93C5FD;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div class="body">
+          <div class="name">@dora_study</div>
+          <div class="meta">复旦 · 138****5566</div>
+        </div>
+        <span class="pill success"><span class="dot"></span>正常</span>
+      </div>
+      <div class="user-row glass" style="margin-top: 12px;">
+        <div class="avatar">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: #93C5FD;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div class="body">
+          <div class="name">@dora_mei</div>
+          <div class="meta">上财 · 186****1122</div>
+        </div>
+        <span class="pill error"><span class="dot"></span>已封禁</span>
+      </div>
+      <div class="user-row glass" style="margin-top: 12px;">
+        <div class="avatar">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: #93C5FD;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div class="body">
+          <div class="name">@dora99</div>
+          <div class="meta">同济 · 139****0921</div>
+        </div>
+        <span class="pill success"><span class="dot"></span>正常</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="frame">
+    <span class="label">Light · Parity</span>
+    <div class="canvas light">
+      <div class="notch"></div>
+      <div class="mesh light">
+        <span class="blob b1"></span><span class="blob b2"></span>
+        <span class="blob b3"></span><span class="blob b4"></span>
+      </div>
+      <div class="header-row" style="padding-top: 56px;">
+        <div class="row">
+          <div class="back" style="background: rgba(0,0,0,0.05);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg></div>
+          <div class="col">
+            <h3 style="font-weight: 600; color: var(--color-text-primary);">用户管理</h3>
+            <span style="font-size: 12px; color: var(--color-text-secondary);">匹配 24 条</span>
+          </div>
+        </div>
+      </div>
+      <div class="glass sm search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:0.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input placeholder="昵称 / 手机号 / ID" value="dora" style="color: var(--color-text-primary);" />
+      </div>
+      <div class="filters">
+        <span class="pill">全部</span>
+        <span class="pill success"><span class="dot"></span>正常</span>
+        <span class="pill error"><span class="dot"></span>已封禁</span>
+      </div>
+      <div class="user-row glass">
+        <div class="avatar" style="background: rgba(59,130,246,0.15);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: #2563EB;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div class="body">
+          <div class="name" style="color: var(--color-text-primary);">@dora_study</div>
+          <div class="meta" style="color: var(--color-text-secondary);">复旦 · 138****5566</div>
+        </div>
+        <span class="pill success"><span class="dot"></span>正常</span>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="code">
+<span class="c">// Long-press sheet — reuses GlassSheet (28px radius, deep tint).</span>
+showModalBottomSheet&lt;<span class="t">void</span>&gt;(
+  context: context,
+  backgroundColor: <span class="k">const</span> Color(0x00000000),
+  builder: (ctx) =&gt; GlassSheet(
+    padding: <span class="k">const</span> EdgeInsets.all(DesignSpacing.xl),
+    child: <span class="k">...</span>,
+  ),
+);
+</div>
+</section>
+
+<!-- ============================================================ SCREEN 5 -->
+<section class="screen-block" id="dashboard">
+<header>
+  <div>
+    <h2>5 · Dashboard Metrics</h2>
+    <p>2×2 玻璃指标网格 + 快捷入口；点卡片跳转到对应搜索页（带预过滤）。</p>
+  </div>
+  <span class="num">dashboard_page.dart</span>
+</header>
+<div class="frames">
+  <div class="frame">
+    <span class="label">Dark · Default</span>
+    <div class="canvas">
+      <div class="notch"></div>
+      <div class="mesh">
+        <span class="blob b1"></span><span class="blob b2"></span>
+        <span class="blob b3"></span><span class="blob b4"></span>
+      </div>
+      <div class="header" style="padding-top: 56px;">
+        <div class="eyebrow-2">STUDYBUDDY</div>
+        <h1 style="font-size: 32px; font-weight: 700; margin-top: 4px;">运营仪表盘</h1>
+        <p class="ink-2" style="font-size: 13px; margin-top: 4px;">M3 启动期关键指标一览</p>
+      </div>
+      <div class="grid">
+        <div class="glass tile">
+          <div class="row" style="justify-content: space-between;">
+            <div class="icon s-info">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:0.5"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+          </div>
+          <div>
+            <div class="value">1,284</div>
+            <div class="title">用户</div>
+            <div class="hint">今日 +38 · 本周 +217</div>
+          </div>
+        </div>
+        <div class="glass tile">
+          <div class="row" style="justify-content: space-between;">
+            <div class="icon s-success">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/></svg>
+            </div>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:0.5"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+          </div>
+          <div>
+            <div class="value">57</div>
+            <div class="title">活动</div>
+            <div class="hint">待审核 7 · 招募中 41</div>
+          </div>
+        </div>
+        <div class="glass tile">
+          <div class="row" style="justify-content: space-between;">
+            <div class="icon s-warning">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            </div>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:0.5"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+          </div>
+          <div>
+            <div class="value">3,402</div>
+            <div class="title">报名</div>
+            <div class="hint">今日 +122</div>
+          </div>
+        </div>
+        <div class="glass tile">
+          <div class="row" style="justify-content: space-between;">
+            <div class="icon s-neutral">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+            </div>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:0.5"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+          </div>
+          <div>
+            <div class="value">2,189</div>
+            <div class="title">推送 Token</div>
+            <div class="hint">iOS + Android 累计</div>
+          </div>
+        </div>
+      </div>
+      <div class="quick">
+        <h3 style="font-size: 14px; font-weight: 600;">快捷入口</h3>
+        <div class="row">
+          <button class="btn-glass" style="height: 48px;">✓ 审核队列</button>
+          <button class="btn-glass" style="height: 48px;">👤 用户管理</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="frame">
+    <span class="label">Light · Parity</span>
+    <div class="canvas light">
+      <div class="notch"></div>
+      <div class="mesh light">
+        <span class="blob b1"></span><span class="blob b2"></span>
+        <span class="blob b3"></span><span class="blob b4"></span>
+      </div>
+      <div class="header" style="padding-top: 56px;">
+        <div class="eyebrow-2">STUDYBUDDY</div>
+        <h1 style="font-size: 32px; font-weight: 700; margin-top: 4px; color: var(--color-text-primary);">运营仪表盘</h1>
+        <p style="font-size: 13px; margin-top: 4px; color: var(--color-text-secondary);">M3 启动期关键指标一览</p>
+      </div>
+      <div class="grid">
+        <div class="glass tile">
+          <div class="row" style="justify-content: space-between;">
+            <div class="icon s-info" style="background: rgba(59,130,246,0.18);">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: #2563EB;"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:0.4"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+          </div>
+          <div>
+            <div class="value" style="color: var(--color-text-primary);">1,284</div>
+            <div class="title" style="color: var(--color-text-primary);">用户</div>
+            <div class="hint" style="color: var(--color-text-secondary);">今日 +38 · 本周 +217</div>
+          </div>
+        </div>
+        <div class="glass tile">
+          <div class="row" style="justify-content: space-between;">
+            <div class="icon s-success" style="background: rgba(34,197,94,0.18);">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: #16A34A;"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/></svg>
+            </div>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:0.4"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+          </div>
+          <div>
+            <div class="value" style="color: var(--color-text-primary);">57</div>
+            <div class="title" style="color: var(--color-text-primary);">活动</div>
+            <div class="hint" style="color: var(--color-text-secondary);">待审核 7 · 招募中 41</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="code">
+<span class="c">// dashboard_page.dart — single-shot fetch via FutureProvider.autoDispose.</span>
+<span class="t">final</span> adminDashboardMetricsProvider =
+    FutureProvider.autoDispose&lt;AdminDashboardMetrics&gt;((ref) <span class="k">async</span> {
+  <span class="k">final</span> api = ref.watch(adminApiProvider);
+  <span class="k">return</span> api.dashboardMetrics();
+});
+
+<span class="c">// Tapping a tile navigates with a deep-link to the matching search page.</span>
+onTap: () =&gt; context.go(AdminUsersPage.routePath)
+</div>
+</section>
+
+</main>
+<footer class="foot">
+  <p>StudyBuddy · M3 Admin · Flutter liquid-glass · issue #32 frontend</p>
+  <p style="margin-top: 4px;">Strictly additive: only <code>app/lib/features/admin/**</code> + appended glass tokens to <code>design_tokens.dart</code>.</p>
+</footer>
+</body>
+</html>
