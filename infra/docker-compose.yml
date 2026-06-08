@@ -58,8 +58,9 @@ services:
       LOG_LEVEL: info
       DATABASE_URL: postgresql://studybuddy:studybuddy@postgres:5432/studybuddy
       REDIS_URL: redis://redis:6379
-      # Pass via .env at repo root, or your shell.
-      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET must be set (>= 32 chars). Generate with: openssl rand -base64 48}
+      # Pass via .env at repo root, or your shell. The env validator in
+      # src/lib/env.ts will reject empty / short values at boot.
+      JWT_SECRET: ${JWT_SECRET}
       CORS_ORIGIN: ${CORS_ORIGIN:-*}
     ports:
       - "3000:3000"

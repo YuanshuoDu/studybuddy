@@ -5,33 +5,62 @@
  * or Redis required) by injecting mock `pingPrisma` / `pingRedis`
  * implementations. The goal is to verify the route + error handler
  * contract, not the database driver.
+ *
+ * IMPORTANT: we must NOT use `vi.importActual` for the mocked modules,
+ * because that would instantiate the real PrismaClient + ioredis and
+ * block forever trying to reach localhost. Instead we provide a pure
+ * factory that exports the same names as the real module but stub
+ * values. The `prisma` and `redis` exports are also stubbed so that
+ * `app.ts` decoration + plugins that hold a reference to them never
+ * deref a real client.
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { FastifyInstance } from 'fastify';
-import type * as PrismaModule from '@/lib/prisma.js';
-import type * as RedisModule from '@/lib/redis.js';
 
-import { buildApp } from '@/lib/app.js';
-
-// Mock the ping helpers so we don't need a live DB / Redis.
-vi.mock('@/lib/prisma.js', async () => {
-  const actual = await vi.importActual<typeof PrismaModule>('@/lib/prisma.js');
+vi.mock('@/lib/prisma.js', () => {
+  const prismaStub = {} as never;
   return {
-    ...actual,
+    prisma: prismaStub,
     pingPrisma: vi.fn(),
     closePrisma: vi.fn(),
   };
 });
 
-vi.mock('@/lib/redis.js', async () => {
-  const actual = await vi.importActual<typeof RedisModule>('@/lib/redis.js');
+vi.mock('@/lib/redis.js', () => {
+  // @fastify/rate-limit's RedisStore uses callback-style ioredis:
+  //   redis.rateLimit(key, window, max, ban, continueExceeding, cb)
+  // where cb is `(err, [current, ttl, ban])`. The plugin's request
+  // hook calls `incr()` which awaits the callback — Promise-returning
+  // stubs would hang the test forever. Provide the callback signature
+  // so the hook completes immediately.
+  const redisStub = {
+    defineCommand: vi.fn(),
+    // Always under the limit (current=1, ttl=60000, ban=false).
+    rateLimit: vi.fn(
+      (
+        _key: unknown,
+        _window: unknown,
+        _max: unknown,
+        _ban: unknown,
+        _continue: unknown,
+        cb: (err: null, result: [number, number, boolean]) => void,
+      ) => cb(null, [1, 60_000, false]),
+    ),
+    quit: vi.fn(async () => 'OK'),
+    disconnect: vi.fn(),
+    on: vi.fn(),
+    duplicate: vi.fn(),
+  } as never;
   return {
-    ...actual,
+    redis: redisStub,
     pingRedis: vi.fn(),
-    closeRedis: vi.fn(),
+    closeRedis: vi.fn(async () => undefined),
   };
 });
 
+// Imports placed AFTER vi.mock so the stubs are in place when app.ts
+// pulls in its dependency graph.
+import { buildApp } from '@/lib/app.js';
 import { pingPrisma } from '@/lib/prisma.js';
 import { pingRedis } from '@/lib/redis.js';
 

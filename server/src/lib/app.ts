@@ -22,7 +22,7 @@ import { env } from '@/lib/env.js';
 import { logger } from '@/lib/logger.js';
 import { prisma } from '@/lib/prisma.js';
 import { redis } from '@/lib/redis.js';
-import '@/lib/fastify.d.js';
+import './fastify.d.js';
 
 import authPlugin from '@/plugins/auth.js';
 import corsPlugin from '@/plugins/cors.js';
