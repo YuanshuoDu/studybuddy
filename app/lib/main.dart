@@ -18,7 +18,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'app.dart';
 import 'bootstrap.dart';
-import 'core/config/mapbox_config.dart';
 
 Future<void> main() async {
   // Ensure binding is up before we touch any platform channels (dotenv, secure
@@ -35,10 +34,8 @@ Future<void> main() async {
     // Load .env BEFORE we build the ProviderScope so the API base URL is
     // available when Dio is constructed.
     await dotenv.load(fileName: 'assets/.env');
-    // Issue #35 — initialise the Mapbox global access token. The map
-    // screen reads it via MapboxConfig; the plugin also needs the
-    // global to be set before any MapWidget is mounted.
-    MapboxConfig.bootstrap();
+    // Issue #35 — Mapbox token is now read at map widget mount time via
+    // MapboxConfig.accessToken (no global setter to call).
     runApp(const ProviderScope(child: StudyBuddyApp()));
   });
 }

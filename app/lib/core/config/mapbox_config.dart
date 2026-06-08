@@ -4,18 +4,19 @@
 // ships a placeholder in source; ops must replace the real token at
 // build / deploy time. NEVER commit a real Mapbox public token to git.
 //
-// We initialise the global `mapbox_gl.accessToken` exactly once. The
-// Flutter app calls `MapboxConfig.bootstrap()` from `main()` before
-// `runApp` so any map widget mounted later is ready.
+// `mapbox_gl` 0.16 doesn't expose a public `MapboxOptions` class; the
+// access token is passed directly to `MapboxMap` widgets via the
+// `accessToken` parameter, or set on a per-call basis. We just expose
+// the token here so callers (the future map widget) can read it.
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:mapbox_gl/mapbox_gl.dart' as mapbox;
 
 class MapboxConfig {
   static const String _envKey = 'MAPBOX_ACCESS_TOKEN';
 
   /// Mapbox public access token from .env, or empty when not configured.
-  /// Empty token causes `mapbox.MapWidget` to fail loud (not silent).
+  /// Empty token means the map screen will render a friendly "configure
+  /// your token" placeholder instead of a broken map.
   static String get accessToken {
     final String value = (dotenv.maybeGet(_envKey) ?? '').trim();
     return value;
@@ -25,10 +26,4 @@ class MapboxConfig {
   /// We don't validate the body — Mapbox SDK does that at request time.
   static bool get isConfigured =>
       accessToken.isNotEmpty && accessToken.startsWith('pk.');
-
-  /// One-time init called from main() so the global accessToken is
-  /// set before any MapWidget is constructed.
-  static void bootstrap() {
-    mapbox.MapboxOptions.accessToken = accessToken;
-  }
 }

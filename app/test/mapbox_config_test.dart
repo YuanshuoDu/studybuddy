@@ -41,11 +41,11 @@ GOOGLE_WEB_CLIENT_ID=google-test
     });
 
     test('bootstrap does not throw on empty token', () {
+      // No global bootstrap anymore — the token is read on demand by
+      // the map screen. This test is a no-op placeholder kept so the
+      // suite still exercises the env wiring path.
       dotenv.testLoad(fileInput: '');
-      // Calling bootstrap with an empty token is allowed; the
-      // MapScreen detects isConfigured=false and shows the
-      // "configure your token" placeholder rather than crashing.
-      expect(() => MapboxConfig.bootstrap(), returnsNormally);
+      expect(MapboxConfig.isConfigured, isFalse);
     });
   });
 }

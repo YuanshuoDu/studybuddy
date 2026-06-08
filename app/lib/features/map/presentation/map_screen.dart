@@ -1,34 +1,32 @@
-// Mapbox map screen — issue #35.
+// Map screen — issue #35 (Flutter side, v1 placeholder).
 //
-// Renders an interactive Mapbox map centered on the user's current
-// location, with markers for every activity within `radiusKm`. The
-// activity list comes from the existing `GET /api/v1/activities?
-// lat=&lng=&radiusKm=` endpoint (PR #53). Marker tap → activity
-// detail via go_router.
+// What this PR ships:
+//   - A route + a screen the user can navigate to from the activity list.
+//   - The screen renders a "Mapbox coming soon" placeholder with the
+//     list of nearby activities underneath, using the
+//     `GET /api/v1/activities?lat=&lng=&radiusKm=` endpoint
+//     (PR #53 backend) — same UX as the miniprogram's list view in
+//     PR #55. Tap a card → activity detail.
 //
-// Components:
-//   - MapboxMap (native, via mapbox_gl plugin)
-//   - User position marker (animated pulse via state)
-//   - Activity markers (one per row in the response)
-//   - Bottom sheet: filter chips (type) + radius slider + activity
-//     list with distances
-//   - FAB: recenter on user + refresh location
+// What this PR does NOT ship (deferred to M3 W2 once #31 lands):
+//   - Real Mapbox map rendering. The mapbox_gl plugin's 0.16 API
+//     surface drifts quickly (MyLocationTrackingMode enum members,
+//     MapboxOptions vs MapboxMap.options, etc.); integrating it
+//     properly needs a working Android scaffold and Mapbox gradle
+//     config that don't exist yet on this branch. The plugin is
+//     already declared in pubspec.yaml so the wiring is ready when
+//     Android lands.
 //
-// Token is read from .env (`MAPBOX_ACCESS_TOKEN`). Without a token
-// the screen renders a friendly "configure your token" placeholder
-// instead of crashing.
-
-import 'dart:async';
+// The screen reads its location via the existing `geolocator` package
+// (already a transitive dep of mapbox_gl) and falls back gracefully
+// when permission is denied.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart' as geo;
 import 'package:go_router/go_router.dart';
-import 'package:mapbox_gl/mapbox_gl.dart' as mapbox;
 
-import '../../../core/config/mapbox_config.dart';
 import '../../../core/router/app_router.dart';
-import '../../../core/theme/app_colors.dart';
 import '../../activity/data/activity_model.dart';
 import '../../activity/application/activity_providers.dart';
 
@@ -40,15 +38,10 @@ class MapScreen extends ConsumerStatefulWidget {
 }
 
 class _MapScreenState extends ConsumerState<MapScreen> {
-  mapbox.MapboxMapController? _controller;
-  StreamSubscription<geo.Position>? _positionSub;
-
   geo.Position? _userPosition;
   int _radiusKm = 5;
-  String? _typeFilter; // null = all
+  String? _typeFilter;
   bool _locating = false;
-
-  static const double _initialZoom = 13;
 
   @override
   void initState() {
@@ -56,41 +49,25 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     _locate();
   }
 
-  @override
-  void dispose() {
-    _positionSub?.cancel();
-    _controller?.dispose();
-    super.dispose();
-  }
-
-  // ---------------------------------------------------------------------------
-  // Location
-  // ---------------------------------------------------------------------------
-
   Future<void> _locate() async {
     if (_locating) return;
     setState(() => _locating = true);
     try {
-      // geolocator is the canonical Flutter geo package; we add it
-      // implicitly via mapbox_gl. We re-check permission here.
-      final geo.LocationPermission perm = await geo.Geolocator.checkPermission();
+      geo.LocationPermission perm = await geo.Geolocator.checkPermission();
       if (perm == geo.LocationPermission.denied) {
-        await geo.Geolocator.requestPermission();
+        perm = await geo.Geolocator.requestPermission();
       }
-      final geo.Position pos = await geo.Geolocator.getCurrentPosition(
-        locationSettings: const geo.LocationSettings(
-          accuracy: geo.LocationAccuracy.high,
-          distanceFilter: 0,
-        ),
-      );
+      if (perm == geo.LocationPermission.denied ||
+          perm == geo.LocationPermission.deniedForever) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('需要位置权限以显示附近活动')),
+        );
+        return;
+      }
+      final geo.Position pos = await geo.Geolocator.getCurrentPosition();
       if (!mounted) return;
       setState(() => _userPosition = pos);
-      _controller?.animateCamera(
-        mapbox.CameraUpdate.newLatLngZoom(
-          mapbox.LatLng(pos.latitude, pos.longitude),
-          _initialZoom,
-        ),
-      );
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -101,43 +78,32 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     }
   }
 
-  // ---------------------------------------------------------------------------
-  // Map lifecycle
-  // ---------------------------------------------------------------------------
-
-  void _onMapCreated(mapbox.MapboxMapController controller) {
-    _controller = controller;
-    if (_userPosition != null) {
-      controller.animateCamera(
-        mapbox.CameraUpdate.newLatLngZoom(
-          mapbox.LatLng(_userPosition!.latitude, _userPosition!.longitude),
-          _initialZoom,
-        ),
-      );
-    }
-  }
-
-  // ---------------------------------------------------------------------------
-  // Build
-  // ---------------------------------------------------------------------------
-
   @override
   Widget build(BuildContext context) {
-    if (!MapboxConfig.isConfigured) {
-      return Scaffold(
-        appBar: AppBar(title: const Text('附近活动')),
-        body: _MissingTokenView(),
-      );
-    }
     return Scaffold(
       appBar: AppBar(
         title: const Text('附近活动'),
-        backgroundColor: AppColors.surface,
       ),
-      body: Stack(
+      body: Column(
         children: <Widget>[
-          _buildMap(),
-          _buildBottomSheet(),
+          _MapPlaceholder(
+            position: _userPosition,
+            locating: _locating,
+          ),
+          if (_userPosition != null) _NearbyList(
+            lat: _userPosition!.latitude,
+            lng: _userPosition!.longitude,
+            radiusKm: _radiusKm,
+            typeFilter: _typeFilter,
+            onRadiusChange: (int v) => setState(() => _radiusKm = v),
+            onTypeChange: (String? t) => setState(() => _typeFilter = t),
+            onCardTap: (String id) =>
+                context.push(AppRoutes.activityPath(id)),
+          )
+          else
+            const Expanded(
+              child: Center(child: Text('正在获取位置…')),
+            ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -151,73 +117,98 @@ class _MapScreenState extends ConsumerState<MapScreen> {
       ),
     );
   }
+}
 
-  Widget _buildMap() {
-    return mapbox.MapboxMap(
-      initialCameraPosition: mapbox.CameraPosition(
-        target: _userPosition != null
-            ? mapbox.LatLng(_userPosition!.latitude, _userPosition!.longitude)
-            : const mapbox.LatLng(39.9842, 116.3074), // fallback: Beijing
-        zoom: _initialZoom,
+class _MapPlaceholder extends StatelessWidget {
+  const _MapPlaceholder({required this.position, required this.locating});
+  final geo.Position? position;
+  final bool locating;
+
+  @override
+  Widget build(BuildContext context) {
+    final ColorScheme cs = Theme.of(context).colorScheme;
+    return Container(
+      height: 220,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: <Color>[
+            cs.primary.withOpacity(0.15),
+            cs.primary.withOpacity(0.05),
+          ],
+        ),
+        border: Border(bottom: BorderSide(color: cs.outlineVariant)),
       ),
-      onMapCreated: _onMapCreated,
-      myLocationEnabled: _userPosition != null,
-      myLocationTrackingMode: mapbox.MyLocationTrackingMode.tracking,
-      styleString: mapbox.MapboxOptions.accessToken.isEmpty
-          ? null
-          : 'mapbox://styles/mapbox/streets-v12',
-    );
-  }
-
-  Widget _buildBottomSheet() {
-    if (_userPosition == null) {
-      return const SizedBox.shrink();
-    }
-    return DraggableScrollableSheet(
-      initialChildSize: 0.35,
-      minChildSize: 0.2,
-      maxChildSize: 0.85,
-      builder: (BuildContext context, ScrollController scrollCtl) {
-        return _BottomSheetContent(
-          scrollController: scrollCtl,
-          radiusKm: _radiusKm,
-          typeFilter: _typeFilter,
-          onRadiusChange: (double v) {
-            setState(() => _radiusKm = v.round());
-          },
-          onTypeChange: (String? t) {
-            setState(() => _typeFilter = t);
-          },
-          lat: _userPosition!.latitude,
-          lng: _userPosition!.longitude,
-          onMarkerTap: (String activityId) =>
-              context.push(AppRoutes.activityPath(activityId)),
-        );
-      },
+      child: Stack(
+        children: <Widget>[
+          Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Icon(Icons.map_outlined, size: 48, color: cs.primary),
+                const SizedBox(height: 8),
+                Text(
+                  position == null
+                      ? (locating ? '定位中…' : '点击右下角定位')
+                      : 'Mapbox 地图（开发中）',
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+                if (position != null) ...<Widget>[
+                  const SizedBox(height: 4),
+                  Text(
+                    'lat ${position!.latitude.toStringAsFixed(4)} · lng ${position!.longitude.toStringAsFixed(4)}',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ],
+              ],
+            ),
+          ),
+          const Positioned(
+            top: 8, right: 8,
+            child: _M3W2Badge(),
+          ),
+        ],
+      ),
     );
   }
 }
 
-class _BottomSheetContent extends ConsumerWidget {
-  const _BottomSheetContent({
-    required this.scrollController,
+class _M3W2Badge extends StatelessWidget {
+  const _M3W2Badge();
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: Colors.amber.shade100,
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Text('M3 W2 接入',
+          style: TextStyle(fontSize: 11, color: Colors.amber.shade900)),
+    );
+  }
+}
+
+class _NearbyList extends ConsumerWidget {
+  const _NearbyList({
+    required this.lat,
+    required this.lng,
     required this.radiusKm,
     required this.typeFilter,
     required this.onRadiusChange,
     required this.onTypeChange,
-    required this.lat,
-    required this.lng,
-    required this.onMarkerTap,
+    required this.onCardTap,
   });
 
-  final ScrollController scrollController;
-  final int radiusKm;
-  final String? typeFilter;
-  final ValueChanged<double> onRadiusChange;
-  final ValueChanged<String?> onTypeChange;
   final double lat;
   final double lng;
-  final ValueChanged<String> onMarkerTap;
+  final int radiusKm;
+  final String? typeFilter;
+  final ValueChanged<int> onRadiusChange;
+  final ValueChanged<String?> onTypeChange;
+  final ValueChanged<String> onCardTap;
 
   static const List<_TypeChoice> _types = <_TypeChoice>[
     _TypeChoice(null, '全部'),
@@ -229,85 +220,74 @@ class _BottomSheetContent extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AsyncValue<ActivityListState> async =
-        ref.watch(nearbyActivitiesProvider((lat: lat, lng: lng, radiusKm: radiusKm, type: typeFilter)));
+    final AsyncValue<ActivityListState> async = ref.watch(
+      nearbyActivitiesProvider((
+        lat: lat, lng: lng, radiusKm: radiusKm, type: typeFilter,
+      )),
+    );
 
-    return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        boxShadow: <BoxShadow>[
-          BoxShadow(blurRadius: 12, color: Color(0x22000000), offset: Offset(0, -2)),
-        ],
-      ),
-      child: ListView(
-        controller: scrollController,
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+    return Expanded(
+      child: Column(
         children: <Widget>[
-          Center(
-            child: Container(
-              width: 36, height: 4,
-              decoration: BoxDecoration(
-                color: Colors.grey.shade300,
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-          ),
-          const SizedBox(height: 12),
-          _RadiusSlider(value: radiusKm.toDouble(), onChange: onRadiusChange),
-          const SizedBox(height: 8),
+          _RadiusSlider(value: radiusKm, onChange: onRadiusChange),
           SizedBox(
-            height: 36,
+            height: 44,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               itemCount: _types.length,
               separatorBuilder: (_, __) => const SizedBox(width: 8),
               itemBuilder: (BuildContext context, int i) {
                 final _TypeChoice t = _types[i];
                 final bool active = t.value == typeFilter;
-                return ChoiceChip(
+                return FilterChip(
                   label: Text(t.label),
                   selected: active,
                   onSelected: (bool s) => onTypeChange(s ? t.value : null),
-                  selectedColor: AppColors.primary,
-                  labelStyle: TextStyle(
-                    color: active ? Colors.white : AppColors.textPrimary,
-                    fontWeight: FontWeight.w500,
-                  ),
                 );
               },
             ),
           ),
-          const Divider(height: 24),
-          async.when(
-            data: (ActivityListState s) {
-              if (s.isLoading && s.items.isEmpty) {
-                return const Padding(
-                  padding: EdgeInsets.all(24),
-                  child: Center(child: CircularProgressIndicator()),
+          const Divider(height: 1),
+          Expanded(
+            child: async.when(
+              data: (ActivityListState s) {
+                if (s.items.isEmpty) {
+                  return const Center(child: Text('当前范围内暂无活动'));
+                }
+                return ListView.separated(
+                  itemCount: s.items.length,
+                  separatorBuilder: (_, __) => const Divider(height: 1),
+                  itemBuilder: (BuildContext context, int i) {
+                    final Activity a = s.items[i];
+                    return ListTile(
+                      title: Text(a.title),
+                      subtitle: Text(
+                        '${a.locationName} · ${a.currentCount}/${a.maxParticipants}',
+                      ),
+                      trailing: a.distanceKm != null
+                          ? Text(
+                              '${a.distanceKm!.toStringAsFixed(1)} km',
+                              style: const TextStyle(
+                                color: Colors.blue,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            )
+                          : null,
+                      onTap: () => onCardTap(a.id),
+                    );
+                  },
                 );
-              }
-              if (s.items.isEmpty) {
-                return const Padding(
-                  padding: EdgeInsets.all(24),
-                  child: Center(child: Text('当前范围内暂无活动')),
-                );
-              }
-              return Column(
-                children: <Widget>[
-                  for (final Activity a in s.items)
-                    _ActivityRow(
-                      activity: a,
-                      onTap: () => onMarkerTap(a.id),
-                    ),
-                ],
-              );
-            },
-            error: (Object e, _) => Padding(
-              padding: const EdgeInsets.all(16),
-              child: Text('加载失败：$e', style: const TextStyle(color: Colors.red)),
+              },
+              error: (Object e, _) => Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Text('加载失败：$e',
+                      style: const TextStyle(color: Colors.red)),
+                ),
+              ),
+              loading: () => const Center(child: CircularProgressIndicator()),
             ),
-            loading: () => const SizedBox(height: 80),
           ),
         ],
       ),
@@ -317,26 +297,33 @@ class _BottomSheetContent extends ConsumerWidget {
 
 class _RadiusSlider extends StatelessWidget {
   const _RadiusSlider({required this.value, required this.onChange});
-  final double value;
-  final ValueChanged<double> onChange;
+  final int value;
+  final ValueChanged<int> onChange;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        const Text('半径', style: TextStyle(fontSize: 13, color: AppColors.textSecondary)),
-        Expanded(
-          child: Slider(
-            value: value,
-            min: 1, max: 50, divisions: 49,
-            label: '${value.round()} km',
-            onChanged: onChange,
-            activeColor: AppColors.primary,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      child: Row(
+        children: <Widget>[
+          const Text('半径', style: TextStyle(fontSize: 13)),
+          Expanded(
+            child: Slider(
+              value: value.toDouble(),
+              min: 1, max: 50, divisions: 49,
+              label: '$value km',
+              onChanged: (double v) => onChange(v.round()),
+            ),
           ),
-        ),
-        Text('${value.round()} km',
-            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.primary)),
-      ],
+          SizedBox(
+            width: 56,
+            child: Text('$value km',
+                textAlign: TextAlign.right,
+                style: const TextStyle(
+                    fontSize: 13, fontWeight: FontWeight.w600)),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -345,95 +332,4 @@ class _TypeChoice {
   const _TypeChoice(this.value, this.label);
   final String? value;
   final String label;
-}
-
-class _ActivityRow extends StatelessWidget {
-  const _ActivityRow({required this.activity, required this.onTap});
-  final Activity activity;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-        child: Row(
-          children: <Widget>[
-            Container(
-              width: 40, height: 40,
-              decoration: BoxDecoration(
-                color: _tintColor(activity.type).withOpacity(0.15),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              alignment: Alignment.center,
-              child: Text(_typeEmoji(activity.type), style: const TextStyle(fontSize: 18)),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(activity.title,
-                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-                      maxLines: 1, overflow: TextOverflow.ellipsis),
-                  const SizedBox(height: 2),
-                  Text('${activity.locationName} · ${activity.currentCount}/${activity.maxParticipants}',
-                      style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
-                      maxLines: 1, overflow: TextOverflow.ellipsis),
-                ],
-              ),
-            ),
-            if (activity.distanceKm != null)
-              Text('${activity.distanceKm!.toStringAsFixed(1)} km',
-                  style: const TextStyle(fontSize: 12, color: AppColors.primary, fontWeight: FontWeight.w500)),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Color _tintColor(String type) {
-    switch (type) {
-      case 'STUDY': return AppColors.activityStudy;
-      case 'SPORTS': return AppColors.activitySport;
-      case 'BOARD_GAME': return AppColors.activityBoardGame;
-      case 'ONLINE_GAME': return AppColors.activityOnline;
-      default: return AppColors.textSecondary;
-    }
-  }
-
-  String _typeEmoji(String type) {
-    switch (type) {
-      case 'STUDY': return '📚';
-      case 'SPORTS': return '🏀';
-      case 'BOARD_GAME': return '🎲';
-      case 'ONLINE_GAME': return '🎮';
-      default: return '📌';
-    }
-  }
-}
-
-class _MissingTokenView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(32),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          const Text('🗺️', style: TextStyle(fontSize: 64)),
-          const SizedBox(height: 16),
-          const Text('Mapbox 视图未配置',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-          const SizedBox(height: 8),
-          const Text(
-            '请在 .env 中设置 MAPBOX_ACCESS_TOKEN（pk.eyJ… 格式），然后重新构建。',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
-          ),
-        ],
-      ),
-    );
-  }
 }
