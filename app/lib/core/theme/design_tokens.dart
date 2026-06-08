@@ -204,3 +204,151 @@ class DesignText {
     height: 1.20,
   );
 }
+
+// ---------------------------------------------------------------------------
+// Liquid-glass design system — issue #32 admin UI (Flutter half).
+//
+// This block is the Flutter mirror of the WXSS variables in
+// `miniprogram/styles/tokens.wxss` (`--glass-bg`, `--glass-blur-md`, …)
+// and the canonical spec in `docs/design/admin-glass.md`. Both platforms
+// MUST share the same names so cross-platform review is mechanical.
+//
+// Glass is the visual signature of the M3 launch admin. Every admin
+// card / sheet / toolbar / modal sits on top of a colorful mesh
+// gradient background and renders its surface with
+// `BackdropFilter(ImageFilter.blur(...))` plus a fine translucent
+// border and a subtle inner highlight gradient.
+//
+// Dark mode is the default; light mode is a parity counterpart. All
+// values are derived from the brief's table in §3 / §2.
+// ---------------------------------------------------------------------------
+
+/// Glass surface tints. Indexed by [Brightness] so the widgets below
+/// can resolve both modes with a single `Theme.of(context).brightness`
+/// lookup.
+class GlassColors {
+  GlassColors._();
+
+  // Dark (default)
+  static const Color glassBgDark = Color(0x14FFFFFF); // rgba(255,255,255,0.08)
+  static const Color glassBgDeepDark = Color(0x4D000000); // rgba(0,0,0,0.30)
+  static const Color glassBorderDark = Color(0x2EFFFFFF); // rgba(255,255,255,0.18)
+  static const Color glassHighlightDark = Color(0x1FFFFFFF); // rgba(255,255,255,0.12)
+  static const Color glassShadowDark = Color(0x2E000000); // rgba(0,0,0,0.18)
+  static const Color glassShadow2Dark = Color(0x4D000000); // rgba(0,0,0,0.30)
+
+  // Light (parity)
+  static const Color glassBgLight = Color(0x8CFFFFFF); // rgba(255,255,255,0.55)
+  static const Color glassBgDeepLight = Color(0xB3FFFFFF); // rgba(255,255,255,0.70)
+  static const Color glassBorderLight = Color(0xA6FFFFFF); // rgba(255,255,255,0.65)
+  static const Color glassHighlightLight = Color(0x33FFFFFF); // rgba(255,255,255,0.20)
+  static const Color glassShadowLight = Color(0x140F172A); // rgba(15,23,42,0.08)
+  static const Color glassShadow2Light = Color(0x1F0F172A); // rgba(15,23,42,0.12)
+
+  /// Resolve the surface tint for the current [brightness]. This is
+  /// the single function every glass widget should call.
+  static Color surface(Brightness brightness) =>
+      brightness == Brightness.dark ? glassBgDark : glassBgLight;
+
+  /// Resolve the "deep" tint (used by the bottom-sheet / modal stack).
+  static Color deep(Brightness brightness) =>
+      brightness == Brightness.dark ? glassBgDeepDark : glassBgDeepLight;
+
+  /// Resolve the border color.
+  static Color border(Brightness brightness) =>
+      brightness == Brightness.dark ? glassBorderDark : glassBorderLight;
+
+  /// Resolve the inner highlight gradient start color (used by the
+  /// 1px inner highlight at the top edge of every glass card).
+  static Color highlight(Brightness brightness) =>
+      brightness == Brightness.dark ? glassHighlightDark : glassHighlightLight;
+
+  /// Resolve the 1st-level shadow color (used by small chips / pills).
+  static Color shadow(Brightness brightness) =>
+      brightness == Brightness.dark ? glassShadowDark : glassShadowLight;
+
+  /// Resolve the 2nd-level shadow color (used by cards / sheets).
+  static Color shadow2(Brightness brightness) =>
+      brightness == Brightness.dark ? glassShadow2Dark : glassShadow2Light;
+}
+
+/// Backdrop blur sigma values. Mirrors `--glass-blur-{sm,md,lg}`.
+/// Slight σ adjustments for light mode (MD = 24 vs dark 20) are
+/// documented in the brief §3.
+class GlassBlur {
+  GlassBlur._();
+
+  static const double sm = 12;
+  static const double md = 20;
+  static const double lg = 32;
+}
+
+/// Corner radii for glass surfaces. Mirrors `--glass-radius`,
+/// `--glass-radius-lg`, `--glass-radius-pill`. The `md` slot is the
+/// inner "card" default; `lg` is for the bottom-sheet / modal
+/// container; `pill` is for chips / status pills.
+class GlassRadius {
+  GlassRadius._();
+
+  static const double sm = 12;
+  static const double md = 20;
+  static const double lg = 28;
+  static const double pill = 999;
+}
+
+/// Drop-shadow presets for glass surfaces. Use the variants from
+/// [GlassColors.shadow] for the color so light / dark mode swap
+/// automatically.
+class GlassShadow {
+  GlassShadow._();
+
+  /// Level 1 — small chips, inline pills, status indicators.
+  static List<BoxShadow> level1(Brightness brightness) => <BoxShadow>[
+        BoxShadow(
+          color: GlassColors.shadow(brightness),
+          offset: const Offset(0, 4),
+          blurRadius: 16,
+        ),
+      ];
+
+  /// Level 2 — cards, sheets, modals (the brief's `glass-shadow-2`).
+  static List<BoxShadow> level2(Brightness brightness) => <BoxShadow>[
+        BoxShadow(
+          color: GlassColors.shadow2(brightness),
+          offset: const Offset(0, 8),
+          blurRadius: 32,
+        ),
+      ];
+}
+
+/// Mesh gradient palette for the page background. Mirrors
+/// `--mesh-{1..4}` in the brief §2. Index 0/1 are cool (sky/pink),
+/// 2/3 are warm (green/amber). The dark palette swaps to deep
+/// indigo / teal / orange.
+class MeshColors {
+  MeshColors._();
+
+  // Light mode (sky / pink / green / amber — pastel 100 tones)
+  static const List<Color> light = <Color>[
+    Color(0xFFE0F2FE), // sky-100
+    Color(0xFFFCE7F3), // pink-100
+    Color(0xFFDCFCE7), // green-100
+    Color(0xFFFEF3C7), // amber-100
+  ];
+
+  // Dark mode (indigo / indigo / teal / orange — deep tones)
+  static const List<Color> dark = <Color>[
+    Color(0xFF1E1B4B), // indigo-950
+    Color(0xFF312E81), // indigo-900
+    Color(0xFF0F766E), // teal-700
+    Color(0xFF7C2D12), // orange-900
+  ];
+
+  /// Resolve the palette for the current brightness.
+  static List<Color> forBrightness(Brightness b) =>
+      b == Brightness.dark ? dark : light;
+
+  /// Mesh blur radius. 80px in light mode, 100px in dark mode.
+  static double blurFor(Brightness b) =>
+      b == Brightness.dark ? 100 : 80;
+}
