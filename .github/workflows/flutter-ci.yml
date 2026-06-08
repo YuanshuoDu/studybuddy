@@ -129,12 +129,22 @@ jobs:
         id: has-android
         working-directory: app
         run: |
-          if [ -d "android" ] && [ -f "android/build.gradle" ] || [ -f "android/build.gradle.kts" ]; then
+          # The android/ directory must exist AND have a populated
+          # gradle wrapper (gradlew script + gradle/wrapper/gradle-wrapper.jar).
+          # Those binary bits are created by `flutter create -t app
+          # --platforms=android .` and cannot be committed verbatim.
+          # We also require a working build.gradle + AndroidManifest.
+          if [ -d "android" ] \
+            && [ -f "android/build.gradle" -o -f "android/build.gradle.kts" ] \
+            && [ -f "android/gradlew" ] \
+            && [ -f "android/gradle/wrapper/gradle-wrapper.jar" ] \
+            && [ -f "android/app/src/main/AndroidManifest.xml" ]; then
             echo "present=true" >> "$GITHUB_OUTPUT"
-            echo "android/ scaffold present"
+            echo "android/ scaffold complete (gradle wrapper + manifest)"
           else
             echo "present=false" >> "$GITHUB_OUTPUT"
-            echo "android/ scaffold missing - skipping build-apk (M3 W1 work)"
+            echo "android/ scaffold incomplete (missing gradle wrapper or manifest) - skipping build-apk"
+            echo "Run 'cd app && flutter create -t app --platforms=android .' to populate the gradle wrapper."
           fi
 
       - uses: subosito/flutter-action@v2
