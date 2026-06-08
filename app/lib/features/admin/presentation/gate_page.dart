@@ -45,11 +45,17 @@ class _AdminGatePageState extends ConsumerState<AdminGatePage> {
   void initState() {
     super.initState();
     // If we're already an admin, bounce straight to the dashboard.
+    // Otherwise we MUST flip `_entered` to true so the page becomes
+    // visible (the build() wraps the body in AnimatedOpacity whose
+    // opacity is driven by `_entered`; leaving it false would render
+    // an invisible page for non-admin users).
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       if (ref.read(isAdminProvider)) {
         context.go(AdminDashboardPage.routePath);
+        return;
       }
+      setState(() => _entered = true);
     });
   }
 
@@ -130,7 +136,7 @@ class _AdminGatePageState extends ConsumerState<AdminGatePage> {
                                       fontFamily: 'monospace',
                                       fontSize: 12,
                                       height: 1.4,
-                                      color: AppColors.textPrimary,
+                                      color: AppColors.onSurface,
                                     ),
                                   ),
                                 ),
@@ -143,7 +149,7 @@ class _AdminGatePageState extends ConsumerState<AdminGatePage> {
                                         : Icons.copy_rounded,
                                     color: _copied
                                         ? DesignColors.success
-                                        : AppColors.textPrimary,
+                                        : AppColors.onSurface,
                                   ),
                                   onPressed: _copySqlHint,
                                 ),

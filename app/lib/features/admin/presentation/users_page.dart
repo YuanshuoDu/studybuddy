@@ -201,7 +201,7 @@ class _Header extends StatelessWidget {
             children: <Widget>[
               IconButton(
                 icon: const Icon(Icons.arrow_back),
-                color: AppColors.textPrimary,
+                color: AppColors.onSurface,
                 onPressed: () => context.pop(),
               ),
               const SizedBox(width: DesignSpacing.sm),
@@ -252,7 +252,7 @@ class _SearchField extends StatelessWidget {
           const Icon(
             Icons.search_rounded,
             size: 18,
-            color: AppColors.textSecondary,
+            color: AppColors.onSurfaceVariant,
           ),
           const SizedBox(width: DesignSpacing.sm),
           Expanded(
@@ -272,7 +272,7 @@ class _SearchField extends StatelessWidget {
           if (controller.text.isNotEmpty)
             IconButton(
               icon: const Icon(Icons.close_rounded, size: 18),
-              color: AppColors.textSecondary,
+              color: AppColors.onSurfaceVariant,
               tooltip: '清除',
               onPressed: () {
                 controller.clear();
@@ -340,14 +340,14 @@ class _StatusChip extends StatelessWidget {
       onTap: onTap,
       child: Glass(
         size: GlassSize.sm,
-        color: active ? AppColors.textPrimary.withOpacity(0.20) : null,
+        color: active ? AppColors.onSurface.withOpacity(0.20) : null,
         padding: const EdgeInsets.symmetric(
           horizontal: DesignSpacing.md,
         ),
         child: Text(
           label,
           style: TextStyle(
-            color: active ? AppColors.textPrimary : AppColors.textSecondary,
+            color: active ? AppColors.onSurface : AppColors.onSurfaceVariant,
             fontSize: 12,
             fontWeight: FontWeight.w500,
           ),
@@ -460,7 +460,7 @@ class _Row extends ConsumerWidget {
                 AppColors.primaryContainer.withOpacity(0.6),
             child: const Icon(
               Icons.person_outline,
-              color: AppColors.textPrimary,
+              color: AppColors.onSurface,
             ),
           ),
           const SizedBox(width: DesignSpacing.md),

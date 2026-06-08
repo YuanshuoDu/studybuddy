@@ -495,6 +495,52 @@ class AdminApi {
     );
   }
 
+  /// Find an activity by id, scanning every status filter in parallel.
+  ///
+  /// The server's `GET /api/v1/admin/activities` endpoint requires a
+  /// single status filter (default PENDING_REVIEW) and does not expose
+  /// `/admin/activities/:id`. When the moderation detail screen is
+  /// opened via deep-link (push notification, share sheet, refresh-
+  /// from-back-stack) we don't know the activity's current status, so
+  /// we can't pick a filter up-front.
+  ///
+  /// Strategy: fan out one `listActivities` per `AdminActivityStatus`,
+  /// each with a `pageSize: 100` cap, and return the first response
+  /// that contains the requested id. The cap keeps the per-status
+  /// response cheap; for the typical M3 launch volume (a few hundred
+  /// pending at most) it returns within one TCP round-trip's latency.
+  /// For very large backlogs this is the right escape hatch.
+  ///
+  /// Returns `null` if the activity is genuinely absent or the caller
+  /// is no longer admin (server returns 403 -> swallowed so the other
+  /// status probes can still try).
+  Future<AdminActivitySummary?> findActivityById(String id) async {
+    if (id.isEmpty) return null;
+    final List<Future<AdminActivitySummary?>> probes =
+        <Future<AdminActivitySummary?>>[
+      for (final AdminActivityStatus s in AdminActivityStatus.values)
+        () async {
+          try {
+            final AdminPage<AdminActivitySummary> page =
+                await listActivities(
+              AdminActivityListQuery(status: s, pageSize: 100),
+            );
+            for (final AdminActivitySummary row in page.data) {
+              if (row.id == id) return row;
+            }
+            return null;
+          } on DioException catch (_) {
+            return null;
+          }
+        }(),
+    ];
+    final List<AdminActivitySummary?> results = await Future.wait(probes);
+    for (final AdminActivitySummary? r in results) {
+      if (r != null) return r;
+    }
+    return null;
+  }
+
   /// POST /api/v1/admin/activities/:id/approve
   Future<AdminActivityDecision> approveActivity(String id) async {
     final Response<dynamic> res =

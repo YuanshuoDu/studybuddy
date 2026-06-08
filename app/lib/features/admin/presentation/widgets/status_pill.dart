@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/design_tokens.dart';
+import 'glass_card.dart';
 
 class StatusPill extends StatelessWidget {
   const StatusPill({

@@ -139,7 +139,7 @@ class _Body extends ConsumerWidget {
                 children: <Widget>[
                   IconButton(
                     icon: const Icon(Icons.arrow_back),
-                    color: AppColors.textPrimary,
+                    color: AppColors.onSurface,
                     onPressed: () => context.pop(),
                   ),
                   const SizedBox(width: DesignSpacing.sm),
@@ -248,7 +248,7 @@ class _InfoRow extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: DesignSpacing.xs),
       child: Row(
         children: <Widget>[
-          Icon(icon, size: 18, color: AppColors.textSecondary),
+          Icon(icon, size: 18, color: AppColors.onSurfaceVariant),
           const SizedBox(width: DesignSpacing.sm),
           SizedBox(
             width: 56,
@@ -422,7 +422,7 @@ class _RejectSheetState extends State<_RejectSheet> {
               width: 36,
               height: 4,
               decoration: BoxDecoration(
-                color: AppColors.textPlaceholder.withOpacity(0.6),
+                color: AppColors.onSurfaceVariant.withOpacity(0.6),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),

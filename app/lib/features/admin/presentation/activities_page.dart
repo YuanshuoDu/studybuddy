@@ -180,7 +180,7 @@ class _Header extends StatelessWidget {
             children: <Widget>[
               IconButton(
                 icon: const Icon(Icons.arrow_back),
-                color: AppColors.textPrimary,
+                color: AppColors.onSurface,
                 onPressed: () => context.pop(),
                 tooltip: '返回',
               ),
@@ -248,7 +248,7 @@ class _StatusFilterRow extends StatelessWidget {
                 style: TextStyle(
                   color: active
                       ? AppColors.primary
-                      : AppColors.textPrimary,
+                      : AppColors.onSurface,
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
                 ),
@@ -281,7 +281,7 @@ class _TypeFilterRow extends StatelessWidget {
               child: Glass(
                 size: GlassSize.sm,
                 color: current == null
-                    ? AppColors.textPrimary.withOpacity(0.20)
+                    ? AppColors.onSurface.withOpacity(0.20)
                     : null,
                 padding: const EdgeInsets.symmetric(
                   horizontal: DesignSpacing.md,
@@ -290,8 +290,8 @@ class _TypeFilterRow extends StatelessWidget {
                   '全部类型',
                   style: TextStyle(
                     color: current == null
-                        ? AppColors.textPrimary
-                        : AppColors.textSecondary,
+                        ? AppColors.onSurface
+                        : AppColors.onSurfaceVariant,
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                   ),
@@ -306,7 +306,7 @@ class _TypeFilterRow extends StatelessWidget {
             child: Glass(
               size: GlassSize.sm,
               color: active
-                  ? AppColors.textPrimary.withOpacity(0.20)
+                  ? AppColors.onSurface.withOpacity(0.20)
                   : null,
               padding: const EdgeInsets.symmetric(
                 horizontal: DesignSpacing.md,
@@ -315,8 +315,8 @@ class _TypeFilterRow extends StatelessWidget {
                 t.label,
                 style: TextStyle(
                   color: active
-                      ? AppColors.textPrimary
-                      : AppColors.textSecondary,
+                      ? AppColors.onSurface
+                      : AppColors.onSurfaceVariant,
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
                 ),
@@ -405,7 +405,7 @@ class _Row extends ConsumerWidget {
               Icon(
                 Icons.schedule_outlined,
                 size: 14,
-                color: AppColors.textSecondary,
+                color: AppColors.onSurfaceVariant,
               ),
               const SizedBox(width: 4),
               Text(
@@ -427,7 +427,7 @@ class _Row extends ConsumerWidget {
               Icon(
                 Icons.person_outline,
                 size: 14,
-                color: AppColors.textSecondary,
+                color: AppColors.onSurfaceVariant,
               ),
               const SizedBox(width: 4),
               Expanded(
@@ -446,7 +446,7 @@ class _Row extends ConsumerWidget {
               Icon(
                 Icons.place_outlined,
                 size: 14,
-                color: AppColors.textSecondary,
+                color: AppColors.onSurfaceVariant,
               ),
               const SizedBox(width: 4),
               Expanded(
@@ -516,12 +516,12 @@ class _ActionButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Icon(icon, size: 16, color: AppColors.textPrimary),
+            Icon(icon, size: 16, color: AppColors.onSurface),
             const SizedBox(width: DesignSpacing.xs),
             Text(
               label,
               style: const TextStyle(
-                color: AppColors.textPrimary,
+                color: AppColors.onSurface,
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
               ),

@@ -16,6 +16,7 @@ import '../../../shared/extensions/context.dart';
 import '../../../shared/widgets/error_view.dart';
 import '../../../shared/widgets/loading_view.dart';
 import '../application/admin_providers.dart';
+import '../data/admin_api.dart';
 import 'activities_page.dart';
 import 'users_page.dart';
 import 'widgets/glass_card.dart';
@@ -210,7 +211,7 @@ class _MetricCard extends StatelessWidget {
               Icon(
                 Icons.arrow_outward_rounded,
                 size: 16,
-                color: AppColors.textSecondary,
+                color: AppColors.onSurfaceVariant,
               ),
             ],
           ),
@@ -291,7 +292,7 @@ class _ActionButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Icon(icon, size: 20, color: AppColors.textPrimary),
+            Icon(icon, size: 20, color: AppColors.onSurface),
             const SizedBox(width: DesignSpacing.sm),
             Text(
               label,
