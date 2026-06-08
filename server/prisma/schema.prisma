@@ -39,6 +39,7 @@ model User {
 
   activities Activity[] @relation("creator")
   signups    Signup[]
+  pushTokens PushToken[]
 
   @@index([school, grade])
   @@index([status])
@@ -151,4 +152,52 @@ model Review {
   @@unique([activityId, fromUserId, toUserId])
   @@index([toUserId])
   @@map("reviews")
+}
+
+// =====================================================================
+// Push tokens (issue #27)
+// =====================================================================
+//
+// One row per (user, device, channel). The `token` value is the
+// platform-specific registration handle:
+//   - WECHAT_TEMPLATE:  WeChat openid (re-keyed for template-send)
+//   - TPNS:             TPNS device-token
+//   - FCM:              FCM registration token
+//   - APNS:             APNs device-token
+//
+// `lastSeenAt` is updated on every registration refresh; tokens
+// older than 90 days with no refresh are GC'd by a background job
+// (M3 W2 followup). The `(userId, channel, token)` unique index
+// makes the registration idempotent — a fresh device-token for the
+// same user on the same channel just upserts the row.
+
+enum PushChannel {
+  WECHAT_TEMPLATE @map("wechat_template")
+  TPNS            @map("tpns")
+  FCM             @map("fcm")
+  APNS            @map("apns")
+
+  @@map("push_channel")
+}
+
+model PushToken {
+  id         String      @id @default(cuid())
+  userId     String      @map("user_id")
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  channel    PushChannel
+  /// Platform-specific registration handle. Free-form string so we
+  /// can pass through any token format without re-migrating.
+  token      String      @db.VarChar(500)
+  /// Optional device metadata: model name, OS version, locale,
+  /// install id, app version, etc. Free-form JSON encoded as text
+  /// (Prisma's `Json` type requires Postgres 9.4+; we already have
+  /// it but a text column is simpler for the M3 stub).
+  deviceInfo String?     @map("device_info") @db.Text
+  createdAt  DateTime    @default(now()) @map("created_at")
+  lastSeenAt DateTime    @default(now()) @map("last_seen_at")
+
+  @@unique([userId, channel, token])
+  @@index([userId])
+  @@index([channel, lastSeenAt])
+  @@map("push_tokens")
 }
