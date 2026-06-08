@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Default Flutter launcher background — pure white so the cold-start
+  frame matches the app's surface colour (#FFFFFF in design system
+  v1). Replace with a branded gradient when design assets land.
+-->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@android:color/white" />
+</layer-list>

@@ -1,0 +1,13 @@
+# Flutter / Android build outputs
+build/
+.gradle/
+local.properties
+*.iml
+
+# Keystore for signed release builds
+key.properties
+*.jks
+
+# Mapbox secret token — only ever in ~/.gradle/gradle.properties
+# on the build host, never in source.
+gradle.properties.local

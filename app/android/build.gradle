@@ -1,0 +1,40 @@
+// Pairhub Android scaffold — top-level build file.
+//
+// Flutter 3.24 / AGP 8.x / Kotlin 1.9. The Flutter Gradle plugin is
+// loaded from the local SDK; the Android Gradle Plugin (AGP) is
+// pulled from google() in settings.gradle. We don't pin AGP versions
+// in this file because Flutter's tooling picks the right pair.
+//
+// For the Mapbox mapbox_gl ^0.16 plugin (PR #56, issue #35) we add
+// the Mapbox Maven repository via allprojects { repositories { … } }
+// so the plugin can pull its native SDK at build time. The access
+// token is read from `gradle.properties` (gitignored) — see
+// android/gradle.properties.template for what to add to the local
+// file.
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        // Mapbox native SDK distribution. The token is sourced from
+        // ~/.gradle/gradle.properties or this project's gradle.properties;
+        // do NOT commit the secret. See android/gradle.properties.
+        maven {
+            url 'https://api.mapbox.com/downloads/v2/releases/maven'
+            authentication {
+                create('Authorization', 'Bearer ' + project.findProperty('MAPBOX_DOWNLOADS_TOKEN') ?: '')
+            }
+        }
+    }
+}
+
+rootProject.buildDir = '../build'
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+}
+subprojects {
+    project.evaluationDependsOn(':app')
+}
+
+tasks.register("clean", Delete) {
+    delete rootProject.buildDir
+}

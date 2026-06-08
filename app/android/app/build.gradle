@@ -1,0 +1,83 @@
+// Pairhub Android app module — Flutter 3.24 / AGP 8.
+//
+// Plugin declarations are managed by Flutter's gradle plugin loader
+// (see settings.gradle). The plugins we use:
+//   - mapbox_gl    (issue #35 — map view native SDK)
+//   - geolocator   (issue #35 — location permission + getCurrentPosition)
+//
+// For Mapbox we set the runtime access token in MainActivity.kt so the
+// native SDK can initialise. The token is read from the FlutterAsset
+// .env at boot (see MapboxConfig) and passed to Mapbox.getInstance(...).
+
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    id "dev.flutter.flutter-gradle-plugin"
+}
+
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader("UTF-8") { reader ->
+        localProperties.load(reader)
+    }
+}
+
+def flutterVersionCode = localProperties.getProperty("flutter.versionCode")
+if (flutterVersionCode == null) {
+    flutterVersionCode = "1"
+}
+
+def flutterVersionName = localProperties.getProperty("flutter.versionName")
+if (flutterVersionName == null) {
+    flutterVersionName = "0.1.0"
+}
+
+android {
+    namespace = "com.pairhub.app"
+    compileSdk = 34
+    ndkVersion = flutter.ndkVersion
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+
+    sourceSets {
+        main.java.srcDirs += "src/main/kotlin"
+    }
+
+    defaultConfig {
+        applicationId = "com.pairhub.app"
+        // Issue #35 — mapbox_gl needs minSdk 21, geolocator too.
+        minSdk = 21
+        targetSdk = 34
+        versionCode = flutterVersionCode.toInteger()
+        versionName = flutterVersionName
+    }
+
+    signingConfigs {
+        // Release config: ops must add the keystore to android/key.properties
+        // (gitignored) before producing a Play Store build. See
+        // docs/release/ios-metadata.md for the equivalent iOS flow.
+    }
+
+    buildTypes {
+        release {
+            // placeholder — replaced by signed release config once
+            // android/key.properties is in place.
+            signingConfig = signingConfigs.debug
+            minifyEnabled = true
+            shrinkResources = true
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+        }
+    }
+}
+
+flutter {
+    source = "../.."
+}
