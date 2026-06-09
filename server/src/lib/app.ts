@@ -22,12 +22,14 @@ import { env } from '@/lib/env.js';
 import { logger } from '@/lib/logger.js';
 import { prisma } from '@/lib/prisma.js';
 import { redis } from '@/lib/redis.js';
+import { initSentry } from '@/lib/sentry.js';
 import '@/lib/fastify.d.js';
 
 import authPlugin from '@/plugins/auth.js';
 import corsPlugin from '@/plugins/cors.js';
 import errorHandlerPlugin from '@/plugins/error-handler.js';
 import rateLimitPlugin from '@/plugins/rate-limit.js';
+import metricsPlugin from '@/plugins/metrics.js';
 
 import { registerHealthModule } from '@/modules/health/index.js';
 import { registerAuthModule } from '@/modules/auth/index.js';
@@ -37,6 +39,7 @@ import { registerSignupModule } from '@/modules/signup/index.js';
 import { registerReviewModule } from '@/modules/review/index.js';
 import { registerPushModule } from '@/modules/push/push.routes.js';
 import { registerAdminModule } from '@/modules/admin/index.js';
+import { registerMonitoringModule } from '@/modules/monitoring/index.js';
 
 export interface BuildAppOptions {
   /** Skip route printing (used in tests). */
@@ -63,15 +66,21 @@ export async function buildApp(options: BuildAppOptions = {}): Promise<FastifyIn
   // errors from the rest of the lifecycle.
   await app.register(errorHandlerPlugin);
 
+  // Sentry: init AFTER the error handler is registered (so the Fastify
+  // error handler Sentry wires can delegate to ours) but BEFORE the
+  // auth / rate-limit / metrics plugins that might throw.
+  initSentry(app);
+
   // Security & utilities
   await app.register(helmet, { contentSecurityPolicy: false });
   await app.register(corsPlugin);
   await app.register(cookie);
   await app.register(sensible);
 
-  // Auth + rate limit
+  // Cross-cutting
   await app.register(authPlugin);
   await app.register(rateLimitPlugin);
+  await app.register(metricsPlugin);
 
   // Routes
   await registerHealthModule(app);
@@ -82,6 +91,7 @@ export async function buildApp(options: BuildAppOptions = {}): Promise<FastifyIn
   await registerReviewModule(app);
   await registerPushModule(app);
   await registerAdminModule(app);
+  await registerMonitoringModule(app);
 
   // Dev-only: pretty-print registered routes
   if (env.NODE_ENV === 'development' && !options.silent) {

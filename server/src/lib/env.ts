@@ -50,6 +50,25 @@ const envSchema = z.object({
     .string()
     .url()
     .default('https://api.weixin.qq.com/wxa/msg_sec_check'),
+
+  // ---- Monitoring (issue #34) ----
+  // Sentry DSN — leave empty to disable Sentry in dev / CI.
+  SENTRY_DSN: z.string().default(''),
+  SENTRY_TRACES_SAMPLE_RATE: z.coerce.number().min(0).max(1).default(0.1),
+  SENTRY_PROFILES_SAMPLE_RATE: z.coerce.number().min(0).max(1).default(0.1),
+  // Prometheus /metrics endpoint. When set, requires this token via
+  // `Authorization: Bearer <token>`. When empty, /metrics is open (only
+  // safe on dev / staging). Production MUST set a token.
+  METRICS_TOKEN: z.string().default(''),
+  // Feishu (Lark) incoming webhook for alert routing. Empty disables.
+  ALERT_WEBHOOK_FEISHU: z.string().default(''),
+  // DingTalk incoming webhook. Empty disables.
+  ALERT_WEBHOOK_DINGTALK: z.string().default(''),
+  // Generic webhook (Grafana / Alertmanager / custom). Empty disables.
+  ALERT_WEBHOOK_GENERIC: z.string().default(''),
+  // HMAC secret for the inbound alert receiver (validates X-Signature
+  // header on POST /api/v1/monitoring/alerts). Empty disables (dev only).
+  ALERT_RECEIVER_HMAC_SECRET: z.string().default(''),
 });
 
 const parsed = envSchema.safeParse(process.env);
