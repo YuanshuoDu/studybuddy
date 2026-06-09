@@ -7,7 +7,7 @@
  */
 import { PrismaClient } from '@prisma/client';
 
-import { env } from './env.js';
+import { getEnv } from './env.js';
 
 declare global {
   // eslint-disable-next-line no-var
@@ -17,7 +17,7 @@ declare global {
 function makeClient(): PrismaClient {
   return new PrismaClient({
     log:
-      env.NODE_ENV === 'production'
+      getEnv().NODE_ENV === 'production'
         ? ['error']
         : ['warn', 'error'],
   });
@@ -25,7 +25,7 @@ function makeClient(): PrismaClient {
 
 export const prisma: PrismaClient = globalThis.__prisma ?? makeClient();
 
-if (env.NODE_ENV !== 'production') {
+if (getEnv().NODE_ENV !== 'production') {
   globalThis.__prisma = prisma;
 }
 

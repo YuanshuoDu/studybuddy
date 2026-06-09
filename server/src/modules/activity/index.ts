@@ -26,7 +26,7 @@ import { Prisma } from '@prisma/client';
 
 import { ForbiddenError, NotFoundError, UnauthorizedError, ValidationError } from '@/lib/errors.js';
 import { checkFields } from '@/lib/content-safety.js';
-import { env } from '@/lib/env.js';
+import { getEnv } from '@/lib/env.js';
 
 // ---------------------------------------------------------------------------
 // Schemas
@@ -379,7 +379,7 @@ export async function registerActivityModule(app: FastifyInstance): Promise<void
       // Per-endpoint tighter limit on top of the global 100/min/IP bucket.
       // Issue #26 — activity creation is a write path with potential for
       // spam / abuse.
-      config: { rateLimit: { max: env.RATE_LIMIT_CREATE_ACTIVITY_MAX, timeWindow: '1 minute' } },
+      config: { rateLimit: { max: getEnv().RATE_LIMIT_CREATE_ACTIVITY_MAX, timeWindow: '1 minute' } },
     },
     async (req) => {
     const userId = req.userId;
@@ -469,7 +469,7 @@ export async function registerActivityModule(app: FastifyInstance): Promise<void
     {
       preHandler: [app.authenticate],
       // Same tighter cap as create. Issue #26.
-      config: { rateLimit: { max: env.RATE_LIMIT_CREATE_ACTIVITY_MAX, timeWindow: '1 minute' } },
+      config: { rateLimit: { max: getEnv().RATE_LIMIT_CREATE_ACTIVITY_MAX, timeWindow: '1 minute' } },
     },
     async (req) => {
     const userId = req.userId;

@@ -19,7 +19,7 @@ import type { FastifyInstance } from 'fastify';
 import type * as SentryModule from '@sentry/node';
 import type { ProfilingIntegration as ProfilingIntegrationType } from '@sentry/profiling-node';
 
-import { env } from '@/lib/env.js';
+import { getEnv } from '@/lib/env.js';
 
 // Lazily import Sentry only when actually needed — keeps test
 // environments (where the Sentry DSN is empty by definition) free
@@ -35,7 +35,7 @@ type SentryLike = {
 let sentry: SentryLike | null = null;
 
 function getSentry(): SentryLike | null {
-  if (!env.SENTRY_DSN || env.NODE_ENV === 'test') return null;
+  if (!getEnv().SENTRY_DSN || getEnv().NODE_ENV === 'test') return null;
   if (sentry) return sentry;
   // Dynamic require so the SDK + native binaries are only loaded
   // when the DSN is set.
@@ -53,12 +53,12 @@ let initialized = false;
 
 export function initSentry(app: FastifyInstance): void {
   if (initialized) return;
-  if (env.NODE_ENV === 'test') {
+  if (getEnv().NODE_ENV === 'test') {
     app.log.debug('Sentry skipped in test env');
     initialized = true;
     return;
   }
-  if (!env.SENTRY_DSN) {
+  if (!getEnv().SENTRY_DSN) {
     app.log.info('Sentry disabled (SENTRY_DSN is empty)');
     initialized = true;
     return;
@@ -86,11 +86,11 @@ export function initSentry(app: FastifyInstance): void {
   }
 
   Sentry.init({
-    dsn: env.SENTRY_DSN,
-    environment: env.NODE_ENV,
+    dsn: getEnv().SENTRY_DSN,
+    environment: getEnv().NODE_ENV,
     release: process.env['npm_package_version'] ?? '0.1.0',
-    tracesSampleRate: env.SENTRY_TRACES_SAMPLE_RATE,
-    profilesSampleRate: env.SENTRY_PROFILES_SAMPLE_RATE,
+    tracesSampleRate: getEnv().SENTRY_TRACES_SAMPLE_RATE,
+    profilesSampleRate: getEnv().SENTRY_PROFILES_SAMPLE_RATE,
     integrations: profilingIntegration ? [profilingIntegration] : [],
     beforeSendTransaction(event) {
       if (event.transaction === 'GET /health' || event.transaction === 'GET /ready') {
@@ -113,7 +113,7 @@ export function initSentry(app: FastifyInstance): void {
     },
   });
 
-  app.log.info({ dsn: redactDsn(env.SENTRY_DSN) }, 'Sentry initialized');
+  app.log.info({ dsn: redactDsn(getEnv().SENTRY_DSN) }, 'Sentry initialized');
   initialized = true;
 }
 

@@ -13,7 +13,7 @@ import type { FastifyError, FastifyInstance, FastifyReply, FastifyRequest } from
 import fp from 'fastify-plugin';
 
 import { AppError } from '@/lib/errors.js';
-import { env } from '@/lib/env.js';
+import { getEnv } from '@/lib/env.js';
 
 const ERROR_TYPE_BASE = 'https://pairhub.example.com/errors';
 
@@ -92,7 +92,7 @@ async function errorHandlerPlugin(app: FastifyInstance): Promise<void> {
       title: err.name ?? 'Error',
       status,
       detail:
-        isServer && env.NODE_ENV === 'production' ? '服务器内部错误' : err.message,
+        isServer && getEnv().NODE_ENV === 'production' ? '服务器内部错误' : err.message,
       instance: req.url,
       code: isServer ? 'INTERNAL_ERROR' : (err.code ?? 'ERROR'),
     });

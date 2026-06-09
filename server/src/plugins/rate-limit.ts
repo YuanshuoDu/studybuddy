@@ -15,13 +15,13 @@ import rateLimit from '@fastify/rate-limit';
 import type { FastifyInstance } from 'fastify';
 import fp from 'fastify-plugin';
 
-import { env } from '@/lib/env.js';
+import { getEnv } from '@/lib/env.js';
 
 async function rateLimitPlugin(app: FastifyInstance): Promise<void> {
   // Global rate limit — applies to every route by default.
   await app.register(rateLimit, {
     global: true,
-    max: env.RATE_LIMIT_MAX,
+    max: getEnv().RATE_LIMIT_MAX,
     timeWindow: '1 minute',
     redis: app.redis,
     keyGenerator: (req) => req.ip,
@@ -43,7 +43,7 @@ async function rateLimitPlugin(app: FastifyInstance): Promise<void> {
   await app.register(async (instance) => {
     await instance.register(rateLimit, {
       global: false,
-      max: env.RATE_LIMIT_LOGIN_MAX,
+      max: getEnv().RATE_LIMIT_LOGIN_MAX,
       timeWindow: '1 minute',
       redis: instance.redis,
       keyGenerator: (req) => req.ip,

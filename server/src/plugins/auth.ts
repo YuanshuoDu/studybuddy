@@ -24,7 +24,7 @@ import jwt from '@fastify/jwt';
 import type { FastifyInstance, FastifyRequest } from 'fastify';
 import fp from 'fastify-plugin';
 
-import { env } from '@/lib/env.js';
+import { getEnv } from '@/lib/env.js';
 import { ForbiddenError, UnauthorizedError } from '@/lib/errors.js';
 
 declare module 'fastify' {
@@ -36,7 +36,7 @@ declare module 'fastify' {
 
 async function authPlugin(app: FastifyInstance): Promise<void> {
   await app.register(jwt, {
-    secret: env.JWT_SECRET,
+    secret: getEnv().JWT_SECRET,
     sign: {
       expiresIn: '7d',
       // HS256 is the default; keep it explicit so audit logs are clear.

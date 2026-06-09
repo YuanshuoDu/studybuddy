@@ -23,3 +23,31 @@ process.env['ALERT_WEBHOOK_FEISHU'] = '';
 process.env['ALERT_WEBHOOK_DINGTALK'] = '';
 process.env['ALERT_WEBHOOK_GENERIC'] = '';
 process.env['ALERT_RECEIVER_HMAC_SECRET'] = '';
+
+import { beforeEach, vi } from 'vitest';
+
+// -----------------------------------------------------------------------------
+// Global mock isolation (Item 2 of feat/optimization-server).
+// -----------------------------------------------------------------------------
+// `vi.clearAllMocks()` clears mock *call history* but DOES NOT clear the
+// `mockResolvedValueOnce` queue. The once-queue leaks across tests, which is
+// how the analytics.routes test originally surfaced a 50-user phantom count
+// in its retention assertion (see fix #28 / analytics.routes.test.ts:193).
+//
+// `vi.resetAllMocks()` resets BOTH the call history AND every mock
+// implementation (including the once-queue). It is the documented Vitest
+// helper for the leak bug.
+//
+// We run this as a *global* beforeEach so every test file gets the protection
+// without having to remember to call it in its own `beforeEach`. File-local
+// `beforeEach` blocks (which re-set per-resource `mockResolvedValue([])` /
+// `mockResolvedValue(0)` defaults after each reset) still run, in the
+// expected outside-in order.
+//
+// Per-resource defaults stay in the test file itself — they require access
+// to the file-local `prismaStub` / `mockPrismaState`, which is not reachable
+// from this global setup file.
+// -----------------------------------------------------------------------------
+beforeEach(() => {
+  vi.resetAllMocks();
+});
