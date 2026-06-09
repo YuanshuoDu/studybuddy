@@ -72,7 +72,11 @@ afterAll(async () => {
 });
 
 beforeEach(() => {
-  vi.clearAllMocks();
+  // Use resetAllMocks (not clearAllMocks) so the mockResolvedValueOnce
+  // queue does not leak into later tests. The global setup.ts also runs
+  // resetAllMocks; this local call is explicit and makes the intent
+  // obvious if the file is read in isolation.
+  vi.resetAllMocks();
 });
 
 describe('POST /api/v1/devices (issue #27)', () => {

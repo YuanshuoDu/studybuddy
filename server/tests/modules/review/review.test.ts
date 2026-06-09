@@ -205,7 +205,11 @@ describe('review.service — createReview', () => {
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    // Use resetAllMocks (not clearAllMocks) so any leftover
+    // mockResolvedValueOnce queue from this test is wiped before the
+    // global beforeEach runs again. The fresh stub from the next
+    // beforeEach masks this in practice; reset is for defense in depth.
+    vi.resetAllMocks();
   });
 
   it('happy path: creator rates a participant', async () => {

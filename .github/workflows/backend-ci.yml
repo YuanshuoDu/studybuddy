@@ -73,6 +73,13 @@ jobs:
 
       - name: Generate Prisma client
         working-directory: server
+        # MUST run before lint / typecheck / test / build. The Prisma
+        # client is generated into node_modules/@prisma/client; without
+        # this step, adding a new model to prisma/schema.prisma causes
+        # `pnpm typecheck` to fail with `Module '@prisma/client' has no
+        # exported member 'NewModel'` and `pnpm test` to fail at the
+        # PrismaClient constructor. Keep this step above the four that
+        # consume the generated client.
         run: pnpm prisma generate
 
       - name: Lint
