@@ -1,0 +1,156 @@
+# Prometheus / Grafana alert rules (issue #34)
+#
+# Import into Grafana via:
+#   1. Alerting → Alert rules → New alert rule
+#   2. Pick "Grafana managed" + "Prometheus" data source
+#   3. Paste each rule's Expression / Threshold / Annotations
+#   4. Set the "for" duration + notification policy
+#
+# OR paste the whole file into Alertmanager (if you self-host it):
+#   amtool config-render --alertmanager.url=http://alertmanager:9093
+#
+# The "expr" snippets below use the metric names declared in
+# `server/src/lib/metrics.ts`. If you rename a metric, update this
+# file in the same commit.
+
+groups:
+  - name: pairhub.api
+    interval: 30s
+    rules:
+      # ----- R1: error budget burn rate (5xx > 1% over 5m) -----
+      # 5xx is the most actionable signal: a real bug is shipping
+      # 5xx responses to clients. 1% is the SLO threshold.
+      - alert: PairhubHigh5xxRate
+        expr: |
+          (
+            sum(rate(pairhub_http_requests_total{status_class="5xx"}[5m]))
+            /
+            sum(rate(pairhub_http_requests_total[5m]))
+          ) > 0.01
+        for: 5m
+        labels:
+          severity: critical
+          team: backend
+        annotations:
+          summary: "5xx rate > 1% for 5m"
+          description: |
+            5xx responses are {{ printf "%.2f" $value | humanizePercentage }} of total
+            over the last 5 minutes. Check Sentry + server logs immediately.
+          dashboard: https://grafana.example.com/d/pairhub-overview
+
+      # ----- R2: p99 latency > 1s on any route for 10m -----
+      # 1s is the upper-bound for "feels instant" on the miniprogram
+      # and Flutter clients. Sustained p99 over 1s means the cache
+      # is cold or a slow query leaked into prod.
+      - alert: PairhubHighLatencyP99
+        expr: |
+          histogram_quantile(0.99,
+            sum by (route, le) (
+              rate(pairhub_http_request_duration_seconds_bucket[10m])
+            )
+          ) > 1
+        for: 10m
+        labels:
+          severity: warning
+          team: backend
+        annotations:
+          summary: "p99 latency > 1s on {{ $labels.route }}"
+          description: "p99 = {{ printf \"%.2f\" $value }}s. Check the activity list cache hit ratio + the slow query dashboard."
+
+      # ----- R3: auth failure storm (401/403 spike) -----
+      # More than 50 auth failures in 5m usually means either (a) a
+      # client bug is firing expired tokens, or (b) someone is
+      # credential-stuffing. Either way, escalate fast.
+      - alert: PairhubAuthFailureStorm
+        expr: sum(rate(pairhub_auth_failures_total[5m])) * 300 > 50
+        for: 5m
+        labels:
+          severity: warning
+          team: security
+        annotations:
+          summary: "Auth failure storm (>50 in 5m)"
+          description: "Inspect `auth_failures_total{reason=\"...\"}` labels for the dominant reason."
+
+      # ----- R4: rate-limit hot route -----
+      # A single route being rate-limited > 100 req/min is normal
+      # (the global cap). 1000+ means real abuse — block the IP range
+      # upstream at the load balancer.
+      - alert: PairhubRateLimitedHotRoute
+        expr: sum by (route) (rate(pairhub_rate_limited_total[5m])) * 300 > 1000
+        for: 5m
+        labels:
+          severity: warning
+          team: security
+        annotations:
+          summary: "Rate-limit storm on {{ $labels.route }}"
+
+      # ----- R5: Redis down -----
+      # 100% error rate on cache ops for 2m means Redis is dead.
+      # App should still serve (read paths fall through to PG) but
+      # latency will spike; alert so ops can investigate before users notice.
+      - alert: PairhubRedisOutage
+        expr: |
+          (
+            sum(rate(pairhub_cache_ops_total{op="get",result="error"}[2m]))
+            /
+            sum(rate(pairhub_cache_ops_total{op="get"}[2m]))
+          ) > 0.5
+        for: 2m
+        labels:
+          severity: critical
+          team: backend
+        annotations:
+          summary: "Redis error rate > 50% for 2m"
+
+  - name: pairhub.content
+    interval: 1m
+    rules:
+      # ----- R6: content-safety disabled -----
+      # If the disabled-bucket count is non-zero, WeChat creds are
+      # missing in this env — content is NOT being screened. This is
+      # a compliance gap, fix immediately.
+      - alert: PairhubContentSafetyDisabled
+        expr: rate(pairhub_content_check_total{result="disabled"}[5m]) > 0
+        for: 5m
+        labels:
+          severity: warning
+          team: compliance
+        annotations:
+          summary: "Content-safety is currently disabled"
+          description: "WECHAT_MP_APPID / WECHAT_MP_SECRET are missing from this env. User-generated text is NOT being screened."
+
+      # ----- R7: content-safety fail-open rate spike -----
+      # 微信 content-safety API is failing 5xx / timing out, and we're
+      # letting content through un-screened. Acceptable briefly, but
+      # if sustained > 5% for 10m we should disable the offending
+      # write paths until WeChat recovers.
+      - alert: PairhubContentSafetyFailOpen
+        expr: |
+          (
+            sum(rate(pairhub_content_check_total{result="fail_open"}[10m]))
+            /
+            sum(rate(pairhub_content_check_total[10m]))
+          ) > 0.05
+        for: 10m
+        labels:
+          severity: warning
+          team: backend
+        annotations:
+          summary: "WeChat content-safety fail-open > 5% for 10m"
+
+  - name: pairhub.operational
+    interval: 1m
+    rules:
+      # ----- R8: background job missed heartbeat -----
+      # Each background job sets a gauge with its name + the
+      # last-run unix timestamp. If no run in the last 2× its
+      # declared cadence, alert. (Per-job cadences in the docs.)
+      - alert: PairhubBackgroundJobStalled
+        expr: time() - pairhub_background_job_last_run_timestamp > 7200
+        for: 5m
+        labels:
+          severity: warning
+          team: backend
+        annotations:
+          summary: "Background job {{ $labels.job }} has not run in 2h"
+          description: "Check the cron / worker log for that job."

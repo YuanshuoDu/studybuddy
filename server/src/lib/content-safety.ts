@@ -27,6 +27,7 @@
 import { createHash } from 'node:crypto';
 
 import { logger } from './logger.js';
+import { contentCheckTotal } from './metrics.js';
 
 export interface ContentCheckResult {
   pass: boolean;
@@ -196,6 +197,16 @@ export async function checkFields(
   for (const [name, value] of fields) {
     if (!value) continue;
     const result = await checkText(value);
+    // Issue #34: bucket each call into one of 5 outcomes for the
+    // pairhub_content_check_total counter. Skipped (WECHAT creds
+    // not configured) is its own outcome so the dashboard can show
+    // "we're not actually screening right now" cleanly.
+    const label = result.skipped
+      ? 'disabled'
+      : result.pass
+        ? 'pass'
+        : 'block';
+    contentCheckTotal.inc({ result: label });
     if (!result.pass) {
       return { pass: false, field: name, result };
     }
