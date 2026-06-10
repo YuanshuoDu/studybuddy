@@ -4,8 +4,11 @@ publish_to: 'none'
 version: 0.1.0+1
 
 environment:
-  sdk: '>=3.3.0 <4.0.0'
-  flutter: '>=3.19.0'
+  # SDK floor — locks the toolchain at the version we test against.
+  # Currently Flutter 3.24.3 / Dart 3.5.3 in CI (see
+  # .github/workflows/flutter-ci.yml).
+  sdk: '>=3.4.0 <4.0.0'
+  flutter: '>=3.24.0'
 
 dependencies:
   flutter:
