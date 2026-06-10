@@ -2,8 +2,17 @@
 // Spec: docs/design/system-v1.md. All miniprogram + Flutter code MUST import
 // from this file; do not introduce new color hex / spacing values inline.
 //
-// The legacy `app_colors.dart` typedefs `AppColors` / `AppSpacing` /
-// `AppRadius` to these classes for one release cycle (removed in v1.1).
+// The classes below (`DesignColors`, `DesignSpacing`, `DesignRadius`,
+// `DesignElevation`, `DesignMotion`, `DesignText`) are the canonical
+// tokens. The legacy `app_colors.dart` re-export shim was removed
+// in v1.1; `DesignColors` now ships Material 3 aliases (`onSurface`,
+// `outline`) and the legacy activity alias (`activityGame`) so call
+// sites map 1:1 onto the new vocabulary without runtime risk.
+//
+// Why aliases (not copies): aliases keep the canonical hex literal
+// in exactly one place. If the design system tweaks the brand seed
+// tomorrow, every alias follows for free — no risk of a 1-bit drift
+// between `textPrimary` and `onSurface` silently diverging.
 
 import 'package:flutter/material.dart';
 
@@ -18,7 +27,12 @@ class DesignColors {
   static const Color primary = Color(0xFF3B82F6);
   static const Color primaryContainer = Color(0xFFDBEAFE);
   static const Color onPrimary = Color(0xFFFFFFFF);
+  static const Color onPrimaryContainer = Color(0xFF1E3A8A);
   static const Color primaryActive = Color(0xFF2563EB);
+
+  // Accent
+  static const Color secondary = Color(0xFF10B981);
+  static const Color tertiary = Color(0xFFF59E0B);
 
   // Semantic
   static const Color success = Color(0xFF22C55E);
@@ -35,19 +49,34 @@ class DesignColors {
   static const Color surfaceVariant = Color(0xFFF1F5F9);
   static const Color divider = Color(0xFFE2E8F0);
   static const Color border = Color(0xFFCBD5E1);
+  /// M3 ColorScheme.outline alias. Kept in lock-step with [border]
+  /// so a future palette tweak propagates to both names.
+  static const Color outline = border;
 
   // Text
   static const Color textPrimary = Color(0xFF0F172A);
   static const Color textSecondary = Color(0xFF475569);
   static const Color textPlaceholder = Color(0xFF94A3B8);
   static const Color textInverse = Color(0xFFFFFFFF);
+  /// M3 ColorScheme.onSurface alias — same value as [textPrimary],
+  /// aliased rather than duplicated so they stay in lock-step.
+  static const Color onSurface = textPrimary;
   static const Color onSurfaceVariant = Color(0xFF475569);
+
+  // Dark mode surfaces (parity with the light palette above)
+  static const Color darkSurface = Color(0xFF0F172A);
+  static const Color darkSurfaceVariant = Color(0xFF1E293B);
+  static const Color darkOnSurface = Color(0xFFE2E8F0);
 
   // Activity type tints
   static const Color activityStudy = Color(0xFF3B82F6);
   static const Color activitySport = Color(0xFF22C55E);
   static const Color activityBoardgame = Color(0xFFA855F7);
   static const Color activityOnlineGame = Color(0xFFEF4444);
+  /// Short alias for [activityOnlineGame] (matches the legacy DesignColors
+  /// name). Kept so existing call sites that say `activityGame` keep
+  /// compiling without churn.
+  static const Color activityGame = activityOnlineGame;
   static const Color activityOther = Color(0xFF64748B);
 }
 
