@@ -11,7 +11,7 @@
  *   - POST /logout        — revoke the supplied refresh_token (delete from Redis).
  *
  * Access token TTL: 15 minutes. Refresh token TTL: 30 days.
- * Both use JWT HS256 with the secret from env.JWT_SECRET.
+ * Both use JWT HS256 with the secret from getEnv().JWT_SECRET.
  *
  * Social identity merge (one user, many providers):
  *   1. If a `phone` is supplied (WeChat flow), find or create the user by phone.
@@ -28,7 +28,7 @@ import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import crypto from 'node:crypto';
 
-import { env } from '@/lib/env.js';
+import { getEnv } from '@/lib/env.js';
 import { UnauthorizedError, ValidationError } from '@/lib/errors.js';
 
 // ---------------------------------------------------------------------------
@@ -121,8 +121,8 @@ function signAccessToken(
     type: 'access',
   };
   // We use the @fastify/jwt registered on `app` to sign — but as a static helper
-  // we need to do it ourselves. The simplest path: HS256 with env.JWT_SECRET.
-  return jwtSignHs256(payload, env.JWT_SECRET);
+  // we need to do it ourselves. The simplest path: HS256 with getEnv().JWT_SECRET.
+  return jwtSignHs256(payload, getEnv().JWT_SECRET);
 }
 
 function signRefreshToken(userId: string, jti: string): string {
@@ -134,11 +134,11 @@ function signRefreshToken(userId: string, jti: string): string {
     exp: now + 30 * 24 * 60 * 60, // 30 days
     type: 'refresh',
   };
-  return jwtSignHs256(payload, env.JWT_SECRET);
+  return jwtSignHs256(payload, getEnv().JWT_SECRET);
 }
 
 function verifyRefreshToken(token: string): RefreshTokenPayload {
-  const decoded = jwtVerifyHs256<RefreshTokenPayload>(token, env.JWT_SECRET);
+  const decoded = jwtVerifyHs256<RefreshTokenPayload>(token, getEnv().JWT_SECRET);
   if (decoded.type !== 'refresh') {
     throw new UnauthorizedError('Token 不是 refresh_token');
   }
@@ -225,7 +225,7 @@ export async function registerAuthModule(app: FastifyInstance): Promise<void> {
       // Per-endpoint tighter limit on top of the global 100/min/IP bucket.
       // Login is the primary abuse surface (credential stuffing, fake account
       // creation); we cap it at RATE_LIMIT_LOGIN_MAX/min/IP. Issue #26.
-      config: { rateLimit: { max: env.RATE_LIMIT_LOGIN_MAX, timeWindow: '1 minute' } },
+      config: { rateLimit: { max: getEnv().RATE_LIMIT_LOGIN_MAX, timeWindow: '1 minute' } },
     },
     async (req) => {
     const parsed = socialLoginBodySchema.safeParse(req.body);
@@ -311,7 +311,7 @@ export async function registerAuthModule(app: FastifyInstance): Promise<void> {
   app.post(
     '/api/v1/auth/refresh',
     {
-      config: { rateLimit: { max: env.RATE_LIMIT_LOGIN_MAX, timeWindow: '1 minute' } },
+      config: { rateLimit: { max: getEnv().RATE_LIMIT_LOGIN_MAX, timeWindow: '1 minute' } },
     },
     async (req) => {
     const parsed = refreshBodySchema.safeParse(req.body);

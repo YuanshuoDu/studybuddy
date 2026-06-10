@@ -11,13 +11,13 @@
  */
 import { pino, type Logger, type LoggerOptions } from 'pino';
 
-import { env } from './env.js';
+import { getEnv } from './env.js';
 
 const options: LoggerOptions = {
-  level: env.LOG_LEVEL,
+  level: getEnv().LOG_LEVEL,
   base: {
     service: 'pairhub-server',
-    env: env.NODE_ENV,
+    env: getEnv().NODE_ENV,
     pid: process.pid,
   },
   timestamp: pino.stdTimeFunctions.isoTime,
@@ -37,7 +37,7 @@ const options: LoggerOptions = {
     level: (label) => ({ level: label }),
   },
   transport:
-    env.NODE_ENV === 'development'
+    getEnv().NODE_ENV === 'development'
       ? {
           target: 'pino-pretty',
           options: {

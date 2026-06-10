@@ -12,7 +12,7 @@ import type { FastifyInstance } from 'fastify';
 
 import { UnauthorizedError, ValidationError } from '@/lib/errors.js';
 import { checkFields } from '@/lib/content-safety.js';
-import { env } from '@/lib/env.js';
+import { getEnv } from '@/lib/env.js';
 
 import { createReviewSchema, reviewListQuerySchema } from './review.schema.js';
 import { createReview, listUserReviews } from './review.service.js';
@@ -24,7 +24,7 @@ export async function registerReviewModule(app: FastifyInstance): Promise<void> 
     {
       preHandler: app.authenticate,
       // Per-endpoint tighter cap. Issue #26.
-      config: { rateLimit: { max: env.RATE_LIMIT_REVIEW_MAX, timeWindow: '1 minute' } },
+      config: { rateLimit: { max: getEnv().RATE_LIMIT_REVIEW_MAX, timeWindow: '1 minute' } },
     },
     async (req, reply) => {
       const fromUserId = req.userId;

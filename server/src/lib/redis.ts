@@ -10,7 +10,7 @@
  */
 import Redis from 'ioredis';
 
-import { env } from './env.js';
+import { getEnv } from './env.js';
 import { logger } from './logger.js';
 
 declare global {
@@ -19,7 +19,7 @@ declare global {
 }
 
 function makeClient(): Redis {
-  const client = new Redis(env.REDIS_URL, {
+  const client = new Redis(getEnv().REDIS_URL, {
     maxRetriesPerRequest: null,
     enableReadyCheck: true,
     lazyConnect: false,
@@ -45,7 +45,7 @@ function makeClient(): Redis {
 
 export const redis: Redis = globalThis.__redis ?? makeClient();
 
-if (env.NODE_ENV !== 'production') {
+if (getEnv().NODE_ENV !== 'production') {
   globalThis.__redis = redis;
 }
 

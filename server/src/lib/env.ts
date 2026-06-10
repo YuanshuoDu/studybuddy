@@ -1,14 +1,31 @@
 /**
  * Centralized, validated environment configuration.
  *
- * Use this instead of reading `process.env` directly so that:
- * - Missing / malformed values fail fast on boot.
+ * Use `getEnv()` instead of reading `process.env` directly so that:
+ * - Missing / malformed values fail fast on first access (boot or first test
+ *   that needs them).
  * - The rest of the codebase gets typed config.
  * - Sensitive values never get logged in plaintext.
+ *
+ * # Why lazy (Item 8 of feat/optimization-server)
+ *
+ * The previous version eagerly parsed `process.env` at import time and
+ * `Object.freeze`-d the result. That made `vi.stubEnv('X', 'Y')` in tests
+ * useless: env.ts had already captured the pre-stub value at module load,
+ * so the stub never propagated to `env.X`.
+ *
+ * With lazy init, `getEnv()` parses + freezes on first call, then caches
+ * the frozen object. Callers that need to react to `vi.stubEnv(...)`
+ * changes in tests can call `setEnvForTesting()` to invalidate the cache
+ * before their next `getEnv()`. Production code never calls
+ * `setEnvForTesting()` — env values are set once at process start and
+ * stay constant.
  */
 import { z } from 'zod';
 
-// Treat the test env as `test` so Prisma logging is silent.
+// Treat the test env as `test` so Prisma logging is silent. Read this
+// eagerly (it's used as a zod default hint) but the real validation
+// happens on the first `getEnv()` call.
 const NODE_ENV = process.env['NODE_ENV'] ?? 'development';
 
 const envSchema = z.object({
@@ -71,15 +88,42 @@ const envSchema = z.object({
   ALERT_RECEIVER_HMAC_SECRET: z.string().default(''),
 });
 
-const parsed = envSchema.safeParse(process.env);
+export type Env = z.infer<typeof envSchema>;
 
-if (!parsed.success) {
-  // Print all the issues with their path so users can fix the env quickly.
-  // We deliberately skip a logger here to keep the import order trivial.
-  // eslint-disable-next-line no-console
-  console.error('❌ Invalid environment variables:', parsed.error.flatten().fieldErrors);
-  process.exit(1);
+/**
+ * Frozen snapshot of `process.env`, validated against {@link envSchema}.
+ *
+ * The first call parses + validates + freezes + caches. Subsequent calls
+ * return the same cached object. Call {@link setEnvForTesting} to drop
+ * the cache (used by tests that mutate `process.env` between cases).
+ */
+let cached: Readonly<Env> | null = null;
+
+export function getEnv(): Readonly<Env> {
+  if (cached === null) {
+    const parsed = envSchema.safeParse(process.env);
+    if (!parsed.success) {
+      // Print all the issues with their path so users can fix the env quickly.
+      // We deliberately skip a logger here to keep the import order trivial.
+      // eslint-disable-next-line no-console
+      console.error('❌ Invalid environment variables:', parsed.error.flatten().fieldErrors);
+      process.exit(1);
+    }
+    cached = Object.freeze(parsed.data);
+  }
+  return cached;
 }
 
-export const env = Object.freeze(parsed.data);
-export type Env = z.infer<typeof envSchema>;
+/**
+ * Drop the cached env snapshot so the next {@link getEnv} call re-parses
+ * `process.env`. Tests that mutate `process.env` (via `vi.stubEnv` or
+ * direct assignment) and then re-import or otherwise invalidate module
+ * caches should call this *before* the next `getEnv()` to pick up the
+ * new values.
+ *
+ * Production code MUST NOT call this — env values are fixed at process
+ * start.
+ */
+export function setEnvForTesting(): void {
+  cached = null;
+}
