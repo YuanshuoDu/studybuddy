@@ -30,7 +30,7 @@ import {
   UnauthorizedError,
   ValidationError,
 } from '@/lib/errors.js';
-import { env } from '@/lib/env.js';
+import { getEnv } from '@/lib/env.js';
 import { invalidateActivityListCache } from '@/modules/activity/index.js';
 
 const idParamSchema = z.object({
@@ -53,7 +53,7 @@ export async function registerSignupModule(app: FastifyInstance): Promise<void> 
       // Per-endpoint tighter cap on top of the global 100/min/IP bucket.
       // Issue #26 — signup is a hot write path; without this a single
       // IP can churn signups / cancellations to grief specific activities.
-      config: { rateLimit: { max: env.RATE_LIMIT_SIGNUP_MAX, timeWindow: '1 minute' } },
+      config: { rateLimit: { max: getEnv().RATE_LIMIT_SIGNUP_MAX, timeWindow: '1 minute' } },
     },
     async (req) => {
       const userId = req.userId;

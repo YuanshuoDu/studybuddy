@@ -10,7 +10,7 @@
  *   5. Crash on uncaught errors / unhandled rejections.
  */
 import { buildApp } from '@/lib/app.js';
-import { env } from '@/lib/env.js';
+import { getEnv } from '@/lib/env.js';
 import { closePrisma, pingPrisma } from '@/lib/prisma.js';
 import { closeRedis, pingRedis } from '@/lib/redis.js';
 
@@ -70,7 +70,7 @@ async function main(): Promise<void> {
     void shutdown('unhandledRejection');
   });
 
-  await app.listen({ port: env.PORT, host: env.HOST });
+  await app.listen({ port: getEnv().PORT, host: getEnv().HOST });
 }
 
 main().catch((err) => {

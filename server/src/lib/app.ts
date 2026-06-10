@@ -18,12 +18,18 @@ import cookie from '@fastify/cookie';
 import helmet from '@fastify/helmet';
 import sensible from '@fastify/sensible';
 
-import { env } from '@/lib/env.js';
+import { getEnv } from '@/lib/env.js';
 import { logger } from '@/lib/logger.js';
 import { prisma } from '@/lib/prisma.js';
 import { redis } from '@/lib/redis.js';
 import { initSentry } from '@/lib/sentry.js';
-import '@/lib/fastify.d.js';
+
+// `src/lib/fastify.d.ts` augments Fastify's types (req.userId, app.prisma,
+// app.authenticate, etc.). It's picked up automatically by the TypeScript
+// compiler via the `include` glob in tsconfig.json — no runtime import is
+// needed. The previous `import '@/lib/fastify.d.js';` survived only as a
+// no-op side-effect import and leaked the `@/` alias into dist/ (tsc-alias
+// does not rewrite `.d.ts` references).
 
 import authPlugin from '@/plugins/auth.js';
 import corsPlugin from '@/plugins/cors.js';
@@ -96,7 +102,7 @@ export async function buildApp(options: BuildAppOptions = {}): Promise<FastifyIn
   await registerAnalyticsModule(app);
 
   // Dev-only: pretty-print registered routes
-  if (env.NODE_ENV === 'development' && !options.silent) {
+  if (getEnv().NODE_ENV === 'development' && !options.silent) {
     await app.register(fastifyPrintRoutes, {
       // Print to stdout at boot
       output: console.info.bind(console),

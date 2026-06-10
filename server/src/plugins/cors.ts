@@ -11,14 +11,14 @@ import cors from '@fastify/cors';
 import type { FastifyInstance } from 'fastify';
 import fp from 'fastify-plugin';
 
-import { env } from '@/lib/env.js';
+import { getEnv } from '@/lib/env.js';
 
 async function corsPlugin(app: FastifyInstance): Promise<void> {
-  const isDev = env.NODE_ENV !== 'production';
+  const isDev = getEnv().NODE_ENV !== 'production';
 
   const origin = (() => {
     if (isDev) return true;
-    const raw = env.CORS_ORIGIN.trim();
+    const raw = getEnv().CORS_ORIGIN.trim();
     if (raw === '' || raw === '*') {
       // eslint-disable-next-line no-console
       console.warn(
