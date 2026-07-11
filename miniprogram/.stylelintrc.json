@@ -1,4 +1,4 @@
-﻿{
+{
   "plugins": ["./scripts/stylelint-plugin-import-first.mjs"],
   "rules": {
     "no-duplicate-selectors": true,
