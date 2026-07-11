@@ -57,7 +57,7 @@ abstract final class AppTheme {
           ),
         ),
       ),
-      cardTheme: CardThemeData(
+      cardTheme: CardTheme(
         clipBehavior: Clip.antiAlias,
         elevation: 0,
         margin: EdgeInsets.zero,
