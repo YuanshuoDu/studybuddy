@@ -70,7 +70,7 @@ RUN addgroup -g 1001 -S nodejs && adduser -S nodejs -u 1001
 # `npm ci` (no package-lock.json in source) — the prod dep versions
 # are pinned in package.json so the resolution is deterministic.
 COPY package.json ./
-RUN npm install --omit=dev --no-audit --no-fund --ignore-scripts
+RUN npm install --omit=dev --omit=optional --no-audit --no-fund --ignore-scripts
 
 # Strip the cross-platform native binaries that npm installs
 # unconditionally. The runtime only needs linux-x64-musl; the rest
@@ -78,8 +78,10 @@ RUN npm install --omit=dev --no-audit --no-fund --ignore-scripts
 RUN set -eux; \
   echo "=== node_modules size BEFORE strip ===" ; \
   du -sh /app/node_modules ; \
-  echo "=== top-10 heaviest subdirs BEFORE strip ===" ; \
-  du -sh /app/node_modules/* 2>/dev/null | sort -rh | head -10 ; \
+  echo "=== find sentry binaries (BEFORE) ===" ; \
+  find /app/node_modules -path '*/@sentry/profiling-node/lib/*' -type f 2>/dev/null | head -20 ; \
+  echo "=== find prisma engines (BEFORE) ===" ; \
+  find /app/node_modules -path '*/@prisma/engines/*' -type f 2>/dev/null | head -20 ; \
   # @sentry/profiling-node ships per-arch .node binaries under lib/.
   # Keep only linux-x64-musl (our runtime target).
   find /app/node_modules -path '*/@sentry/profiling-node/lib/*' -type f ! -name '*linux-x64-musl*' -delete 2>/dev/null || true ; \
@@ -95,8 +97,10 @@ RUN set -eux; \
   rm -rf /app/node_modules/.cache /app/node_modules/.bin/.cache ; \
   echo "=== node_modules size AFTER strip ===" ; \
   du -sh /app/node_modules ; \
-  echo "=== top-10 heaviest subdirs AFTER strip ===" ; \
-  du -sh /app/node_modules/* 2>/dev/null | sort -rh | head -10 ; \
+  echo "=== find sentry binaries (AFTER) ===" ; \
+  find /app/node_modules -path '*/@sentry/profiling-node/lib/*' -type f 2>/dev/null | head -20 ; \
+  echo "=== find prisma engines (AFTER) ===" ; \
+  find /app/node_modules -path '*/@prisma/engines/*' -type f 2>/dev/null | head -20 ; \
   echo "Image-prep: stripped cross-platform native binaries."
 
 # Copy the compiled output + the Prisma schema (for any runtime
