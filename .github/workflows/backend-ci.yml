@@ -122,15 +122,15 @@ jobs:
           context: ./server
           file: ./server/Dockerfile
           push: false
-          tags: Pairhub-server:ci
+          tags: pairhub-server:ci
           cache-from: type=gha
           cache-to: type=gha,mode=max
           load: true
       - name: Image size
         run: |
           echo "Image size (bytes):"
-          docker image inspect Pairhub-server:ci --format '{{.Size}}'
-          SIZE_MB=$(docker image inspect Pairhub-server:ci --format '{{.Size}}' | awk '{print int($1/1048576)}')
+          docker image inspect pairhub-server:ci --format '{{.Size}}'
+          SIZE_MB=$(docker image inspect pairhub-server:ci --format '{{.Size}}' | awk '{print int($1/1048576)}')
           echo "Image size (MB): $SIZE_MB"
           if [ "$SIZE_MB" -gt 300 ]; then
             echo "::error::Image $SIZE_MB MB exceeds 300 MB target"

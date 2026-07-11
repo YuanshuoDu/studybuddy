@@ -73,54 +73,51 @@
   - `/auth/refresh` → `/api/v1/auth/refresh`
   - 加 4 行注释说明"PR #51 hotfix"和 PR #44 的回归来源
 
-## 4. 未修（待 hotfix-2）
+## 4. 未修 → **hotfix-2 已修(2026-07-11)** ✅
 
-P1.1 signup 重新报名：service 层先 `findFirst({ where: { activityId, userId, status: 'CANCELED' } })`，找到则 update 回 APPROVED + 重新算 currentCount；找不到则原 create。
+| Bug | 状态 | 修在哪 | 备注 |
+|---|------|--------|------|
+| P1.1 signup 重新报名 | ✅ 已修 | `server/src/modules/signup/index.ts:99-117` | service 层先 `findUnique({ activityId_userId })`，找到 CANCELED 则 `update({ status: APPROVED, canceledAt: null, signedAt: now })`；找不到则原 create；APPROVED 则幂等返回 |
+| P1.2 cache invalidate | ✅ 已修 | `server/src/modules/activity/index.ts:198-216` + 5 个写路径调用 | `invalidateActivityListCache` 用 `SCAN MATCH activity:list:*` + 分批 DEL，避开了 `KEYS *` 阻塞。POST/PATCH/DELETE activity + POST/DELETE signup 5 个写路径都调用 |
+| P2.1 ternary | ✅ 已修 | `server/src/modules/auth/index.ts:300` | 简化为 `openid: compositeOpenid`（单表达式），注释明确说"之前是 `phone ? compositeOpenid : compositeOpenid`" |
+| P2.2 PATCH refine 短路 | ✅ 已修 | `server/src/modules/activity/index.ts:512-527` | route handler 先 fetch existing，再算 `mergedStart = body.startTime ?? existing.startTime` + `mergedEnd = body.endTime ?? existing.endTime`，然后校验 `mergedEnd > mergedStart` |
+| P3.1 注释 | ⏳ 未动 | — | 保留待 M3 末或 M4 接真实 OAuth 时清理 |
 
-P1.2 cache invalidate：抽 `invalidateActivityListCache(app.redis)` 用 `SCAN MATCH activity:list:*` 删 key，避免 `KEYS` 阻塞 Redis；所有写路径（POST/PATCH/DELETE activity + signup/cancelSignup）调一遍。
+完整 hotfix-2 验证报告见 [docs/verification/hotfix-2.md](./hotfix-2.md)。
 
-P2.1 ternary：简化为 `openid: compositeOpenid` + 注释。
+## 5. CI 验证 — rebrand 后(2026-07-11 21:08 UTC 起)
 
-P2.2 PATCH refine：route handler 里 fetch existing + 合并后 refine。
+CI 在 Pairhub rebrand (commit `fa04366`) 后由 6 个 workflow 跑了首次验证，结果:
 
-P3.1 注释：承认 "trust-the-client" 占位，M3 末或 M4 才会接真实 OAuth。
+| Workflow | 状态 | 备注 |
+|----------|------|------|
+| miniprogram-ci | ✅ success | rebrand 改字符串后 1 个 JSON 文件 BOM 导致 fail（commit `20cffca` 修）|
+| miniprogram-stylelint | ✅ success | 同上，BOM 修后绿 |
+| docs-verification | ✅ success | 一次过 |
+| backend-ci | ⏳ 待验证 | prisma/schema.prisma BOM 导致 P1012（commit `1e6ec3a` 修，待新一轮 push 验证）|
+| flutter-ci | ⏳ 待验证 | rebrand 改动 flutter 代码少，预期跟之前一样 |
+| android-release | 🟡 tag-only | rebrand 没新增 tag，本周不跑 |
 
-## 5. CI 验证（待跑）
+## 6. Rebrand 副作用的 BOM 污染(已修)
 
-- Backend: `pnpm lint` + `pnpm typecheck` + `pnpm test` + `pnpm build`
-- Miniprogram: scaffold validate（`pnpm i` + `pnpm validate`）
-- Flutter: `flutter analyze` + `flutter test` + `flutter build apk`（gated on android/）
+rebrand 脚本用 `[System.IO.File]::WriteAllText(..., [System.Text.Encoding]::UTF8)` 写文件，PowerShell 的 UTF8 encoder 默认带 BOM（EF BB BF）。被污染的文件：
 
-预期：P0.1 + P0.2 修完应该全绿（adapter 模式不破坏现有测试）。
+- 9 个 JSON（`miniprogram/{app,package,project.config,.stylelintrc}.json` 等）—— Node `JSON.parse` 严格不接受 BOM，导致 miniprogram-ci 失败
+- 1 个 Prisma schema —— Prisma 5 wasm validator 严格不接受 BOM，导致 backend-ci 失败（P1012）
 
-## 6. e2e 验证（待下个 tick）
+修复：commit `20cffca` + `1e6ec3a`，通用脚本 `scripts/rebrand/strip-bom.ps1` 和 `strip-bom-prisma.ps1`。
 
-```bash
-# 起 stack
-cd server && pnpm dev &
-# 或 docker compose up -d  # 如果有 docker-compose.yml
+## 7. 验证总结(更新于 2026-07-11)
 
-# 全链路 curl（待写）
-curl -X POST localhost:3000/api/v1/auth/social-login -d '{"provider":"wechat","token":"test"}' 
-# 拿到 accessToken
-curl -X POST localhost:3000/api/v1/activities -H "Authorization: Bearer $TOK" -d '{...}' 
-# 活动 ID
-curl -X POST localhost:3000/api/v1/activities/$ID/signup -H "Authorization: Bearer $TOK2" 
-# 第二用户报名
-# ... etc
-```
-
-发现 bug → 开 hotfix-3。
-
-## 7. 验证总结
-
-- ✅ **已完成**：M0-M2-M3 W1-W3 主要功能**代码层完成**
-- ⚠️ **不可用**：P0 路径 bug 修完，**两端才能真正登录使用**
-- ⏳ **遗留**：4 个 P1/P2 server bug 待 hotfix-2
-- ⏳ **未跑**：L3 e2e docker-compose + curl 待下个 tick
+- ✅ **MVP 代码完成**：M0-M2-M3 W1-W3 主要功能已上线
+- ✅ **P0 已修**：miniprogram 路径 bug + Flutter refresh 路径 bug（PR #51）
+- ✅ **P1.1 / P1.2 / P2.1 / P2.2 已修**：hotfix-2 见 [./hotfix-2.md](./hotfix-2.md)
+- ⏳ **CI 待最终验证**：backend-ci / flutter-ci 在 rebrand 后待重新跑一遍确认全绿
+- ⏳ **未跑**：L3 e2e docker-compose + curl（见 hotfix-3 计划）
+- ⏳ **P3.1 注释清理**：留 M3 末或 M4 接真实 OAuth 时
 
 下一步：
-1. 等待本 PR CI 全绿
-2. 起 hotfix-2 修 P1.1 + P1.2（核心功能 bug）
-3. 起 hotfix-3 修 P2 + 跑 e2e
-4. 关 #32 admin 设计时把 hotfix-2/3 留 M3 末
+1. 等 commit `1e6ec3a` 触发的 backend-ci / flutter-ci 跑完
+2. 起 hotfix-3 跑 L3 e2e（docker-compose + curl 全链路）
+3. 清理 P3.1 注释
+4. 写 v1.1 roadmap kickoff doc
