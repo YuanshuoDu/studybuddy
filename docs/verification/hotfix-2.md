@@ -23,7 +23,7 @@ The CI suite had not been re-run since the rebrand (force-push did not re-trigge
 
 ---
 
-## 1. P1.1 — Re-signup after cancel
+## Layer 1: P1.1 — Re-signup after cancel
 
 **Original bug** (mvp-validation.md §P1.1):
 > `@@unique([activityId, userId])` + 软删（CANCELED status）+ `tx.signup.create` 重新报名会触发 P2002
@@ -73,7 +73,7 @@ it('P1.1: re-signup after cancel revives the row + bumps currentCount', async ()
 
 ---
 
-## 2. P1.2 — Cache invalidation on write
+## Layer 2: P1.2 — Cache invalidation on write
 
 **Original bug** (mvp-validation.md §P1.2):
 > Redis cache 写后永不失效（5min TTL 内 stale）
@@ -119,7 +119,7 @@ export async function invalidateActivityListCache(redis: {
 
 ---
 
-## 3. P2.1 — Dead-code ternary in auth
+## Layer 3: P2.1 — Dead-code ternary in auth
 
 **Original bug** (mvp-validation.md §P2.1):
 > `openid: phone ? compositeOpenid : compositeOpenid` 两支完全等价，code smell
@@ -144,7 +144,7 @@ openid: compositeOpenid,
 
 ---
 
-## 4. P2.2 — PATCH refine short-circuit
+## Layer 4: P2.2 — PATCH refine short-circuit
 
 **Original bug** (mvp-validation.md §P2.2):
 > PATCH 只传 endTime 不传 startTime 时，refine 短路掉 → 不验证新 endTime vs existing startTime
@@ -190,6 +190,8 @@ if (mergedEnd <= mergedStart) {
 The mvp-validation.md was written on **2026-06-08**. The fixes have been in the tree since sometime in the M3 window (before the rebrand on 2026-07-11), but no verification report was filed. This is the verification report.
 
 All 4 hotfix descriptions in mvp-validation.md §4 (renamed to "未修 → hotfix-2 已修") are now cross-referenced to the line numbers above.
+
+**Verdict: READY (modulo backend-ci / flutter-ci final-green).** All 4 hotfix targets are confirmed in code. The 3 cascade fixes (BOM-strip on JSON, BOM-strip on Prisma, Docker tag lowercased) are also merged. Remaining items are listed in §hotfix-3 below; none of them block declaring the v1.0.1 hotfix slate closed.
 
 ---
 
