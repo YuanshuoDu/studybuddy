@@ -76,27 +76,27 @@ RUN npm install --omit=dev --no-audit --no-fund --ignore-scripts
 # unconditionally. The runtime only needs linux-x64-musl; the rest
 # are dead weight in the image (~200 MB).
 RUN set -eux; \
-  # @sentry/profiling-node ships per-arch .node binaries; keep only
-  # linux-x64-musl (our runtime target).
-  find /app/node_modules/@sentry -type f \( \
-      -name '*-darwin-*' -o \
-      -name '*-linux-arm64-*' -o \
-      -name '*-linux-arm-*' -o \
-      -name '*-win32-*' \
-    \) -delete 2>/dev/null || true; \
+  echo "=== node_modules size BEFORE strip ===" ; \
+  du -sh /app/node_modules ; \
+  echo "=== top-10 heaviest subdirs BEFORE strip ===" ; \
+  du -sh /app/node_modules/* 2>/dev/null | sort -rh | head -10 ; \
+  # @sentry/profiling-node ships per-arch .node binaries under lib/.
+  # Keep only linux-x64-musl (our runtime target).
+  find /app/node_modules -path '*/@sentry/profiling-node/lib/*' -type f ! -name '*linux-x64-musl*' -delete 2>/dev/null || true ; \
   # @prisma/engines ships query-engine + migration-engine per-arch
   # binaries. Keep only linux-musl; everything else is dead weight.
-  find /app/node_modules/@prisma -type f \( \
-      -name '*darwin*' -o \
-      -name '*debian-openssl*' -o \
-      -name '*linux-arm64*' -o \
-      -name '*rhel-openssl*' -o \
-      -name '*windows*' \
-    \) -delete 2>/dev/null || true; \
+  find /app/node_modules -path '*/@prisma/engines/*' -type f ! -name '*linux-musl*' -delete 2>/dev/null || true ; \
+  # @prisma/engines directory has per-arch subdirs (e.g.
+  # `query-engine-linux-arm64-openssl-1.1.x`); delete the non-musl ones.
+  find /app/node_modules -path '*/@prisma/engines/*' -type d ! -name 'engines' ! -name '*linux-musl*' -exec rm -rf {} + 2>/dev/null || true ; \
   # Strip dev-only .map files in the runtime image.
-  find /app/node_modules -name '*.map' -delete 2>/dev/null || true; \
+  find /app/node_modules -name '*.map' -delete 2>/dev/null || true ; \
   # Remove npm's caches that it sometimes leaves.
-  rm -rf /app/node_modules/.cache /app/node_modules/.bin/.cache; \
+  rm -rf /app/node_modules/.cache /app/node_modules/.bin/.cache ; \
+  echo "=== node_modules size AFTER strip ===" ; \
+  du -sh /app/node_modules ; \
+  echo "=== top-10 heaviest subdirs AFTER strip ===" ; \
+  du -sh /app/node_modules/* 2>/dev/null | sort -rh | head -10 ; \
   echo "Image-prep: stripped cross-platform native binaries."
 
 # Copy the compiled output + the Prisma schema (for any runtime
