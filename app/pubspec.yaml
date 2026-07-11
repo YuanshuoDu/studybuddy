@@ -21,7 +21,7 @@ dependencies:
   go_router: ^14.2.0
 
   # Networking
-  dio: ^5.4.3+1
+  dio: ^5.10.0
 
   # Secure storage for tokens (NEVER use shared_preferences for tokens)
   flutter_secure_storage: ^9.2.2

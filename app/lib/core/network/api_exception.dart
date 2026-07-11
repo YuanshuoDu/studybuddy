@@ -102,6 +102,7 @@ ApiException mapDioException(DioException error) {
     case DioExceptionType.receiveTimeout:
     case DioExceptionType.connectionError:
     case DioExceptionType.unknown:
+    case DioExceptionType.transformTimeout:
       return NetworkException(
         error.message ?? 'network_error',
         requestPath: path,
