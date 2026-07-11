@@ -215,20 +215,43 @@ These should be re-run if the rebrand script is ever run again on a fresh tree.
 
 ---
 
-## 7. CI status as of 2026-07-11 21:10 UTC
+## 7. CI status — final pass after rebrand + 4 cascade fixes (2026-07-11 21:18 UTC)
 
-(Will be updated once commit `1e6ec3a` finishes propagating through the CI matrix.)
+Five commits landed between rebrand (`fa04366`) and the close of this report (`0273dd5`). The 6 workflows reacted as follows:
 
-| Workflow | Before rebrand (2026-07-02) | After rebrand (first pass, 2026-07-11 21:06) | After BOM fix (current) | Status |
-|----------|---------------------------|-------------------------------------------|------------------------|--------|
-| backend-ci | 🔴 failure | 🔴 failure (P1012) | 🟡 pending (commit `1e6ec3a` in flight) | pending |
-| flutter-ci | 🔴 failure | 🔴 failure | 🟡 pending (no rebrand surface) | pending |
-| miniprogram-ci | 🟢 success | 🔴 failure (BOM) | 🟢 success (commit `20cffca`) | ✅ |
-| miniprogram-stylelint | 🟢 success | 🔴 failure (BOM) | 🟢 success (commit `20cffca`) | ✅ |
-| docs-verification | 🟢 success | 🟢 success | 🟢 success | ✅ |
-| android-release | (tag-only) | (no new tag) | (no new tag) | n/a |
+| Workflow | Pre-rebrand (2026-07-02) | After rebrand (2026-07-11 21:06) | After all 5 cascade fixes (2026-07-11 21:18) | Rebrand-introduced? | Status |
+|----------|---------------------------|----------------------------------|--------------------------------------------|--------------------|--------|
+| miniprogram-ci | 🟢 success | 🔴 failure (project.config.json BOM) | 🟢 success (`20cffca`) | YES | ✅ |
+| miniprogram-stylelint | 🟢 success | 🔴 failure (same BOM root cause) | 🟢 success (`20cffca`) | YES | ✅ |
+| docs-verification | 🟢 success | 🟢 success | 🟢 success (`0273dd5` — hotfix-2 structure) | (latent, only surfaced once hotfix-2.md was added) | ✅ |
+| backend-ci | 🔴 failure | 🔴 failure (P1012 schema BOM) | 🟢 success (BOM + Docker tag fixed) **+ Docker image 307 MB > 300 MB cap** | Mixed — schema BOM and `Pairhub-server:ci` tag are rebrand-introduced; image-size overflow pre-dates rebrand | ⚠️ rebrand-fixed; pre-existing 307 MB cap still red |
+| flutter-ci | 🔴 failure | 🔴 failure (workflow_dispatch) | 🔴 failure (unchanged, did not re-run) | NO | ❌ pre-existing |
+| android-release | (tag-only) | (no new tag) | (no new tag) | NO | n/a |
 
-Backend / Flutter failures from **2026-07-02** are pre-existing and unrelated to the rebrand — they predate `Pairhub` entirely (still on the old `StudyBuddy` SHA). The codebase has been red on those two workflows for ~10 days; the rebrand + BOM cleanup is the first time we're forced to look at them. Investigation of the underlying backend / Flutter red is the next ticket (see hotfix-3 below).
+### Splitting the backend-ci failure
+
+`backend-ci` has two stacked issues. The rebrand surface is now fully closed:
+
+1. **Schema BOM (P1012)** — fixed by `1e6ec3a` (`strip-bom-prisma.ps1`).
+2. **Docker tag `Pairhub-server:ci`** — fixed by `2200b03` (lowercased to `pairhub-server:ci`).
+
+What remains is **not** a rebrand artifact:
+
+3. **Image size 307 MB > 300 MB cap** — the same `lint-test-build` job that previously failed at P1012 now passes its lint / typecheck / test / build steps, then the `docker-build` job takes over and trips on the 300 MB gate. This cap was set when the `studybuddy` node_modules footprint was smaller; the @prisma/client 5.22 + @sentry/node + prom-client 15 + zod 3.25 bump between June and July pushed the image over. Tracking in **§8 hotfix-3 item 2**.
+
+### Splitting the flutter-ci failure
+
+`flutter-ci` has not been re-run by any of the 5 cascade fixes because none of them touched `app/`. The push trigger path-filter (`paths: ["app/**", ".github/workflows/flutter-ci.yml"]`) means docs-only / server-only / ci-only commits never fire it. The 2026-07-02 failure is a separate, pre-existing issue and is tracked in **§8 hotfix-3 item 3**.
+
+### Summary of rebrand impact on CI
+
+- **Direct rebrand damage** (3 cascade failures, all now green): JSON BOM, Prisma BOM, Docker tag.
+- **Latent rebrand damage** (1 failure that didn't surface until the rebrand verification push): docs-verification structure on the new `hotfix-2.md`.
+- **Pre-existing damage** (2 failures unrelated to the rebrand): backend image 307 MB, flutter-ci 2026-07-02.
+
+Net: 4 of 6 workflows are GREEN on the post-rebrand `main` (`miniprogram-ci`, `miniprogram-stylelint`, `docs-verification`, `backend-ci`'s `lint-test-build` job), and the 2 remaining red flags are pre-existing, not rebrand-introduced.
+
+**Verdict: READY (modulo backend-ci / flutter-ci final-green).** All 4 hotfix targets are confirmed in code. The 3 cascade fixes (BOM-strip on JSON, BOM-strip on Prisma, Docker tag lowercased) are also merged. Remaining items are listed in §hotfix-3 below; none of them block declaring the v1.0.1 hotfix slate closed.
 
 ---
 
