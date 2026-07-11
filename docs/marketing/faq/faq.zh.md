@@ -1,4 +1,4 @@
-# Pairhub FAQ — 中文
+﻿# Pairhub FAQ — 中文
 
 > 留学生涯同好/活动匹配应用。10 道最常被问到的问题。内容跟代码
 > 保持一致：每个答案里涉及的功能、限制、隐私边界都能在
@@ -214,8 +214,8 @@ Pairhub 用 2 道关卡保护你和平台：
 
 ## 还有问题？
 
-- 📧 邮件：[support@pairhub.app](mailto:support@pairhub.app)
+- 📧 邮件：[support@Pairhub.app](mailto:support@Pairhub.app)
 - 💬 微信群：见 App 内 `我的` → `加入用户群`
-- 🐛 反馈：[github.com/YuanshuoDu/pairhub/issues](https://github.com/YuanshuoDu/pairhub/issues)
+- 🐛 反馈：[github.com/YuanshuoDu/Pairhub/issues](https://github.com/YuanshuoDu/Pairhub/issues)
 - 📜 服务协议：`docs/ops/legal/terms-of-service.zh.md`
 - 🔒 隐私政策：`docs/ops/legal/privacy-policy.zh.md`

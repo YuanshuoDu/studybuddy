@@ -1,4 +1,4 @@
-/**
+﻿/**
  * 统一 API 配置
  *
  * - baseUrl 通过 project.private.config.json 中 build 环境变量注入
@@ -7,7 +7,7 @@
  */
 
 export const API_CONFIG = {
-  baseUrl: 'https://api.pairhub.example.com',
+  baseUrl: 'https://api.Pairhub.example.com',
   mockUrl: 'http://localhost:4000',
   timeout: 15000,
   /** 业务码白名单（不弹 toast） */

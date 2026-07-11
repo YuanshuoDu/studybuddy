@@ -1,5 +1,5 @@
-/**
- * Custom stylelint plugin: pairhub/no-rule-before-import
+﻿/**
+ * Custom stylelint plugin: Pairhub/no-rule-before-import
  *
  * Warns when a WXSS file contains a CSS rule (selector + declarations) that
  * appears BEFORE the first `@import` statement.
@@ -28,7 +28,7 @@
 
 import stylelint from 'stylelint';
 
-const ruleName = 'pairhub/no-rule-before-import';
+const ruleName = 'Pairhub/no-rule-before-import';
 const messages = stylelint.utils.ruleMessages(ruleName, {
   rejected: (firstImportLine) =>
     `Rule appears before the first @import (line ${firstImportLine}). ` +
@@ -36,7 +36,7 @@ const messages = stylelint.utils.ruleMessages(ruleName, {
 });
 
 const meta = {
-  url: 'https://github.com/YuanshuoDu/pairhub/blob/main/miniprogram/scripts/stylelint-plugin-import-first.mjs',
+  url: 'https://github.com/YuanshuoDu/Pairhub/blob/main/miniprogram/scripts/stylelint-plugin-import-first.mjs',
 };
 
 /** Walk the top-level root nodes and return the first @import node, if any. */

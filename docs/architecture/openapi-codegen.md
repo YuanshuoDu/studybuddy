@@ -1,4 +1,4 @@
-# OpenAPI / Codegen Architecture
+﻿# OpenAPI / Codegen Architecture
 
 The Pairhub API surface is authored **once** in TypeScript and shipped
 to three clients (browser docs, WeChat minip, Flutter app) through a

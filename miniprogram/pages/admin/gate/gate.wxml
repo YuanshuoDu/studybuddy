@@ -1,4 +1,4 @@
-<!--
+﻿<!--
   Admin 入口页（issue #32 前端 / docs/design/admin-glass.md §6.1）
 
   v2 (per verifier feedback on attempt 1)：玻璃面板用 class="glass ..." 全局

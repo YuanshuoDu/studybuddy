@@ -1,4 +1,4 @@
-# Pairhub Flutter — strict static analysis
+﻿# Pairhub Flutter — strict static analysis
 # Extends flutter_lints (the recommended set) with extra safety rules.
 
 include: package:flutter_lints/flutter.yaml

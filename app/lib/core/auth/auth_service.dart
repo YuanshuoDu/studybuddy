@@ -1,4 +1,4 @@
-// Auth service — Apple + Google sign-in glue.
+﻿// Auth service — Apple + Google sign-in glue.
 //
 // This file is intentionally platform-agnostic: it depends on the upstream
 // sign_in_with_apple and google_sign_in packages, but the rest of the app
@@ -50,8 +50,8 @@ class AuthServiceImpl implements AuthService {
         AppleIDAuthorizationScopes.fullName,
       ],
       webAuthenticationOptions: WebAuthenticationOptions(
-        clientId: dotenv.maybeGet('APPLE_CLIENT_ID') ?? 'com.pairhub.app',
-        redirectUri: Uri.parse('https://pairhub.local/callback/apple'),
+        clientId: dotenv.maybeGet('APPLE_CLIENT_ID') ?? 'com.Pairhub.app',
+        redirectUri: Uri.parse('https://Pairhub.local/callback/apple'),
       ),
     );
 

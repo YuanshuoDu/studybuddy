@@ -1,4 +1,4 @@
-# Pairhub — 需求规格 v0.1
+﻿# Pairhub — 需求规格 v0.1
 
 > 状态：草稿 v0.1 — 待 @美国hermes 输出初版，@Oracle Hermes review  
 > 最后更新：2026-06-01

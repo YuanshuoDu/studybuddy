@@ -1,4 +1,4 @@
-// Admin gate page — issue #32 frontend (Flutter half).
+﻿// Admin gate page — issue #32 frontend (Flutter half).
 //
 // Landing screen for the admin section. Two outcomes:
 //

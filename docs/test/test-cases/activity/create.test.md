@@ -1,4 +1,4 @@
-# T-ACTIVITY-CREATE — 创建活动
+﻿# T-ACTIVITY-CREATE — 创建活动
 
 > **模块**：activity / create
 > **关联 API**：`POST /api/activities`
@@ -11,7 +11,7 @@
 ## TC-ACTIVITY-CREATE-001  创建自习类活动成功
 - **优先级**：P0
 - **类型**：正向
-- **关联**：[#7](https://github.com/YuanshuoDu/pairhub/issues/7) 核心场景 1
+- **关联**：[#7](https://github.com/YuanshuoDu/Pairhub/issues/7) 核心场景 1
 - **前置条件**：
   - 用户 `usr_creator_001` 已登录（access token 有效）
   - 微信内容安全 API mock 返回 `errcode: 0`（标题 / 描述合规）

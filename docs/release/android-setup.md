@@ -1,4 +1,4 @@
-# Android scaffold — setup & release (issue #31)
+﻿# Android scaffold — setup & release (issue #31)
 
 > 状态：M3 W1 — PR #57（待合）落地 `app/android/` 全部源码配置。
 > **缺**：`gradlew` / `gradlew.bat` / `gradle/wrapper/gradle-wrapper.jar` — 三个 binary bit
@@ -138,8 +138,8 @@ flutter build apk --debug
 需要 Android keystore（一次性）：
 
 ```bash
-keytool -genkey -v -keystore android/app/pairhub-release.keystore \
-  -alias pairhub -keyalg RSA -keysize 2048 -validity 10000
+keytool -genkey -v -keystore android/app/Pairhub-release.keystore \
+  -alias Pairhub -keyalg RSA -keysize 2048 -validity 10000
 ```
 
 然后在 `app/android/key.properties`（gitignore）：
@@ -147,8 +147,8 @@ keytool -genkey -v -keystore android/app/pairhub-release.keystore \
 ```properties
 storePassword=<store-pw>
 keyPassword=<key-pw>
-keyAlias=pairhub
-storeFile=app/pairhub-release.keystore
+keyAlias=Pairhub
+storeFile=app/Pairhub-release.keystore
 ```
 
 `android/app/build.gradle` 里现在用的是 debug signingConfig placeholder。release 上架前把 `signingConfigs.release` 改为读 `key.properties`：

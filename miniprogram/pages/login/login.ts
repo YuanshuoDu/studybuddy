@@ -1,4 +1,4 @@
-/**
+﻿/**
  * 登录页
  *
  * - 默认显示微信一键登录（更顺滑）
@@ -171,6 +171,6 @@ Page<LoginData, LoginCustom>({
   },
 
   onContactTap() {
-    wx.showModal({ title: '联系客服', content: '微信：pairhub-support\n工作时间 9:00 - 21:00', showCancel: false });
+    wx.showModal({ title: '联系客服', content: '微信：Pairhub-support\n工作时间 9:00 - 21:00', showCancel: false });
   },
 });

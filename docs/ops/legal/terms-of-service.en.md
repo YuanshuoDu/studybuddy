@@ -1,4 +1,4 @@
-# Terms of Service
+﻿# Terms of Service
 
 > English version ｜ 简体中文见 [terms-of-service.zh.md](./terms-of-service.zh.md)
 > Last updated: 2026-06-08
@@ -74,7 +74,7 @@ You can request account deletion at any time via "Profile → Settings → Delet
 
 ### 7.3 Suspension
 
-For users who violate Section 3 of this Agreement, we reserve the right to **immediately suspend** their account. Suspended users may appeal at: support@pairhub.app.
+For users who violate Section 3 of this Agreement, we reserve the right to **immediately suspend** their account. Suspended users may appeal at: support@Pairhub.app.
 
 ## 8. Disclaimers and Limitation of Liability
 
@@ -95,8 +95,8 @@ Any dispute arising from this Agreement shall be resolved through friendly negot
 
 ## 11. Contact Us
 
-- Customer support: support@pairhub.app
-- Reports: report@pairhub.app
+- Customer support: support@Pairhub.app
+- Reports: report@Pairhub.app
 - Address: XXX Tech Park, XXX Road, Nanshan District, Shenzhen, China
 
 ## 12. Miscellaneous

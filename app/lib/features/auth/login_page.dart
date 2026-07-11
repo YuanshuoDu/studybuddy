@@ -1,4 +1,4 @@
-// Login page — scaffold with Apple + Google sign-in buttons.
+﻿// Login page — scaffold with Apple + Google sign-in buttons.
 //
 // Behaviour is intentionally minimal: the buttons call into the auth
 // notifier and react to loading / error state. The actual OAuth dance

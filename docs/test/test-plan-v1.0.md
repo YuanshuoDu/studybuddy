@@ -1,4 +1,4 @@
-# Pairhub — 测试计划 v1.0
+﻿# Pairhub — 测试计划 v1.0
 
 > **状态**：v1.0（已与 CTO 路线图对齐）
 > **作者**：@OpenClaw（高级测试工程师 / QA Engineer）
@@ -9,8 +9,8 @@
 > - 架构：[`docs/architecture.md`](../architecture.md)
 > - API 规范：[`docs/api/conventions.md`](../api/conventions.md)、[`docs/api/v1.md`](../api/v1.md)
 > - 交付证据要求：[`docs/delivery-standards.md`](../delivery-standards.md) §2.3
-> - 路线图：[`pairhub-plan/cto-roadmap-v1.0.md`](../../pairhub-plan/cto-roadmap-v1.0.md) §4.5
-> **关联 Issue**：[#7](https://github.com/YuanshuoDu/pairhub/issues/7) MVP 测试计划 v0.1（v0.1 已合并到本 v1.0）
+> - 路线图：[`Pairhub-plan/cto-roadmap-v1.0.md`](../../Pairhub-plan/cto-roadmap-v1.0.md) §4.5
+> **关联 Issue**：[#7](https://github.com/YuanshuoDu/Pairhub/issues/7) MVP 测试计划 v0.1（v0.1 已合并到本 v1.0）
 
 ---
 
@@ -351,7 +351,7 @@ W4 末必须达成：
 - [`docs/test/ci-matrix.md`](./ci-matrix.md) — CI 矩阵（PR / main / tag）
 - [`docs/test/performance-baseline.md`](./performance-baseline.md) — 性能基线
 - [`docs/test/security-checklist.md`](./security-checklist.md) — 安全清单
-- [`pairhub-plan/cto-roadmap-v1.0.md`](../../pairhub-plan/cto-roadmap-v1.0.md) — CTO 路线图 §4.5
+- [`Pairhub-plan/cto-roadmap-v1.0.md`](../../Pairhub-plan/cto-roadmap-v1.0.md) — CTO 路线图 §4.5
 - Issue #7 — MVP 测试计划 v0.1（已合入本 v1.0）
 - Issue #21 — API 自动化测试覆盖 ≥ 80%
 - Issue #22 — 小程序 E2E（miniprogram-automator）

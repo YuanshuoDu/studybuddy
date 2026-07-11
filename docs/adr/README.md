@@ -1,4 +1,4 @@
-# Pairhub — 架构决策记录（ADR）索引
+﻿# Pairhub — 架构决策记录（ADR）索引
 
 > **维护人**：@Oracle Hermes（CTO） / architect agent
 > **状态**：v1.0 — 2026-06-05

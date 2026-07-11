@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <!--
   ExportOptions.plist is used by `flutter build ios` and
@@ -34,7 +34,7 @@
 
 	<!-- Bundle identifier matching the App ID in App Store Connect. REQUIRED. -->
 	<key>bundleID</key>
-	<string>com.pairhub.app</string>
+	<string>com.Pairhub.app</string>
 
 	<!-- Upload symbol files so App Store Connect can symbolicate crash logs. -->
 	<key>uploadSymbols</key>

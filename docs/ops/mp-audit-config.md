@@ -1,4 +1,4 @@
-# 微信小程序审核配置 — Issue #29
+﻿# 微信小程序审核配置 — Issue #29
 
 > 适用版本：Pairhub M3 首发上架（2026 H2 目标）
 > 维护者：CTO (Mavis)  ·  审核责任：市场 + 运营
@@ -74,8 +74,8 @@
 3. 站内展示：登录页底部 + 个人中心「设置」页有外链（issue #33 落地时实现）
 
 **URL 形态**（建议）：
-- 短期：直接挂在 GitHub Pages / Vercel，URL 形如 `https://pairhub.app/legal/terms-of-service.zh`
-- 中期：迁移到 `https://pairhub.app/legal/...`（自有域名 + 静态托管）
+- 短期：直接挂在 GitHub Pages / Vercel，URL 形如 `https://Pairhub.app/legal/terms-of-service.zh`
+- 中期：迁移到 `https://Pairhub.app/legal/...`（自有域名 + 静态托管）
 
 ---
 
@@ -139,7 +139,7 @@
 | 被拒原因 | 规避 |
 | --- | --- |
 | 「类目与功能不符」 | 类目功能描述要明确写「搭子活动匹配 / 校园活动聚合」 |
-| 「未提供测试账号」 | 审核版本固定一个测试账号 (test@pairhub / 密码 8位+字母数字) |
+| 「未提供测试账号」 | 审核版本固定一个测试账号 (test@Pairhub / 密码 8位+字母数字) |
 | 「诱导分享朋友圈」 | 不要写「分享到朋友圈得 XX 奖励」 |
 | 「内容涉嫌违规」 | 后台接入微信 `msg_sec_check`（已落地）；评论先审后发 |
 | 「登录后空白页」 | 真机跑通登录 → 首页 完整链路，不要只跑开发版 |

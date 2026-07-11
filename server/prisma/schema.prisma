@@ -1,4 +1,4 @@
-// Pairhub Prisma schema
+﻿// Pairhub Prisma schema
 // Spec alignment: docs/spec-v0.2.md §5 (User / Activity / Signup) and §13 (Review, M3 stub).
 // Postgres 16 + Prisma 5.20+
 

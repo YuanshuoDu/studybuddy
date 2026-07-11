@@ -1,4 +1,4 @@
-# Pairhub FAQ — English
+﻿# Pairhub FAQ — English
 
 > Activity-matching app for Chinese students studying abroad. The 10
 > most-asked questions. Every answer maps to actual code under
@@ -228,8 +228,8 @@ to your registered email within 7 days).
 
 ## Still have questions?
 
-- 📧 Email: [support@pairhub.app](mailto:support@pairhub.app)
+- 📧 Email: [support@Pairhub.app](mailto:support@Pairhub.app)
 - 💬 User group: see in-app `Me` → `Join user group`
-- 🐛 Issues: [github.com/YuanshuoDu/pairhub/issues](https://github.com/YuanshuoDu/pairhub/issues)
+- 🐛 Issues: [github.com/YuanshuoDu/Pairhub/issues](https://github.com/YuanshuoDu/Pairhub/issues)
 - 📜 Terms: `docs/ops/legal/terms-of-service.en.md`
 - 🔒 Privacy: `docs/ops/legal/privacy-policy.en.md`

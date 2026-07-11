@@ -1,4 +1,4 @@
-# Pairhub 🎓
+﻿# Pairhub 🎓
 
 > **30 分钟内找到一起去图书馆 / 打球 / 桌游的搭子。**
 >
@@ -43,7 +43,7 @@ ecosystem. Server is open; mobile clients are first-party.
 ## 📁 目录结构
 
 ```
-pairhub/
+Pairhub/
 ├── docs/                          # 全员可见的文档
 │   ├── spec-v0.2.md               # 需求规约 v0.2（CTO 拍板）
 │   ├── architecture-v1.0.md       # 架构总览 v1.0（系统图 / 模块 / 部署 / 关键流程）
@@ -166,8 +166,8 @@ pairhub/
 
 ```bash
 # 1. 克隆 + 启动依赖服务
-git clone https://github.com/YuanshuoDu/pairhub.git
-cd pairhub
+git clone https://github.com/YuanshuoDu/Pairhub.git
+cd Pairhub
 ./infra/dev-up.sh                 # 起 PostgreSQL + Redis
 
 # 2. 后端
@@ -249,8 +249,8 @@ cd app && flutter analyze && flutter test
 
 ```bash
 # 1. Fork + 克隆
-git clone https://github.com/YuanshuoDu/pairhub.git
-cd pairhub
+git clone https://github.com/YuanshuoDu/Pairhub.git
+cd Pairhub
 
 # 2. 创建功能分支
 git checkout -b feat/<your-feature>

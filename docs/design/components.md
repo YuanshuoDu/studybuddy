@@ -1,4 +1,4 @@
-# Component Specs v1 — Pairhub
+﻿# Component Specs v1 — Pairhub
 
 > Companion to [`system-v1.md`](./system-v1.md). Every value below resolves
 > to a token defined in the system spec — no magic numbers.

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Pino-based structured logger.
  *
  * Why pino:
@@ -16,7 +16,7 @@ import { getEnv } from './env.js';
 const options: LoggerOptions = {
   level: getEnv().LOG_LEVEL,
   base: {
-    service: 'pairhub-server',
+    service: 'Pairhub-server',
     env: getEnv().NODE_ENV,
     pid: process.pid,
   },

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Health endpoint smoke tests.
  *
  * These tests exercise the Fastify instance in-process (no real DB
@@ -58,7 +58,7 @@ describe('health endpoints', () => {
       expect(res.statusCode).toBe(200);
       const body = res.json();
       expect(body.status).toBe('ok');
-      expect(body.service).toBe('pairhub-server');
+      expect(body.service).toBe('Pairhub-server');
       expect(typeof body.timestamp).toBe('string');
     });
 

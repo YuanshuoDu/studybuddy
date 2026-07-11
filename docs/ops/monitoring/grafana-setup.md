@@ -1,4 +1,4 @@
-# Grafana setup (issue #34)
+﻿# Grafana setup (issue #34)
 
 Prometheus + Grafana Cloud is the metrics stack for M3. The server
 side is automatic (`server/src/lib/metrics.ts` declares the metrics,
@@ -19,7 +19,7 @@ doc covers the Grafana-side configuration.
    - URL: `https://prometheus-prod-01-eu-west-0.grafana.net/api/prom/push`
    - Header: `Authorization: Basic <base64(instance_id:api_key)>`
 3. **Wire a Prometheus agent** (or use Grafana Agent / Alloy) to
-   scrape `https://api.pairhub.app/metrics` every 15s and remote-
+   scrape `https://api.Pairhub.app/metrics` every 15s and remote-
    write to Grafana. The config block (deploy on a sidecar in
    the same cluster as the API):
 
@@ -29,13 +29,13 @@ doc covers the Grafana-side configuration.
      scrape_interval: 15s
      evaluation_interval: 30s
    scrape_configs:
-     - job_name: pairhub-server
+     - job_name: Pairhub-server
        scheme: https
        authorization:
          type: Bearer
          credentials: ${METRICS_TOKEN}     # from the same env as the server
        static_configs:
-         - targets: ['api.pairhub.app']
+         - targets: ['api.Pairhub.app']
        metrics_path: /metrics
    remote_write:
      - url: ${GRAFANA_REMOTE_WRITE_URL}
@@ -45,7 +45,7 @@ doc covers the Grafana-side configuration.
    ```
 
 4. **Verify** by visiting your Grafana → Explore → Prometheus →
-   query `pairhub_http_requests_total`. You should see a non-empty
+   query `Pairhub_http_requests_total`. You should see a non-empty
    graph within 30s of the first scrape.
 
 ## Dashboards (import these)
@@ -61,14 +61,14 @@ The "first screen on call" — single 12-cell grid, refresh every 30s.
 
 | Cell | Query |
 | --- | --- |
-| 5xx rate (last 5m) | `sum(rate(pairhub_http_requests_total{status_class="5xx"}[5m]))` |
-| 4xx rate | `sum(rate(pairhub_http_requests_total{status_class="4xx"}[5m]))` |
-| 2xx rate | `sum(rate(pairhub_http_requests_total{status_class="2xx"}[5m]))` |
+| 5xx rate (last 5m) | `sum(rate(Pairhub_http_requests_total{status_class="5xx"}[5m]))` |
+| 4xx rate | `sum(rate(Pairhub_http_requests_total{status_class="4xx"}[5m]))` |
+| 2xx rate | `sum(rate(Pairhub_http_requests_total{status_class="2xx"}[5m]))` |
 | p50 / p95 / p99 latency | `histogram_quantile(0.50, ...)` × 3 |
-| Requests in flight | `pairhub_http_requests_in_flight` |
-| Cache hit ratio | `rate(pairhub_cache_ops_total{result="hit"}[5m]) / rate(pairhub_cache_ops_total{op="get"}[5m])` |
-| Top 10 routes by error rate | `topk(10, sum by (route) (rate(pairhub_http_requests_total{status_class="5xx"}[5m])))` |
-| Top 10 routes by p99 latency | `topk(10, histogram_quantile(0.99, sum by (route, le) (rate(pairhub_http_request_duration_seconds_bucket[10m]))))` |
+| Requests in flight | `Pairhub_http_requests_in_flight` |
+| Cache hit ratio | `rate(Pairhub_cache_ops_total{result="hit"}[5m]) / rate(Pairhub_cache_ops_total{op="get"}[5m])` |
+| Top 10 routes by error rate | `topk(10, sum by (route) (rate(Pairhub_http_requests_total{status_class="5xx"}[5m])))` |
+| Top 10 routes by p99 latency | `topk(10, histogram_quantile(0.99, sum by (route, le) (rate(Pairhub_http_request_duration_seconds_bucket[10m]))))` |
 
 ### 2. Pairhub Auth + Abuse
 
@@ -77,9 +77,9 @@ events.
 
 | Cell | Query |
 | --- | --- |
-| 401 by reason | `sum by (reason) (rate(pairhub_auth_failures_total{reason="unauthorized"}[5m]))` |
-| 403 by reason | `sum by (reason) (rate(pairhub_auth_failures_total{reason="forbidden"}[5m]))` |
-| Rate-limited by route (top 10) | `topk(10, sum by (route) (rate(pairhub_rate_limited_total[5m])))` |
+| 401 by reason | `sum by (reason) (rate(Pairhub_auth_failures_total{reason="unauthorized"}[5m]))` |
+| 403 by reason | `sum by (reason) (rate(Pairhub_auth_failures_total{reason="forbidden"}[5m]))` |
+| Rate-limited by route (top 10) | `topk(10, sum by (route) (rate(Pairhub_rate_limited_total[5m])))` |
 | Refresh-token rotation | computed from `auth:refresh:*` Redis key TTL distribution |
 
 ### 3. Pairhub Business KPIs
@@ -88,9 +88,9 @@ What the PMs care about. Refresh every 5m.
 
 | Cell | Query |
 | --- | --- |
-| Signups today / this week | `pairhub_module_events_total{module="signup",event="created"}` |
-| Activities created today | `pairhub_module_events_total{module="activity",event="created"}` |
-| Reviews created today | `pairhub_module_events_total{module="review",event="created"}` |
+| Signups today / this week | `Pairhub_module_events_total{module="signup",event="created"}` |
+| Activities created today | `Pairhub_module_events_total{module="activity",event="created"}` |
+| Reviews created today | `Pairhub_module_events_total{module="review",event="created"}` |
 | New users today / this week | (from `users` table — derived) |
 | Banned users | (from `users` table — derived) |
 | Open PENDING_REVIEW queue | (from `activities` table — derived) |

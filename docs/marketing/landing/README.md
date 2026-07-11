@@ -1,7 +1,7 @@
-# Pairhub landing page — `docs/marketing/landing/index.html`
+﻿# Pairhub landing page — `docs/marketing/landing/index.html`
 
 > **What this is** — the in-repo, self-contained landing page for
-> `pairhub.app`. The "production" version (Awwwards-grade, video
+> `Pairhub.app`. The "production" version (Awwwards-grade, video
 > hero, animated SVG blobs, custom type, deployed to Vercel + CloudFront)
 > is on the v1.1 roadmap; this in-repo file is the **evergreen source
 > of truth for copy + structure** that any future marketing re-skin
@@ -58,8 +58,8 @@
 When a designer / agency takes the v1.1 version live, the same 7-section
 structure ships to:
 
-- `pairhub.app` (Vercel + CloudFront, EN)
-- `pairhub.app/zh` (same repo, language switcher in URL)
+- `Pairhub.app` (Vercel + CloudFront, EN)
+- `Pairhub.app/zh` (same repo, language switcher in URL)
 - Mini Program landing tab (custom webview)
 - App Store "What's new" page (we only own the structure, the screenshots
   ship separately)

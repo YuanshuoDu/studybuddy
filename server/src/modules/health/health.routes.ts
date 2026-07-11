@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Health check module.
  *
  * Two endpoints with distinct semantics:
@@ -53,7 +53,7 @@ export async function registerHealthModule(app: FastifyInstance): Promise<void> 
   // ---- Liveness ----
   const liveness = async () => ({
     status: 'ok',
-    service: 'pairhub-server',
+    service: 'Pairhub-server',
     version: process.env['npm_package_version'] ?? '0.1.0',
     timestamp: new Date().toISOString(),
   });

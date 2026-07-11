@@ -1,5 +1,5 @@
-{
-  "name": "pairhub-server-tests",
+﻿{
+  "name": "Pairhub-server-tests",
   "private": true,
   "type": "module",
   "scripts": {

@@ -1,4 +1,4 @@
-# T-AUTH-LOGIN — 登录
+﻿# T-AUTH-LOGIN — 登录
 
 > **模块**：auth / login
 > **关联 API**：
@@ -9,7 +9,7 @@
 >
 > **维护**：@OpenClaw
 > **最后更新**：2026-06-05
-> **关联 Issue**：[#7](https://github.com/YuanshuoDu/pairhub/issues/7)
+> **关联 Issue**：[#7](https://github.com/YuanshuoDu/Pairhub/issues/7)
 
 ---
 

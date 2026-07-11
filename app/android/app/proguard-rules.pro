@@ -1,4 +1,4 @@
-// =============================================================================
+﻿// =============================================================================
 // ProGuard / R8 rules for Pairhub Android release build (issue #31).
 // =============================================================================
 // Without these rules R8 will (correctly) strip classes that the
@@ -26,7 +26,7 @@
 
 # Keep our MainActivity (the manifest names it by class FQN; renaming
 # breaks the manifest).
--keep class com.pairhub.app.MainActivity { *; }
+-keep class com.Pairhub.app.MainActivity { *; }
 
 # -----------------------------------------------------------------------
 # Mapbox GL Native (issue #35)

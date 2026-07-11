@@ -1,4 +1,4 @@
-# Pairhub — 系统架构 v0.1
+﻿# Pairhub — 系统架构 v0.1
 
 > 配套 [spec-v0.2.md](./spec-v0.2.md)  
 > 在线版：[architecture.html](./architecture.html) （深色 SVG，可直接浏览器打开）  
@@ -120,7 +120,7 @@ Cron 每分钟扫描 activities 表
 ## 7. 目录结构
 
 ```
-pairhub/
+Pairhub/
 ├── server/                # 后端
 │   ├── src/
 │   │   ├── app.ts         # Fastify 入口

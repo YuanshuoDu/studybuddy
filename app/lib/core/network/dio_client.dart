@@ -1,4 +1,4 @@
-// Dio HTTP client with:
+﻿// Dio HTTP client with:
 //   - JWT injection (reads token from secure storage on every request)
 //   - 401-driven token refresh + single-flight refresh queue
 //   - Structured error mapping (see api_exception.dart)
@@ -29,7 +29,7 @@ abstract final class TokenKeys {
 /// timeouts and a mock base URL.
 final Provider<DioConfig> dioConfigProvider = Provider<DioConfig>((Ref ref) {
   return DioConfig(
-    baseUrl: dotenv.maybeGet('API_BASE_URL') ?? 'https://api.pairhub.local',
+    baseUrl: dotenv.maybeGet('API_BASE_URL') ?? 'https://api.Pairhub.local',
     connectTimeoutMs: int.tryParse(dotenv.maybeGet('API_TIMEOUT_MS') ?? '') ?? 15000,
     receiveTimeoutMs: int.tryParse(dotenv.maybeGet('API_TIMEOUT_MS') ?? '') ?? 15000,
   );

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * 微信内容安全 (msg_sec_check) helper — issue #26.
  *
  * Wraps the WeChat MP /wxa/msg_sec_check endpoint that screens
@@ -198,7 +198,7 @@ export async function checkFields(
     if (!value) continue;
     const result = await checkText(value);
     // Issue #34: bucket each call into one of 5 outcomes for the
-    // pairhub_content_check_total counter. Skipped (WECHAT creds
+    // Pairhub_content_check_total counter. Skipped (WECHAT creds
     // not configured) is its own outcome so the dashboard can show
     // "we're not actually screening right now" cleanly.
     const label = result.skipped

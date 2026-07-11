@@ -1,9 +1,9 @@
-# ADR-0001: Flutter 作为 iOS + Android 移动端实现
+﻿# ADR-0001: Flutter 作为 iOS + Android 移动端实现
 
 > **状态**：✅ Accepted
 > **日期**：2026-06-05
 > **决策人**：@YuanshuoDu（决策人） / @Oracle Hermes（CTO 提报）
-> **关联**：[cto-roadmap-v1.0.md §0 D1-D2](../../pairhub-plan/cto-roadmap-v1.0.md) · [architecture-v1.0.md §2](../architecture-v1.0.md)
+> **关联**：[cto-roadmap-v1.0.md §0 D1-D2](../../Pairhub-plan/cto-roadmap-v1.0.md) · [architecture-v1.0.md §2](../architecture-v1.0.md)
 
 ## Context（背景）
 

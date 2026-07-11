@@ -1,4 +1,4 @@
-/**
+﻿/**
  * 附近活动 (Map + 列表) — 微信小程序页面
  *
  * Issue #35 — Mapbox 地图 + 附近活动页面
@@ -8,12 +8,12 @@
  *  2. 调 GET /api/v1/activities?lat=&lng=&radiusKm= (后端 PR #53 实现)
  *     拿到按距离排序的活动列表 + 每行的 distanceKm
  *  3. 列表渲染（driven by 用户最关心的"按距离排序"）
- *  4. 地图区域：生产环境用 <web-view> 加载 pairhub.app/m/embed.html
+ *  4. 地图区域：生产环境用 <web-view> 加载 Pairhub.app/m/embed.html
  *     （Mapbox GL JS 的 hosted embed），本地开发用占位
  *  5. Tap 列表项 / 地图 marker → 跳活动详情
  *
  * 已知限制 (M3 W2 跟进):
- *  - embed.html 必须 deploy 到 pairhub.app/m/，否则只显示列表
+ *  - embed.html 必须 deploy 到 Pairhub.app/m/，否则只显示列表
  *  - 滑动 slider 改 radius 时是 debounce 触发 (300ms)，避免每帧都发请求
  *  - 微信 <web-view> 限制：无法直接 postMessage 给父页面，
  *    走 bindmessage 接 mapbox embed 端 wx.miniProgram.postMessage
@@ -181,7 +181,7 @@ Page<PageData>({
       this.setData({ embedUrl: null });
       return;
     }
-    // Production: pairhub.app hosts embed.html. Until that's
+    // Production: Pairhub.app hosts embed.html. Until that's
     // deployed we fall back to the placeholder.
     //
     // The `token` query is the user JWT — embed.html uses it to
@@ -194,7 +194,7 @@ Page<PageData>({
       token: userStore.state.token ?? '',
       lang: 'zh',
     });
-    const url = `https://pairhub.app/m/embed.html?${params.toString()}`;
+    const url = `https://Pairhub.app/m/embed.html?${params.toString()}`;
     // Skip the web-view in dev — only mount it when the host is reachable.
     // (We can't HEAD here; the web-view will simply fail to load and show
     // an error frame, which is acceptable for the first deploy.)

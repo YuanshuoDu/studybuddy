@@ -1,4 +1,4 @@
-# Posters — design + print spec (issue #33)
+﻿# Posters — design + print spec (issue #33)
 
 > 3 poster sizes for offline + online use. Each has a different role:
 > A2 = "study hall" poster (most students see this for 5+ seconds at a
@@ -63,7 +63,7 @@ headline:   找搭子
 subtitle:   Pairhub · 海外留学生同好匹配 App
 pitch:      6 种活动 · 50 km 半径 · 3 端通用
 cta:        扫码下载 Pairhub
-fine:       pairhub.app · 微信小程序搜「Pairhub」
+fine:       Pairhub.app · 微信小程序搜「Pairhub」
 ```
 
 ## A4 — "info session" handout (offline)
@@ -110,7 +110,7 @@ body:
 
 stats:   50 km 半径 · 6 类活动 · 端到端中文
 cta:     扫码下载 Pairhub
-fine:    pairhub.app · 完全免费 · 无广告
+fine:    Pairhub.app · 完全免费 · 无广告
 ```
 
 ## 1080×1920 — "WeChat / Instagram Story" (online)
@@ -179,7 +179,7 @@ pnpm exec tsx scripts/poster-export.ts --size story --lang zh
 ## Asset versioning
 
 `{size}-{lang}.{shortSha}.{pdf|png}` in
-`pairhub-assets/posters/v{version}/`.
+`Pairhub-assets/posters/v{version}/`.
 
 ## When to regenerate
 

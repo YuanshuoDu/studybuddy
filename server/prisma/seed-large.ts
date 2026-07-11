@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Large seed for the M3 launch 50-user beta (issue #28).
  *
  * Run: pnpm prisma:seed:large
@@ -109,7 +109,7 @@ const ACTIVITY_TEMPLATES = [
     type: 'ONLINE_GAME' as const,
     title: 'Apex Legends 排位 双排/三排',
     description: '钻石以上优先，会打猎杀。',
-    location: { name: 'Discord #pairhub-apex', addr: 'online', lat: 0, lng: 0 },
+    location: { name: 'Discord #Pairhub-apex', addr: 'online', lat: 0, lng: 0 },
     tags: ['Apex', '排位', 'FPS'],
   },
   {

@@ -1,4 +1,4 @@
-# Prometheus / Grafana alert rules (issue #34)
+﻿# Prometheus / Grafana alert rules (issue #34)
 #
 # Import into Grafana via:
 #   1. Alerting → Alert rules → New alert rule
@@ -14,7 +14,7 @@
 # file in the same commit.
 
 groups:
-  - name: pairhub.api
+  - name: Pairhub.api
     interval: 30s
     rules:
       # ----- R1: error budget burn rate (5xx > 1% over 5m) -----
@@ -23,9 +23,9 @@ groups:
       - alert: PairhubHigh5xxRate
         expr: |
           (
-            sum(rate(pairhub_http_requests_total{status_class="5xx"}[5m]))
+            sum(rate(Pairhub_http_requests_total{status_class="5xx"}[5m]))
             /
-            sum(rate(pairhub_http_requests_total[5m]))
+            sum(rate(Pairhub_http_requests_total[5m]))
           ) > 0.01
         for: 5m
         labels:
@@ -36,7 +36,7 @@ groups:
           description: |
             5xx responses are {{ printf "%.2f" $value | humanizePercentage }} of total
             over the last 5 minutes. Check Sentry + server logs immediately.
-          dashboard: https://grafana.example.com/d/pairhub-overview
+          dashboard: https://grafana.example.com/d/Pairhub-overview
 
       # ----- R2: p99 latency > 1s on any route for 10m -----
       # 1s is the upper-bound for "feels instant" on the miniprogram
@@ -46,7 +46,7 @@ groups:
         expr: |
           histogram_quantile(0.99,
             sum by (route, le) (
-              rate(pairhub_http_request_duration_seconds_bucket[10m])
+              rate(Pairhub_http_request_duration_seconds_bucket[10m])
             )
           ) > 1
         for: 10m
@@ -62,7 +62,7 @@ groups:
       # client bug is firing expired tokens, or (b) someone is
       # credential-stuffing. Either way, escalate fast.
       - alert: PairhubAuthFailureStorm
-        expr: sum(rate(pairhub_auth_failures_total[5m])) * 300 > 50
+        expr: sum(rate(Pairhub_auth_failures_total[5m])) * 300 > 50
         for: 5m
         labels:
           severity: warning
@@ -76,7 +76,7 @@ groups:
       # (the global cap). 1000+ means real abuse — block the IP range
       # upstream at the load balancer.
       - alert: PairhubRateLimitedHotRoute
-        expr: sum by (route) (rate(pairhub_rate_limited_total[5m])) * 300 > 1000
+        expr: sum by (route) (rate(Pairhub_rate_limited_total[5m])) * 300 > 1000
         for: 5m
         labels:
           severity: warning
@@ -91,9 +91,9 @@ groups:
       - alert: PairhubRedisOutage
         expr: |
           (
-            sum(rate(pairhub_cache_ops_total{op="get",result="error"}[2m]))
+            sum(rate(Pairhub_cache_ops_total{op="get",result="error"}[2m]))
             /
-            sum(rate(pairhub_cache_ops_total{op="get"}[2m]))
+            sum(rate(Pairhub_cache_ops_total{op="get"}[2m]))
           ) > 0.5
         for: 2m
         labels:
@@ -102,7 +102,7 @@ groups:
         annotations:
           summary: "Redis error rate > 50% for 2m"
 
-  - name: pairhub.content
+  - name: Pairhub.content
     interval: 1m
     rules:
       # ----- R6: content-safety disabled -----
@@ -110,7 +110,7 @@ groups:
       # missing in this env — content is NOT being screened. This is
       # a compliance gap, fix immediately.
       - alert: PairhubContentSafetyDisabled
-        expr: rate(pairhub_content_check_total{result="disabled"}[5m]) > 0
+        expr: rate(Pairhub_content_check_total{result="disabled"}[5m]) > 0
         for: 5m
         labels:
           severity: warning
@@ -127,9 +127,9 @@ groups:
       - alert: PairhubContentSafetyFailOpen
         expr: |
           (
-            sum(rate(pairhub_content_check_total{result="fail_open"}[10m]))
+            sum(rate(Pairhub_content_check_total{result="fail_open"}[10m]))
             /
-            sum(rate(pairhub_content_check_total[10m]))
+            sum(rate(Pairhub_content_check_total[10m]))
           ) > 0.05
         for: 10m
         labels:
@@ -138,7 +138,7 @@ groups:
         annotations:
           summary: "WeChat content-safety fail-open > 5% for 10m"
 
-  - name: pairhub.operational
+  - name: Pairhub.operational
     interval: 1m
     rules:
       # ----- R8: background job missed heartbeat -----
@@ -146,7 +146,7 @@ groups:
       # last-run unix timestamp. If no run in the last 2× its
       # declared cadence, alert. (Per-job cadences in the docs.)
       - alert: PairhubBackgroundJobStalled
-        expr: time() - pairhub_background_job_last_run_timestamp > 7200
+        expr: time() - Pairhub_background_job_last_run_timestamp > 7200
         for: 5m
         labels:
           severity: warning

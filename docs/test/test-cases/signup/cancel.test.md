@@ -1,4 +1,4 @@
-# T-SIGNUP-CANCEL — 退出活动报名
+﻿# T-SIGNUP-CANCEL — 退出活动报名
 
 > **模块**：signup / cancel
 > **关联 API**：`DELETE /api/signups/:id`（或 `POST /api/signups/:id/cancel`，待后端 track 拍板）
@@ -12,7 +12,7 @@
 ## TC-SIGNUP-CANCEL-001  正常退出未开始的活动
 - **优先级**：P0
 - **类型**：正向
-- **关联**：[#7](https://github.com/YuanshuoDu/pairhub/issues/7) 核心场景 3
+- **关联**：[#7](https://github.com/YuanshuoDu/Pairhub/issues/7) 核心场景 3
 - **前置条件**：
   - 用户 `usr_canceler_001` 已报名活动 `act_open_001`（`Signup.status=approved`）
   - 活动状态：`open`（`currentParticipants=4/maxParticipants=6`，退出后变 3）

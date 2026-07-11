@@ -1,4 +1,4 @@
-# Pairhub — API 设计规范 v0.2
+﻿# Pairhub — API 设计规范 v0.2
 
 > 配套 [spec-v0.2.md §7](../spec-v0.2.md)
 
@@ -62,7 +62,7 @@ POST   /api/auth/refresh                      # v0.3
 
 ```json
 {
-  "type": "https://pairhub.example.com/errors/activity-not-found",
+  "type": "https://Pairhub.example.com/errors/activity-not-found",
   "title": "Activity Not Found",
   "status": 404,
   "detail": "活动 ID abc123 不存在或已删除",

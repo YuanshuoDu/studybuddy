@@ -1,7 +1,7 @@
-"""Flutter responsive / a11y static audit."""
+﻿"""Flutter responsive / a11y static audit."""
 import os, re, json
 
-ROOT = r"C:\Users\Steven.du\.minimax-agent-cn\projects\pairhub\app\lib"
+ROOT = r"C:\Users\Steven.du\.minimax-agent-cn\projects\Pairhub\app\lib"
 
 # Simple counter patterns
 COUNTERS = [

@@ -1,4 +1,4 @@
-<view class="login">
+﻿<view class="login">
   <!-- 顶部 logo + slogan -->
   <view class="login__hero">
     <view class="login__logo">SB</view>

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Tests for the monitoring module (issue #34).
  *
  * Covers:
@@ -61,7 +61,7 @@ describe('GET /metrics (issue #34)', () => {
     });
     expect(res.statusCode).toBe(200);
     expect(res.headers['content-type']).toMatch(/text\/plain/);
-    // Default metrics are registered with the `pairhub_` prefix
+    // Default metrics are registered with the `Pairhub_` prefix
     expect(res.body).toContain('# HELP');
     expect(res.body).toContain('# TYPE');
   });

@@ -1,4 +1,4 @@
-// Pairhub Android app module — Flutter 3.24 / AGP 8.
+﻿// Pairhub Android app module — Flutter 3.24 / AGP 8.
 //
 // Plugin declarations are managed by Flutter's gradle plugin loader
 // (see settings.gradle). The plugins we use:
@@ -47,7 +47,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace = "com.pairhub.app"
+    namespace = "com.Pairhub.app"
     compileSdk = 34
     ndkVersion = flutter.ndkVersion
 
@@ -65,7 +65,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.pairhub.app"
+        applicationId = "com.Pairhub.app"
         // Issue #35 — mapbox_gl needs minSdk 21, geolocator too.
         minSdk = 21
         targetSdk = 34

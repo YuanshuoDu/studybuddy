@@ -1,4 +1,4 @@
-# Pairhub 后端 — API 风格指南
+﻿# Pairhub 后端 — API 风格指南
 
 > 配套：[`../api/conventions.md`](../api/conventions.md)（v0.2 RFC 7807 契约）
 >
@@ -67,7 +67,7 @@ export async function registerActivityRoutes(app: FastifyInstance): Promise<void
 
 ```json
 {
-  "type": "https://pairhub.example.com/errors/activity-not-found",
+  "type": "https://Pairhub.example.com/errors/activity-not-found",
   "title": "NotFoundError",
   "status": 404,
   "detail": "活动不存在",
@@ -194,7 +194,7 @@ const res = await app.inject({
 expect(res.statusCode).toBe(201);
 ```
 
-- 涉及 DB 的测试用 **testcontainers** 或单独建一个 `pairhub_test` 数据库。
+- 涉及 DB 的测试用 **testcontainers** 或单独建一个 `Pairhub_test` 数据库。
   本期没集成测试，仅 `/health` `/ready` 路径——下一期引入。
 
 ## 10. 迁出 Scaffold 范围

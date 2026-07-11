@@ -1,4 +1,4 @@
-// ESLint 9 flat config for the Pairhub backend.
+﻿// ESLint 9 flat config for the Pairhub backend.
 // Lints both src/ and prisma/; tests/ follows the same rules.
 import tseslint from 'typescript-eslint';
 import prettier from 'eslint-config-prettier';

@@ -1,7 +1,7 @@
-"""miniprogram responsive / accessibility static audit."""
+﻿"""miniprogram responsive / accessibility static audit."""
 import os, re, json
 
-ROOT = r"C:\Users\Steven.du\.minimax-agent-cn\projects\pairhub\miniprogram"
+ROOT = r"C:\Users\Steven.du\.minimax-agent-cn\projects\Pairhub\miniprogram"
 issues = []
 stats = {"wxss": 0, "wxml": 0, "rpx": 0, "vh_vw": 0, "flex": 0, "media_query": 0, "fixed_px_css": 0, "fixed_px_attr": 0}
 

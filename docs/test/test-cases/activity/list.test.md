@@ -1,4 +1,4 @@
-# T-ACTIVITY-LIST — 活动列表
+﻿# T-ACTIVITY-LIST — 活动列表
 
 > **模块**：activity / list
 > **关联 API**：`GET /api/activities`
@@ -11,7 +11,7 @@
 ## TC-ACTIVITY-LIST-001  默认列表返回第一页（按时间倒序）
 - **优先级**：P0
 - **类型**：正向
-- **关联**：[#7](https://github.com/YuanshuoDu/pairhub/issues/7) 核心场景 2
+- **关联**：[#7](https://github.com/YuanshuoDu/Pairhub/issues/7) 核心场景 2
 - **前置条件**：
   - DB 已有 50 条 Activity 种子数据（seed.ts 生成）
   - 时间分布：近 30 天

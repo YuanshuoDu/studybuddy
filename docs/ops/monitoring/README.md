@@ -1,4 +1,4 @@
-# Monitoring runbook (issue #34)
+﻿# Monitoring runbook (issue #34)
 
 This is the operator-facing entry point for the Pairhub monitoring
 stack. The split is intentional: each external service gets its own
@@ -55,24 +55,24 @@ serve the K8s / ECS liveness + readiness probes — distinct from the
 
 ## Metrics catalogue (what `/metrics` exposes)
 
-All metrics are prefixed with `pairhub_` and live in
+All metrics are prefixed with `Pairhub_` and live in
 `server/src/lib/metrics.ts`. The curated set is:
 
 | Metric | Type | Labels | Use |
 | --- | --- | --- | --- |
-| `pairhub_http_requests_total` | counter | method, route, status_class | Throughput + error rate |
-| `pairhub_http_request_duration_seconds` | histogram | method, route, status_class | p50 / p95 / p99 latency |
-| `pairhub_http_requests_in_flight` | gauge | — | Concurrency / saturation |
-| `pairhub_auth_failures_total` | counter | route, reason | Brute force / token expiry detection |
-| `pairhub_rate_limited_total` | counter | route | Abuse detection |
-| `pairhub_module_events_total` | counter | module, event | Business KPIs (signups, activities) |
-| `pairhub_db_query_duration_seconds` | histogram | model, action | Slow query detection |
-| `pairhub_cache_ops_total` | counter | op, result | Redis cache hit ratio |
-| `pairhub_content_check_total` | counter | result | WeChat content-safety effectiveness |
-| `pairhub_background_job_last_run_timestamp` | gauge | job | Stalled-job detection |
+| `Pairhub_http_requests_total` | counter | method, route, status_class | Throughput + error rate |
+| `Pairhub_http_request_duration_seconds` | histogram | method, route, status_class | p50 / p95 / p99 latency |
+| `Pairhub_http_requests_in_flight` | gauge | — | Concurrency / saturation |
+| `Pairhub_auth_failures_total` | counter | route, reason | Brute force / token expiry detection |
+| `Pairhub_rate_limited_total` | counter | route | Abuse detection |
+| `Pairhub_module_events_total` | counter | module, event | Business KPIs (signups, activities) |
+| `Pairhub_db_query_duration_seconds` | histogram | model, action | Slow query detection |
+| `Pairhub_cache_ops_total` | counter | op, result | Redis cache hit ratio |
+| `Pairhub_content_check_total` | counter | result | WeChat content-safety effectiveness |
+| `Pairhub_background_job_last_run_timestamp` | gauge | job | Stalled-job detection |
 
 Plus the `prom-client` default Node.js metrics (CPU, memory, GC, etc.)
-with the same `pairhub_` prefix.
+with the same `Pairhub_` prefix.
 
 ## Cardinality discipline
 
@@ -85,9 +85,9 @@ Three rules we enforce so the metrics stay cheap:
 2. **Bounded histograms.** Latency histograms use a fixed bucket set
    (5ms to 10s) — never custom per-route buckets. If you need
    per-route p99 detail, add a separate `*_bucket_seconds` metric.
-3. **No name collisions.** Every metric has the `pairhub_`
+3. **No name collisions.** Every metric has the `Pairhub_`
    prefix. Sentry and the alert rules use the same names — search
-   for `pairhub_` in this repo and you'll see every metric.
+   for `Pairhub_` in this repo and you'll see every metric.
 
 ## On-call rotation
 

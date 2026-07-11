@@ -1,4 +1,4 @@
-{
+﻿{
   "openapi": "3.0.3",
   "info": {
     "title": "Pairhub API",
@@ -11,7 +11,7 @@
       "description": "Local dev"
     },
     {
-      "url": "https://api.pairhub.example.com",
+      "url": "https://api.Pairhub.example.com",
       "description": "Production"
     }
   ],

@@ -1,10 +1,10 @@
-================================================================
+﻿================================================================
 EVIDENCE 04 — security-checklist.md (GitHub 渲染摘要)
 ================================================================
 File path: docs/test/security-checklist.md
 Size: ~18 KB / 10 sections
 Render URL:
-  https://github.com/YuanshuoDu/pairhub/blob/test/test-plan-v1/docs/test/security-checklist.md
+  https://github.com/YuanshuoDu/Pairhub/blob/test/test-plan-v1/docs/test/security-checklist.md
 
 ## 章节结构
 

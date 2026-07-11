@@ -1,4 +1,4 @@
-# Pairhub 服务协议
+﻿# Pairhub 服务协议
 
 > 简体中文版 ｜ 英文版见 [terms-of-service.en.md](./terms-of-service.en.md)
 > 最近更新：2026-06-08
@@ -74,7 +74,7 @@ Pairhub 是一个面向**海外中国留学生**的校园搭子（buddy）匹配
 
 ### 7.3 冻结
 
-对于违反本协议第 3 条的用户，我们保留**立即冻结账户**的权利。冻结后用户可申诉，申诉邮箱：support@pairhub.app。
+对于违反本协议第 3 条的用户，我们保留**立即冻结账户**的权利。冻结后用户可申诉，申诉邮箱：support@Pairhub.app。
 
 ## 8. 免责与责任限制
 
@@ -95,8 +95,8 @@ Pairhub 是一个面向**海外中国留学生**的校园搭子（buddy）匹配
 
 ## 11. 联系方式
 
-- 客服邮箱：support@pairhub.app
-- 投诉举报：report@pairhub.app
+- 客服邮箱：support@Pairhub.app
+- 投诉举报：report@Pairhub.app
 - 公司地址：深圳市南山区 XXX 路 XXX 号 XXX 科技园 XXX 楼 XXX 室
 
 ## 12. 其他

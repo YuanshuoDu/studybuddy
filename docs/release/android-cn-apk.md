@@ -1,4 +1,4 @@
-# 国内 APK 直发 + 国内市场分发 runbook (issue #31)
+﻿# 国内 APK 直发 + 国内市场分发 runbook (issue #31)
 
 > **先 APK 直发 + 自有下载页**，目标用户所在地（学校/中超/留学中介）拉
 > 新。等用户量起来后，按 ROI 选择性上国内市场（华为/小米/OPPO/vivo/
@@ -23,7 +23,7 @@ bundle exec fastlane android build_apk_cn
 # → build/app/outputs/flutter-apk/app-release.apk
 # (~ 60-80 MB universal，3 个 ABI 打包在一起)
 
-# 4. 上传到自有下载页（pairhub.app/download）
+# 4. 上传到自有下载页（Pairhub.app/download）
 # （走 docs/ops/marketing 网站的 v1.1 流程，先用 GitHub release 当 fallback）
 
 # 5. 在国内大学 / 中超 / 留学中介 的社群发下载链接 + 海报
@@ -47,7 +47,7 @@ bundle exec fastlane android build_apk_cn
 ### 1. 签名 keystore
 
 **和 Google Play 共用同一个 `.jks`**（同一个 applicationId
-`com.pairhub.app`，签名一致可以让用户后续从 Google Play 装的版本
+`com.Pairhub.app`，签名一致可以让用户后续从 Google Play 装的版本
 和你直发的版本互认）。
 
 参见 `docs/release/android-google-play.md#6-签名-keystore` 的
@@ -66,9 +66,9 @@ keytool 命令。**不要**为了"国内分发"重新生成 keystore。
 
 ### 3. ICP 备案
 
-大陆境内的 server 域名 `pairhub.app` 走海外 DNS 解析，**不需要**
+大陆境内的 server 域名 `Pairhub.app` 走海外 DNS 解析，**不需要**
 ICP 备案（你的 API server 在 AWS Frankfurt，DNS 在 Cloudflare）。但
-如果你做 v1.1 国内落地页（pairhub.cn / pairhub.com.cn），那
+如果你做 v1.1 国内落地页（Pairhub.cn / Pairhub.com.cn），那
 个域名**必须**做 ICP 备案，工信部审批，10-30 天。
 
 短期内用 GitHub Pages / Vercel 海外托管 + QR code 引导 → 微信小
@@ -99,7 +99,7 @@ ls -lh build/app/outputs/flutter-apk/app-release.apk
 $ANDROID_HOME/build-tools/34.0.0/aapt2 dump badging \
   build/app/outputs/flutter-apk/app-release.apk
 # 验证：
-#   package: name='com.pairhub.app' versionCode='1' versionName='0.1.0'
+#   package: name='com.Pairhub.app' versionCode='1' versionName='0.1.0'
 #   sdkVersion:'21' targetSdkVersion:'34'
 #   native-code: 'arm64-v8a' 'armeabi-v7a' 'x86_64'
 #   application-label:'Pairhub'
@@ -110,7 +110,7 @@ $ANDROID_HOME/build-tools/34.0.0/aapt2 dump badging \
 
 ```bash
 adb install -r build/app/outputs/flutter-apk/app-release.apk
-adb shell am start -n com.pairhub.app/.MainActivity
+adb shell am start -n com.Pairhub.app/.MainActivity
 # 验证：
 #   - 启动无 crash（关键 ProGuard 测试）
 #   - 地图瓦片能加载（关键 Mapbox 测试）
@@ -128,10 +128,10 @@ gh release create v1.0.0 \
   build/app/outputs/flutter-apk/app-release.apk \
   --title "Pairhub v1.0.0 (国内 APK 直发)" \
   --notes-file .harness/release-notes-1.0.0.md
-# → https://github.com/YuanshuoDu/pairhub/releases/tag/v1.0.0
+# → https://github.com/YuanshuoDu/Pairhub/releases/tag/v1.0.0
 ```
 
-下载链接 = `https://github.com/YuanshuoDu/pairhub/releases/download/v1.0.0/app-release.apk`
+下载链接 = `https://github.com/YuanshuoDu/Pairhub/releases/download/v1.0.0/app-release.apk`
 
 二维码（用任何 QR 生成器，把上面这个 URL 喂进去）贴到：
 - 微信群 / 朋友圈
@@ -140,7 +140,7 @@ gh release create v1.0.0 \
 
 ### 4. （v1.1）自有下载页
 
-`https://pairhub.app/download`（CN 域名）落地页：
+`https://Pairhub.app/download`（CN 域名）落地页：
 - 大号下载按钮（"Android 下载" + "iOS TestFlight" + "微信小程序"）
 - 截图轮播
 - FAQ 折叠
@@ -241,7 +241,7 @@ $ANDROID_HOME/build-tools/34.0.0/apksigner verify --print-certs \
    把 APK 放在 `Download/Pairhub/`，加进 FAQ
 2. **"提示病毒风险"** → MIUI / EMUI 默认有"病毒扫描"，APK 第一次
    安装会弹"该应用可能存在风险"。需要在 FAQ 写明"Pairhub 是开源
-   软件，源码在 github.com/YuanshuoDu/pairhub"
+   软件，源码在 github.com/YuanshuoDu/Pairhub"
 3. **"安装时提示"应用未安装""** → 通常是签名 / ABI 不匹配。检查
    `abiFilters` 是否包含目标设备的 ABI
 4. **"位置权限获取不到"** → 国内手机（特别是华为）的"模糊位置"必须
@@ -264,6 +264,6 @@ $ANDROID_HOME/build-tools/34.0.0/apksigner verify --print-certs \
 
 **只发 GitHub Release + 微信群/朋友圈**。等 1-2 周看：
 - 安装量 < 500：当前文案 / 渠道不奏效，迭代文案（不是上市场）
-- 500-5000：加 Vercel 落地页（`pairhub.app/download`）
+- 500-5000：加 Vercel 落地页（`Pairhub.app/download`）
 - 5000+：开始上华为/小米两个最大的市场
 - 10000+：上剩下 4-5 个市场

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * OpenAPI / Swagger UI smoke tests.
  *
  * Verifies that the docs surface is wired up and that the static spec

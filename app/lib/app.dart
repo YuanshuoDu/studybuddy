@@ -1,4 +1,4 @@
-// Top-level MaterialApp.router configuration.
+﻿// Top-level MaterialApp.router configuration.
 //
 // Kept tiny on purpose: all routing decisions live in core/router/app_router.dart
 // and all theming in core/theme/app_theme.dart. This file just glues them

@@ -1,5 +1,5 @@
-{
-  "name": "pairhub-miniprogram",
+﻿{
+  "name": "Pairhub-miniprogram",
   "version": "1.0.0",
   "private": true,
   "description": "Pairhub WeChat miniprogram — tooling only (lint + source-map upload helper). No runtime deps; the miniprogram itself is shipped as raw WXML/WXSS/TS for the WeChat DevTools compiler.",

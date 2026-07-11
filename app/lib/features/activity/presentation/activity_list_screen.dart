@@ -1,4 +1,4 @@
-// Activity list screen — issue #23.
+﻿// Activity list screen — issue #23.
 //
 // Renders the activity feed from GET /api/v1/activities with:
 //   - Horizontal filter chips for type and status

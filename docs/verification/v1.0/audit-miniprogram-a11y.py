@@ -1,7 +1,7 @@
-"""miniprogram a11y audit v2 — only icon-only interactive elements."""
+﻿"""miniprogram a11y audit v2 — only icon-only interactive elements."""
 import os, re, json
 
-ROOT = r"C:\Users\Steven.du\.minimax-agent-cn\projects\pairhub\miniprogram"
+ROOT = r"C:\Users\Steven.du\.minimax-agent-cn\projects\Pairhub\miniprogram"
 issues = []
 
 for root, dirs, names in os.walk(ROOT):

@@ -1,4 +1,4 @@
-# Sentry setup (issue #34)
+﻿# Sentry setup (issue #34)
 
 Error tracking + slow transaction capture for the Pairhub backend.
 The server integration code lives in `server/src/lib/sentry.ts`; this
@@ -23,7 +23,7 @@ empty. This is the default in dev / CI and what you want locally.
    already exists — ask the CTO for the invite).
    - Platform: **Node.js / Express** (we use Fastify, but the
      Node.js preset is the right starting point)
-   - Project name: `pairhub-server` (one project per env: `…-prod`,
+   - Project name: `Pairhub-server` (one project per env: `…-prod`,
      `…-staging`)
 2. **Copy the DSN** from Project Settings → Client Keys (DSN).
    It looks like `https://abc123@o987654.ingest.sentry.io/123456`.
@@ -43,13 +43,13 @@ After deploy, in any environment that has Sentry enabled:
 
 ```bash
 # 1. Confirm the SDK loaded
-curl -s -H "Authorization: Bearer <token>" https://api.pairhub.app/metrics \
-  | grep pairhub_
+curl -s -H "Authorization: Bearer <token>" https://api.Pairhub.app/metrics \
+  | grep Pairhub_
 
 # 2. Trigger a 5xx (e.g. POST a malformed activity without auth)
 curl -X POST -H "Content-Type: application/json" \
      -d '{"title":"x"}' \
-     https://api.pairhub.app/api/v1/activities
+     https://api.Pairhub.app/api/v1/activities
 # → 401 (NOT 5xx, since 401 is handled by the auth preHandler).
 # To get a 5xx into Sentry, throw a deliberate error in a test
 # route handler in a non-prod env.

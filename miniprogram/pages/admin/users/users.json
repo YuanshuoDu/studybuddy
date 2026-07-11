@@ -1,6 +1,6 @@
 {
   "navigationBarTitleText": "用户搜索",
-  "navigationBarBackgroundColor": "transparent",
+  "navigationBarBackgroundColor": "#0B1020",
   "navigationBarTextStyle": "white",
   "backgroundColor": "#0B1020",
   "enablePullDownRefresh": true,

@@ -1,4 +1,4 @@
-# Google Play release runbook (issue #31)
+﻿# Google Play release runbook (issue #31)
 
 > Step-by-step for the operator doing the **Google Play Store** launch of
 > Pairhub. Covers: Console registration, content rating, signing
@@ -9,9 +9,9 @@
 
 ```bash
 # 1. one-time: create the signing keystore (NEVER commit it)
-keytool -genkey -v -keystore app/android/pairhub-release.jks \
+keytool -genkey -v -keystore app/android/Pairhub-release.jks \
   -keyalg RSA -keysize 2048 -validity 25000 \
-  -alias pairhub-release \
+  -alias Pairhub-release \
   -storepass "$RELEASE_STORE_PASSWORD" \
   -keypass "$RELEASE_KEY_PASSWORD" \
   -dname "CN=Pairhub, OU=Eng, O=Pairhub, L=SF, ST=CA, C=US"
@@ -56,9 +56,9 @@ git tag v1.0.0 && git push --tags   # triggers .github/workflows/android-release
 3. App / Game: App
 4. Free / Paid: Free
 5. Declarations:
-   - Privacy policy: `https://pairhub.app/privacy` (after the
+   - Privacy policy: `https://Pairhub.app/privacy` (after the
      v1.1 marketing site ships; for now use the GitHub raw link
-     `https://raw.githubusercontent.com/YuanshuoDu/pairhub/main/docs/ops/legal/privacy-policy.en.md`)
+     `https://raw.githubusercontent.com/YuanshuoDu/Pairhub/main/docs/ops/legal/privacy-policy.en.md`)
    - Ads: No
    - App access: All functionality is available without special access
    - Content rating: complete the IARC questionnaire (see below)
@@ -121,9 +121,9 @@ git tag v1.0.0 && git push --tags   # triggers .github/workflows/android-release
 **One-time, on a trusted operator machine.**
 
 ```bash
-keytool -genkey -v -keystore app/android/pairhub-release.jks \
+keytool -genkey -v -keystore app/android/Pairhub-release.jks \
   -keyalg RSA -keysize 2048 -validity 25000 \
-  -alias pairhub-release
+  -alias Pairhub-release
 ```
 
 You'll be prompted for a 20+ char store + key passphrase. **Store
@@ -143,10 +143,10 @@ The `.jks` file:
 ```bash
 cp app/android/key.properties.example app/android/key.properties
 # Edit the 4 values:
-#   storeFile=pairhub-release.jks
+#   storeFile=Pairhub-release.jks
 #   storePassword=<from 1Password>
 #   keyPassword=<from 1Password>
-#   keyAlias=pairhub-release
+#   keyAlias=Pairhub-release
 ```
 
 The file is gitignored. Keep it on the build host (CI secret + the
@@ -182,7 +182,7 @@ Verify with `aapt2 dump badging`:
 $ANDROID_HOME/build-tools/34.0.0/aapt2 dump badging \
   build/app/outputs/bundle/release/app-release.aab
 # Expected:
-#   package: name='com.pairhub.app' versionCode='1' versionName='0.1.0'
+#   package: name='com.Pairhub.app' versionCode='1' versionName='0.1.0'
 #   application-label:'Pairhub'
 #   uses-permission: name='android.permission.INTERNET'
 #   ...
@@ -277,7 +277,7 @@ real install counts.
 - **Crash on first launch with `NoSuchMethodError`** → ProGuard
   stripped a class. See `proguard-rules.pro` for the keep list.
   The most common culprit is forgetting to keep
-  `com.pairhub.app.MainActivity` — the manifest references it
+  `com.Pairhub.app.MainActivity` — the manifest references it
   by FQN.
 - **"This release is not compliant with the 64-bit requirement"**
   → `abiFilters` excludes `arm64-v8a`. Verify.

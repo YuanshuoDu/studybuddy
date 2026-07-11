@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Domain error types.
  *
  * Throw these from route handlers / services; the global error handler

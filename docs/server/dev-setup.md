@@ -1,4 +1,4 @@
-# Pairhub 后端 — 本地开发手册
+﻿# Pairhub 后端 — 本地开发手册
 
 > 配套：[`../spec-v0.2.md`](../spec-v0.2.md), [`../api/conventions.md`](../api/conventions.md), [`api-style.md`](./api-style.md)
 >
@@ -20,8 +20,8 @@
 ## 1. 拉代码
 
 ```bash
-git clone https://github.com/YuanshuoDu/pairhub.git
-cd pairhub
+git clone https://github.com/YuanshuoDu/Pairhub.git
+cd Pairhub
 git checkout feat/issue-3-server-scaffold   # 或 main
 ```
 
@@ -32,12 +32,12 @@ git checkout feat/issue-3-server-scaffold   # 或 main
 ```
 
 会启动：
-- `pairhub-pg`  — PostgreSQL 16，端口 5432，账号 `pairhub/pairhub`
-- `pairhub-redis` — Redis 7，端口 6379，无密码
+- `Pairhub-pg`  — PostgreSQL 16，端口 5432，账号 `Pairhub/Pairhub`
+- `Pairhub-redis` — Redis 7，端口 6379，无密码
 
-数据落在 docker volume `pairhub_pgdata` / `pairhub_redisdata`，删除容器不会丢数据。
+数据落在 docker volume `Pairhub_pgdata` / `Pairhub_redisdata`，删除容器不会丢数据。
 
-**停止**：`./infra/dev-down.sh`（保留数据）；要彻底清理追加 `docker volume rm pairhub_pgdata pairhub_redisdata`。
+**停止**：`./infra/dev-down.sh`（保留数据）；要彻底清理追加 `docker volume rm Pairhub_pgdata Pairhub_redisdata`。
 
 ## 3. 装依赖 + 准备环境
 
@@ -51,7 +51,7 @@ cp .env.example .env
 
 ```dotenv
 JWT_SECRET=$(openssl rand -base64 48)        # 至少 32 字符
-DATABASE_URL=postgresql://pairhub:pairhub@localhost:5432/pairhub
+DATABASE_URL=postgresql://Pairhub:Pairhub@localhost:5432/Pairhub
 REDIS_URL=redis://localhost:6379
 ```
 
@@ -78,7 +78,7 @@ pnpm dev
 ```
 ✅ PostgreSQL connection ok
 ✅ Redis connection ok
-{"level":30,"time":"...","service":"pairhub-server","env":"development","msg":"Server listening at http://0.0.0.0:3000"}
+{"level":30,"time":"...","service":"Pairhub-server","env":"development","msg":"Server listening at http://0.0.0.0:3000"}
 ```
 
 ## 6. 验证
@@ -92,15 +92,15 @@ curl -i http://localhost:3000/ready
 ```
 
 预期：
-- `/health` → `200 OK`，body `{"status":"ok","service":"pairhub-server",...}`
+- `/health` → `200 OK`，body `{"status":"ok","service":"Pairhub-server",...}`
 - `/ready`  → `200 OK`，body `{"status":"ready","checks":{"postgres":{"status":"ok",...},"redis":{"status":"ok",...}}}`
 
 **故意制造失败**：
 
 ```bash
-docker stop pairhub-pg
+docker stop Pairhub-pg
 curl -i http://localhost:3000/ready   # 应返回 503，postgres check = fail
-docker start pairhub-pg
+docker start Pairhub-pg
 ```
 
 停掉 Redis 同样会触发 `/ready` 503 —— 这是 readiness 探针的本意。
@@ -172,7 +172,7 @@ DEBUG="prisma:query" pnpm dev
 
 ```bash
 # 在另一个终端看所有 redis 命令
-docker exec pairhub-redis redis-cli MONITOR
+docker exec Pairhub-redis redis-cli MONITOR
 ```
 
 ### 8.6 看 fastify 路由

@@ -1,4 +1,4 @@
-# Pairhub — 测试用例库索引
+﻿# Pairhub — 测试用例库索引
 
 > 本目录是 Pairhub 的**测试用例 markdown 库**，对应 [`../test-plan-v1.0.md`](../test-plan-v1.0.md) §5。
 > 编写规范：每模块 1 个目录，每特性 1 个 .md，至少 5 个用例（详见 [`_template.md`](./_template.md)）。

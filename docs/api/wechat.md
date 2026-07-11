@@ -1,4 +1,4 @@
-# Pairhub — 微信生态集成规范
+﻿# Pairhub — 微信生态集成规范
 
 > 配套 [spec-v0.2.md](../spec-v0.2.md)  
 > 维护人：**@爱马仕**（@OpenClaw机器人-1896 协助测试）  
@@ -62,7 +62,7 @@
 ## 4. Mapbox 地图
 
 > 决策 v1.0：主要目标用户是海外留学生，统一使用 Mapbox（WGS-84 坐标系统，国际标准）。
-> 详见 [ADR-0006 Mapbox for global](../adr/0006-mapbox-for-global.md) 和 [Issue #35](https://github.com/YuanshuoDu/pairhub/issues/35)。
+> 详见 [ADR-0006 Mapbox for global](../adr/0006-mapbox-for-global.md) 和 [Issue #35](https://github.com/YuanshuoDu/Pairhub/issues/35)。
 
 ### 4.1 SDK
 
@@ -107,7 +107,7 @@
 
 | 域名 | 类型 |
 |------|------|
-| `api.pairhub.example.com` | request 合法域名 |
+| `api.Pairhub.example.com` | request 合法域名 |
 | `apis.map.qq.com` | request 合法域名 |
 | `api.weixin.qq.com` | request 合法域名 |
 

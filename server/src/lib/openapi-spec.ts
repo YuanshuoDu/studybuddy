@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Hand-curated OpenAPI 3.0.3 spec for the Pairhub v1 API.
  *
  * Scope: the 18 endpoints listed in docs/api/v1.md §1.1 (endpoint list)
@@ -747,7 +747,7 @@ export const openApiSpec: OpenAPIV3.Document = {
   },
   servers: [
     { url: 'http://localhost:3000', description: 'Local dev' },
-    { url: 'https://api.pairhub.example.com', description: 'Production' },
+    { url: 'https://api.Pairhub.example.com', description: 'Production' },
   ],
   tags: [
     { name: 'Health', description: 'Liveness + dependency probe.' },

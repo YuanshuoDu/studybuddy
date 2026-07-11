@@ -1,4 +1,4 @@
-// Pairhub Android settings — Flutter 3.24 / AGP 8.
+﻿// Pairhub Android settings — Flutter 3.24 / AGP 8.
 //
 // `flutter.sdk` must point at the local Flutter checkout. CI sets this
 // via the env; local dev either symlinks Flutter into a known path or

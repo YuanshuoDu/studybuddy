@@ -1,9 +1,9 @@
-# ADR-0004: 活动生命周期用显式状态机 + Cron 扫描驱动
+﻿# ADR-0004: 活动生命周期用显式状态机 + Cron 扫描驱动
 
 > **状态**：✅ Accepted
 > **日期**：2026-06-05
 > **决策人**：@YuanshuoDu（决策人） / @Oracle Hermes（CTO 提报）
-> **关联**：[cto-roadmap-v1.0.md §0 Q 状态机](../../pairhub-plan/cto-roadmap-v1.0.md) · [spec-v0.2.md §6 状态机](../spec-v0.2.md) · [architecture-v1.0.md §5.4](../architecture-v1.0.md)
+> **关联**：[cto-roadmap-v1.0.md §0 Q 状态机](../../Pairhub-plan/cto-roadmap-v1.0.md) · [spec-v0.2.md §6 状态机](../spec-v0.2.md) · [architecture-v1.0.md §5.4](../architecture-v1.0.md)
 
 ## Context（背景）
 

@@ -1,4 +1,4 @@
-<view class="profile">
+﻿<view class="profile">
   <!-- 头部信息 -->
   <view class="profile__header">
     <view class="profile__avatar">{{avatarText}}</view>

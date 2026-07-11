@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Design tokens — miniprogram side of the Pairhub design system.
  * Spec: docs/design/system-v1.md. Mirror of app/lib/core/theme/design_tokens.dart.
  *
@@ -218,12 +218,8 @@ page[data-theme='dark'],
   inset: 0;
   background: var(--glass-highlight);
   pointer-events: none;
-  z-index: 0;
+  z-index: -1;
   opacity: 0.85;
-}
-.glass > * {
-  position: relative;
-  z-index: 1;
 }
 .glass-deep {
   background: var(--glass-bg-deep);

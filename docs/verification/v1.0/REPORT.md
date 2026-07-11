@@ -1,4 +1,4 @@
-# v1.0 GA Verification Report (issue #72 v2 + #73 a11y pass)
+﻿# v1.0 GA Verification Report (issue #72 v2 + #73 a11y pass)
 
 > **Date**: 2026-06-09 (Europe/Dublin)
 > **Scope**: full v1.0 GA verification — main = `c0b6928`
@@ -69,7 +69,7 @@ PR #58 merge; the script is deterministic and idempotent.
 - Playwright MCP (browser_resize / browser_navigate / browser_take_screenshot / browser_evaluate)
 
 ### Screenshots
-Saved to `pairhub/.harness/verification/`:
+Saved to `Pairhub/.harness/verification/`:
 - `landing-desktop-1280.png` (390 KB, full page)
 - `landing-tablet-768.png` (296 KB, full page)
 - `landing-mobile-375.png` (98 KB, full page)
@@ -312,7 +312,7 @@ main: `c0b6928` (was `f79cc81` before this audit).
 
 ## Verification scripts
 
-All audit scripts live in `pairhub/.harness/verification/` and are
+All audit scripts live in `Pairhub/.harness/verification/` and are
 idempotent — re-run after every PR to catch regressions:
 
 - `audit-miniprogram.py` — responsive patterns across all 21 WXSS + 19 WXML

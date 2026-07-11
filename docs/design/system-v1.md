@@ -1,4 +1,4 @@
-# Design System v1 — Pairhub
+﻿# Design System v1 — Pairhub
 
 **Status:** Frozen as of M2 close. Authoritative for both miniprogram + Flutter.
 **Source of truth:** `app/lib/core/theme/design_tokens.dart` (Dart) and `miniprogram/styles/tokens.wxss` (WXSS). This document is the spec; the two token files are the runtime truth.
@@ -179,7 +179,7 @@ CJK-first. 4-pt baseline. Flutter side follows Material 3 type scale; miniprogra
 ### Flutter
 
 ```dart
-import 'package:pairhub/core/theme/design_tokens.dart';
+import 'package:Pairhub/core/theme/design_tokens.dart';
 
 final card = Container(
   padding: EdgeInsets.all(DesignSpacing.lg),

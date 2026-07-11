@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Prometheus metrics registry — issue #34.
  *
  * The server exports a curated set of metrics over `/metrics` (see
@@ -27,12 +27,12 @@ import {
 const registry = new Registry();
 collectDefaultMetrics({
   register: registry,
-  prefix: 'pairhub_',
+  prefix: 'Pairhub_',
 });
 
 /** HTTP request duration in seconds, labelled by route + status class. */
 export const httpRequestDuration = new Histogram({
-  name: 'pairhub_http_request_duration_seconds',
+  name: 'Pairhub_http_request_duration_seconds',
   help: 'HTTP request latency in seconds, sliced by Fastify route + status class.',
   labelNames: ['method', 'route', 'status_class'] as const,
   buckets: [0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5, 5, 10],
@@ -41,7 +41,7 @@ export const httpRequestDuration = new Histogram({
 
 /** HTTP request counter, same labels as the duration histogram. */
 export const httpRequestsTotal = new Counter({
-  name: 'pairhub_http_requests_total',
+  name: 'Pairhub_http_requests_total',
   help: 'Total HTTP requests, sliced by Fastify route + status class.',
   labelNames: ['method', 'route', 'status_class'] as const,
   registers: [registry],
@@ -49,14 +49,14 @@ export const httpRequestsTotal = new Counter({
 
 /** In-flight HTTP requests. */
 export const httpRequestsInFlight = new Gauge({
-  name: 'pairhub_http_requests_in_flight',
+  name: 'Pairhub_http_requests_in_flight',
   help: 'HTTP requests currently being processed.',
   registers: [registry],
 });
 
 /** Auth: 401 / 403 events, sliced by route + reason. */
 export const authFailuresTotal = new Counter({
-  name: 'pairhub_auth_failures_total',
+  name: 'Pairhub_auth_failures_total',
   help: 'Auth preHandler rejections, sliced by route + reason.',
   labelNames: ['route', 'reason'] as const,
   registers: [registry],
@@ -64,7 +64,7 @@ export const authFailuresTotal = new Counter({
 
 /** Rate-limit events. */
 export const rateLimitedTotal = new Counter({
-  name: 'pairhub_rate_limited_total',
+  name: 'Pairhub_rate_limited_total',
   help: 'Requests rejected by rate-limit, sliced by route.',
   labelNames: ['route'] as const,
   registers: [registry],
@@ -72,7 +72,7 @@ export const rateLimitedTotal = new Counter({
 
 /** Per-business-module counters. */
 export const moduleEventsTotal = new Counter({
-  name: 'pairhub_module_events_total',
+  name: 'Pairhub_module_events_total',
   help: 'Per-module business events (signup, activity create, review, etc.).',
   labelNames: ['module', 'event'] as const,
   registers: [registry],
@@ -89,7 +89,7 @@ export const dbQueryDuration = new Histogram({
 
 /** Redis cache hit / miss for the activity list. */
 export const cacheOpsTotal = new Counter({
-  name: 'pairhub_cache_ops_total',
+  name: 'Pairhub_cache_ops_total',
   help: 'Redis cache operations on the activity list cache.',
   labelNames: ['op', 'result'] as const,
   registers: [registry],
@@ -97,7 +97,7 @@ export const cacheOpsTotal = new Counter({
 
 /** Content-safety (WeChat msg_sec_check) outcomes. */
 export const contentCheckTotal = new Counter({
-  name: 'pairhub_content_check_total',
+  name: 'Pairhub_content_check_total',
   help: 'WeChat content-safety check outcomes.',
   labelNames: ['result'] as const, // 'pass' | 'block' | 'fail_open' | 'fail_closed' | 'disabled'
   registers: [registry],
@@ -105,7 +105,7 @@ export const contentCheckTotal = new Counter({
 
 /** Background job heartbeat — set by the GC / scheduled jobs. */
 export const lastBackgroundJobTimestamp = new Gauge({
-  name: 'pairhub_background_job_last_run_timestamp',
+  name: 'Pairhub_background_job_last_run_timestamp',
   help: 'Unix timestamp of the most recent successful run per background job.',
   labelNames: ['job'] as const,
   registers: [registry],

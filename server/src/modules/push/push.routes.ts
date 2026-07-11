@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Push notification module — issue #27.
  *
  * Endpoints (all under /api/v1/devices, auth required):

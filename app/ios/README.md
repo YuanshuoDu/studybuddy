@@ -1,4 +1,4 @@
-# iOS Build & TestFlight Upload Playbook
+﻿# iOS Build & TestFlight Upload Playbook
 
 This is the **end-to-end** guide for shipping the Pairhub Flutter app to
 TestFlight (and from there to the App Store). It covers prerequisites, the
@@ -21,12 +21,12 @@ repo — they live in your Apple Developer account and your local machine.
 | 3 | **Xcode Command Line Tools** | `xcode-select --install` |
 | 4 | **CocoaPods 1.13+** | `sudo gem install cocoapods` (or `brew install cocoapods`) |
 | 5 | **Flutter SDK 3.24+** (stable) matching `pubspec.yaml` | <https://docs.flutter.dev/get-started/install/macos> |
-| 6 | **App Store Connect app** created with bundle id `com.pairhub.app` | <https://appstoreconnect.apple.com/apps> → My Apps → **+** → New App |
+| 6 | **App Store Connect app** created with bundle id `com.Pairhub.app` | <https://appstoreconnect.apple.com/apps> → My Apps → **+** → New App |
 | 7 | **Distribution signing certificate** (Apple Distribution) | Xcode → Settings → Accounts → Manage Certificates → **+** → Apple Distribution |
-| 8 | **Provisioning profile** for `com.pairhub.app` (App Store, distribution) | Xcode will auto-create when you enable **Automatic** signing, or generate manually in <https://developer.apple.com/account/resources/profiles/list> |
+| 8 | **Provisioning profile** for `com.Pairhub.app` (App Store, distribution) | Xcode will auto-create when you enable **Automatic** signing, or generate manually in <https://developer.apple.com/account/resources/profiles/list> |
 | 9 | **App Store Connect API key** (only required for Fastlane path) | App Store Connect → Users & Access → Keys → **+** → In-App (or Team key) |
 
-> **Why the bundle id `com.pairhub.app`?** — This matches the placeholder
+> **Why the bundle id `com.Pairhub.app`?** — This matches the placeholder
 > in `ExportOptions.plist` and the Fastfile. If your team owns a different
 > reverse-DNS prefix, edit all three files (`ExportOptions.plist`, `Fastfile`,
 > and `Runner.xcodeproj` → Signing & Capabilities → Bundle Identifier) and
@@ -56,7 +56,7 @@ open Runner.xcworkspace
 In Xcode, verify **once**:
 
 - **Runner** target → **Signing & Capabilities** → Team = your Apple Developer
-  team, Bundle Identifier = `com.pairhub.app`, Signing = **Automatic** (or
+  team, Bundle Identifier = `com.Pairhub.app`, Signing = **Automatic** (or
   Manual with the provisioning profile from §1).
 - **Build Settings** → search for `IPHONEOS_DEPLOYMENT_TARGET` → must be
   **≥ 13.0** (Mapbox / sign_in_with_apple minimum).
@@ -76,14 +76,14 @@ flutter build ios --release \
 ```
 
 This produces a signed `.ipa` at:
-`app/build/ios/ipa/pairhub_app.ipa` (name follows `pubspec.yaml`).
+`app/build/ios/ipa/Pairhub_app.ipa` (name follows `pubspec.yaml`).
 
 **Before running, edit `app/ios/ExportOptions.plist`:**
 
 | Key | Value |
 |-----|-------|
 | `teamID` | Your 10-character Apple Team ID (Xcode → Settings → Accounts → your team, or <https://developer.apple.com/account/#/membership/>) |
-| `bundleID` | Must match Xcode → Bundle Identifier (default `com.pairhub.app`) |
+| `bundleID` | Must match Xcode → Bundle Identifier (default `com.Pairhub.app`) |
 
 > If `teamID` / `bundleID` are wrong, `flutter build ios` will fail with
 > `No signing certificate "iOS Distribution" found` or
@@ -197,7 +197,7 @@ reads from the photo library — write it in the user's language and explain
 the App Transport Security policy requires the use of a secure connection`.
 
 **Fix**: Production must use **HTTPS only**. The Pairhub backend
-(`https://api.pairhub.example`) is HTTPS. If you ever need a dev/staging
+(`https://api.Pairhub.example`) is HTTPS. If you ever need a dev/staging
 exception, add `NSAppTransportSecurity` → `NSAllowsLocalNetworking` (NOT
 `NSAllowsArbitraryLoads`) to `Info.plist`, and only inside an `#if DEBUG`
 Swift flag.

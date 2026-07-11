@@ -1,4 +1,4 @@
-# Pairhub — 安全清单 v1.0
+﻿# Pairhub — 安全清单 v1.0
 
 > **状态**：v1.0
 > **作者**：@OpenClaw
@@ -6,7 +6,7 @@
 > **关联**：
 > - 架构：[`../architecture.md`](../architecture.md) §安全与合规
 > - 测试计划：[`test-plan-v1.0.md`](./test-plan-v1.0.md)
-> - 路线图：[`../../pairhub-plan/cto-roadmap-v1.0.md`](../../pairhub-plan/cto-roadmap-v1.0.md) §5 Q3（UGC 审核）+ R5（GDPR）
+> - 路线图：[`../../Pairhub-plan/cto-roadmap-v1.0.md`](../../Pairhub-plan/cto-roadmap-v1.0.md) §5 Q3（UGC 审核）+ R5（GDPR）
 
 ---
 
@@ -147,7 +147,7 @@ await prisma.$transaction(async (tx) => {
 **Check 列表**：
 - [ ] `.env.example` 不含真实 secret（仅占位）
 - [ ] `NODE_ENV=production` 时关闭 Fastify 详细错误（`app.setErrorHandler` 自定义）
-- [ ] CORS 白名单（仅 `*.pairhub.app` / 微信小程序后端）
+- [ ] CORS 白名单（仅 `*.Pairhub.app` / 微信小程序后端）
 - [ ] Security headers（`helmet` 插件）：CSP / X-Frame-Options / X-Content-Type-Options / Referrer-Policy
 - [ ] Docker 镜像以非 root 用户运行
 - [ ] `/health` 公开，`/ready` / `/metrics` 仅内网
@@ -630,7 +630,7 @@ async function exportUserData(userId: string): Promise<Buffer> {
 - 微信生态：[`../api/wechat.md`](../api/wechat.md) 内容安全章节
 - OWASP Top 10 2021 — https://owasp.org/Top10/
 - GDPR 官方 — https://gdpr-info.eu/
-- CTO 路线图：[`../../pairhub-plan/cto-roadmap-v1.0.md`](../../pairhub-plan/cto-roadmap-v1.0.md) §5 Q3 + R5
+- CTO 路线图：[`../../Pairhub-plan/cto-roadmap-v1.0.md`](../../Pairhub-plan/cto-roadmap-v1.0.md) §5 Q3 + R5
 
 ---
 

@@ -1,4 +1,4 @@
-package com.pairhub.app
+﻿package com.Pairhub.app
 
 import io.flutter.embedding.android.FlutterActivity
 

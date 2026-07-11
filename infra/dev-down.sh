@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+﻿#!/usr/bin/env bash
 # dev-down.sh — 停止本地数据依赖（保留数据卷）
 # 不删除数据卷，下次 dev-up 还能用。
 set -euo pipefail
@@ -20,12 +20,12 @@ if docker compose version >/dev/null 2>&1; then
 fi
 
 # 兜底：直接用 docker stop
-for name in pairhub-pg pairhub-redis pairhub-server; do
+for name in Pairhub-pg Pairhub-redis Pairhub-server; do
   if docker ps -a --format '{{.Names}}' | grep -q "^${name}$"; then
     echo "🛑 停止 ${name}..."
     docker rm -f "${name}" >/dev/null 2>&1 || true
   fi
 done
 
-echo "✅ 本地环境已停止（数据卷已保留：pairhub_pgdata）"
-echo "   如需彻底清理数据：  docker volume rm pairhub_pgdata"
+echo "✅ 本地环境已停止（数据卷已保留：Pairhub_pgdata）"
+echo "   如需彻底清理数据：  docker volume rm Pairhub_pgdata"

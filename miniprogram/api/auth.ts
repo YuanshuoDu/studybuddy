@@ -129,7 +129,7 @@ export const authApi = {
   /**
    * 拉取当前登录用户信息
    *
-   * 路径是 **/api/v1/users/me**（复数 users），与后端 module 对齐。
+   * 路径是 `/api/v1/users/me`（复数 users），与后端 module 对齐。
    */
   async getUserInfo(): Promise<User> {
     const dto = await http.get<AuthSuccessDTO['user']>('/api/v1/users/me');

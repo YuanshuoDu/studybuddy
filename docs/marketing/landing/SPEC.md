@@ -1,8 +1,8 @@
-# Landing page — Awwwards-grade treatment SPEC (v1.1)
+﻿# Landing page — Awwwards-grade treatment SPEC (v1.1)
 
 > The in-repo `index.html` is the evergreen copy + structure source.
 > This SPEC is the design team's reference for the **production** v1.1
-> landing page that ships to `pairhub.app`. It assumes a designer
+> landing page that ships to `Pairhub.app`. It assumes a designer
 > + front-end pair with 2-3 weeks of dedicated time. All the design
 > tokens, type scale, and copy are inherited from `index.html` so the
 > two are guaranteed to be a content match (only the visual treatment
@@ -33,7 +33,7 @@
 - Audio: NONE (WeChat's autoplay on iOS will mute it anyway; using
   a non-muted track creates UX friction)
 - File size budget: 4 MB at 1080p (H.265, ~2 Mbps, 20s)
-- Hosting: CloudFront, served from `https://cdn.pairhub.app/landing/hero-loop.{shortSha}.mp4`
+- Hosting: CloudFront, served from `https://cdn.Pairhub.app/landing/hero-loop.{shortSha}.mp4`
 
 ## Asset list (design team to generate)
 
@@ -110,15 +110,15 @@ slots switch to `思源宋体` (Source Han Serif). Body stays `思源黑体`.
 
 ## Rollout plan
 
-1. Design team ships static Figma file (`figma.com/pairhub/landing-v1.1`)
+1. Design team ships static Figma file (`figma.com/Pairhub/landing-v1.1`)
 2. Front-end cuts the 13 assets (1 video, 1 poster, 3 Lottie, 3 SVG
    trust, 3 QR, 1 OG, 1 favicon)
 3. Astro site builds to `dist/`, runs through Playwright for
    screenshot diffing (visual regression)
-4. Vercel preview URL: `pairhub-landing-v1-1.vercel.app`
+4. Vercel preview URL: `Pairhub-landing-v1-1.vercel.app`
 5. Smoke: Lighthouse CI on 3 viewports (mobile / tablet / desktop)
-6. Stage on `staging.pairhub.app` for 1 week
-7. Promote to production: `pairhub.app` (CNAME swap)
+6. Stage on `staging.Pairhub.app` for 1 week
+7. Promote to production: `Pairhub.app` (CNAME swap)
 8. Submit new sitemap to Google Search Console
 
 ## What `index.html` keeps doing after v1.1 ships

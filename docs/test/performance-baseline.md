@@ -1,4 +1,4 @@
-# Pairhub — 性能基线 v1.0
+﻿# Pairhub — 性能基线 v1.0
 
 > **状态**：v1.0
 > **作者**：@OpenClaw
@@ -6,7 +6,7 @@
 > **关联**：
 > - 测试计划：[`test-plan-v1.0.md`](./test-plan-v1.0.md) §2
 > - 架构：[`../architecture.md`](../architecture.md)
-> - 路线图：[`../../pairhub-plan/cto-roadmap-v1.0.md`](../../pairhub-plan/cto-roadmap-v1.0.md) §3 M2 出口
+> - 路线图：[`../../Pairhub-plan/cto-roadmap-v1.0.md`](../../Pairhub-plan/cto-roadmap-v1.0.md) §3 M2 出口
 
 ---
 
@@ -327,7 +327,7 @@ export default function () {
 - CI 矩阵：[`ci-matrix.md`](./ci-matrix.md) §2 perf job
 - 安全清单：[`security-checklist.md`](./security-checklist.md)（埋点数据脱敏）
 - 架构：[`../architecture.md`](../architecture.md) §横切（监控 / 性能）
-- CTO 路线图：[`../../pairhub-plan/cto-roadmap-v1.0.md`](../../pairhub-plan/cto-roadmap-v1.0.md) §3 M2 出口"核心接口 P95 < 300ms"
+- CTO 路线图：[`../../Pairhub-plan/cto-roadmap-v1.0.md`](../../Pairhub-plan/cto-roadmap-v1.0.md) §3 M2 出口"核心接口 P95 < 300ms"
 - Issue #24 — 性能基线
 
 ---

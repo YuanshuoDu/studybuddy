@@ -1,4 +1,4 @@
-name: backend-ci
+﻿name: backend-ci
 
 on:
   push:
@@ -27,9 +27,9 @@ jobs:
       postgres:
         image: postgres:16-alpine
         env:
-          POSTGRES_USER: pairhub
-          POSTGRES_PASSWORD: pairhub
-          POSTGRES_DB: pairhub_test
+          POSTGRES_USER: Pairhub
+          POSTGRES_PASSWORD: Pairhub
+          POSTGRES_DB: Pairhub_test
         ports: ['5432:5432']
         options: >-
           --health-cmd pg_isready
@@ -47,7 +47,7 @@ jobs:
 
     env:
       NODE_ENV: test
-      DATABASE_URL: postgresql://pairhub:pairhub@localhost:5432/pairhub_test
+      DATABASE_URL: postgresql://Pairhub:Pairhub@localhost:5432/Pairhub_test
       REDIS_URL: redis://localhost:6379
       JWT_SECRET: ci-secret-please-replace-in-prod-min-32-chars-aaaaa
       LOG_LEVEL: warn
@@ -102,7 +102,7 @@ jobs:
         if: github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v4
         with:
-          name: pairhub-server-dist
+          name: Pairhub-server-dist
           path: server/dist
           retention-days: 7
           if-no-files-found: error
@@ -122,15 +122,15 @@ jobs:
           context: ./server
           file: ./server/Dockerfile
           push: false
-          tags: pairhub-server:ci
+          tags: Pairhub-server:ci
           cache-from: type=gha
           cache-to: type=gha,mode=max
           load: true
       - name: Image size
         run: |
           echo "Image size (bytes):"
-          docker image inspect pairhub-server:ci --format '{{.Size}}'
-          SIZE_MB=$(docker image inspect pairhub-server:ci --format '{{.Size}}' | awk '{print int($1/1048576)}')
+          docker image inspect Pairhub-server:ci --format '{{.Size}}'
+          SIZE_MB=$(docker image inspect Pairhub-server:ci --format '{{.Size}}' | awk '{print int($1/1048576)}')
           echo "Image size (MB): $SIZE_MB"
           if [ "$SIZE_MB" -gt 300 ]; then
             echo "::error::Image $SIZE_MB MB exceeds 300 MB target"

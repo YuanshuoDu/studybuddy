@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Global error handler.
  *
  * Maps:
@@ -15,7 +15,7 @@ import fp from 'fastify-plugin';
 import { AppError } from '@/lib/errors.js';
 import { getEnv } from '@/lib/env.js';
 
-const ERROR_TYPE_BASE = 'https://pairhub.example.com/errors';
+const ERROR_TYPE_BASE = 'https://Pairhub.example.com/errors';
 
 function problemTypeFor(code: string): string {
   return `${ERROR_TYPE_BASE}/${code.toLowerCase().replace(/_/g, '-')}`;

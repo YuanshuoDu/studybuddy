@@ -1,4 +1,4 @@
-// Dashboard metrics — issue #32 frontend (Flutter half).
+﻿// Dashboard metrics — issue #32 frontend (Flutter half).
 //
 // 4 hero numbers in a 2×2 glass grid (Users / Activities / Signups /
 // PushTokens). Tapping a card jumps to the corresponding search screen
@@ -94,7 +94,7 @@ class _Header extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          'PAIRHUB',
+          'Pairhub',
           style: context.text.bodySmall?.copyWith(
             letterSpacing: 4,
             color: context.colorScheme.onSurfaceVariant,

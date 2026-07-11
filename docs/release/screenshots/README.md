@@ -1,4 +1,4 @@
-# App store screenshots — spec (issue #33)
+﻿# App store screenshots — spec (issue #33)
 
 > 5-8 screenshots per platform (iOS / Android / WeChat Mini Program) for
 > the M3 launch. Every screenshot has: a fixed safe area, copy slots,
@@ -144,7 +144,7 @@ Examples:
 - `android-phone-frame-4-en.png`
 - `mp-wechat-frame-3-zh.png`
 
-S3 path: `s3://pairhub-release-assets/screenshots/v{version}/{filename}`
+S3 path: `s3://Pairhub-release-assets/screenshots/v{version}/{filename}`
 
 ## Style guardrails (do NOT do these in any screenshot)
 

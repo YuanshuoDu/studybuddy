@@ -1,4 +1,4 @@
-# Share cards — design + copy spec (issue #33)
+﻿# Share cards — design + copy spec (issue #33)
 
 > 3 share-card variants users send when they want to invite a friend
 > to a Pairhub activity. Each has a different aspect ratio, copy
@@ -162,7 +162,7 @@ footer:   长按识别二维码报名 · Pairhub
 │  │                                      │   │
 │  └──────────────────────────────────────┘   │
 │                                             │
-│ [logo bottom-left]    [pairhub.app]      │
+│ [logo bottom-left]    [Pairhub.app]      │
 └─────────────────────────────────────────────┘
 ```
 
@@ -173,7 +173,7 @@ title:     Pairhub · {活动类型 emoji} {活动标题}
 subtitle:  {开始时间, e.g. Sat 19:00 PDT} · {城市} · {距离} km
 body:      「{英文描述前 50 字}」
 cta:       → Sign up via the link in bio
-footer:    pairhub.app · #Pairhub
+footer:    Pairhub.app · #Pairhub
 ```
 
 ### Design tokens
@@ -207,7 +207,7 @@ H5 activity page (which itself has the OG fallback for Twitter).
 ## Asset versioning
 
 Every PNG export gets a content-hash suffix in the S3 path:
-`pairhub-assets/share-cards/wechat-moments.{shortSha}.png`. The
+`Pairhub-assets/share-cards/wechat-moments.{shortSha}.png`. The
 Flutter `AssetManifest` is regenerated on every build, so a content
 change never ships a stale card.
 

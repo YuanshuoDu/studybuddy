@@ -1,4 +1,4 @@
-# Admin v1 — Operator Runbook (issue #32)
+﻿# Admin v1 — Operator Runbook (issue #32)
 
 This doc covers the M3 launch admin surface. The endpoints live at
 `/api/v1/admin/*` and are gated by the `adminOnly` preHandler
@@ -64,17 +64,17 @@ ADMIN_TOKEN="ey..."
 
 # 2. See what's pending.
 curl -H "Authorization: Bearer $ADMIN_TOKEN" \
-     https://api.pairhub.app/api/v1/admin/activities
+     https://api.Pairhub.app/api/v1/admin/activities
 
 # 3. Approve one.
 curl -X POST -H "Authorization: Bearer $ADMIN_TOKEN" \
-     https://api.pairhub.app/api/v1/admin/activities/ckact_xxxx/approve
+     https://api.Pairhub.app/api/v1/admin/activities/ckact_xxxx/approve
 
 # 4. Or reject with a reason.
 curl -X POST -H "Authorization: Bearer $ADMIN_TOKEN" \
      -H "Content-Type: application/json" \
      -d '{"reason":"活动包含违规链接"}' \
-     https://api.pairhub.app/api/v1/admin/activities/ckact_xxxx/reject
+     https://api.Pairhub.app/api/v1/admin/activities/ckact_xxxx/reject
 ```
 
 ---
@@ -104,13 +104,13 @@ threshold where this matters.
 ```bash
 # Search first (phone or nickname).
 curl -H "Authorization: Bearer $ADMIN_TOKEN" \
-     "https://api.pairhub.app/api/v1/admin/users?search=+12345678901"
+     "https://api.Pairhub.app/api/v1/admin/users?search=+12345678901"
 
 # Ban.
 curl -X PATCH -H "Authorization: Bearer $ADMIN_TOKEN" \
      -H "Content-Type: application/json" \
      -d '{"status":"BANNED","note":"repeat spam"}' \
-     https://api.pairhub.app/api/v1/admin/users/usr_target/status
+     https://api.Pairhub.app/api/v1/admin/users/usr_target/status
 ```
 
 The ban takes effect on the user's **next** request (≤ 15 min — the
@@ -128,7 +128,7 @@ is intact.
 
 ```bash
 curl -H "Authorization: Bearer $ADMIN_TOKEN" \
-     https://api.pairhub.app/api/v1/admin/dashboard/metrics
+     https://api.Pairhub.app/api/v1/admin/dashboard/metrics
 ```
 
 Sample response (counts grow with usage):

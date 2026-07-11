@@ -1,4 +1,4 @@
-// Pairhub Flutter app entry point.
+﻿// Pairhub Flutter app entry point.
 //
 // Wires up the dependency injection (Riverpod) and the router (GoRouter),
 // then hands off to the theme + router configuration defined in core/.

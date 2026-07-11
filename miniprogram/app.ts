@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Pairhub 小程序 App 入口
  *
  * 职责：
@@ -63,7 +63,7 @@ App({
     wx.onUnhandledRejection((res) => {
       const reason = (res as { reason?: unknown }).reason;
       try {
-        wx.reportMonitor('pairhub_unhandled_rejection', 1);
+        wx.reportMonitor('Pairhub_unhandled_rejection', 1);
       } catch {
         /* swallow */
       }
@@ -96,7 +96,7 @@ App({
   onError(error: string) {
     // 1) 微信原生性能监控 — 运营后台「性能监控」可见
     try {
-      wx.reportMonitor('pairhub_script_error', 1);
+      wx.reportMonitor('Pairhub_script_error', 1);
     } catch {
       /* reportMonitor 自身不可用时 swallow */
     }
@@ -111,7 +111,7 @@ App({
   onPageNotFound(res: WechatMiniprogram.OnPageNotFoundListenerResult) {
     console.warn('[App] onPageNotFound', res);
     try {
-      wx.reportMonitor('pairhub_page_not_found', 1);
+      wx.reportMonitor('Pairhub_page_not_found', 1);
     } catch {
       /* swallow */
     }

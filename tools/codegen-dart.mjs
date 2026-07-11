@@ -1,4 +1,4 @@
-/* eslint-disable no-console -- CLI tool, stdout is the whole point */
+﻿/* eslint-disable no-console -- CLI tool, stdout is the whole point */
 /**
  * Generate Dart DTOs from the v1 OpenAPI spec.
  *
@@ -379,7 +379,7 @@ for (const [name, schema] of Object.entries(schemas)) {
 }
 
 // Barrel: re-exports all generated types so consumers can
-//   `import 'package:pairhub_app/api/openapi/openapi.dart';`
+//   `import 'package:Pairhub_app/api/openapi/openapi.dart';`
 //   and pull in everything.
 const barrel = [
   `// GENERATED barrel for the openapi codegen.`,

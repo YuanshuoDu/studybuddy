@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Rate limiting plugin.
  *
  * - Global:   RATE_LIMIT_MAX req / minute / IP (default 100)
@@ -28,7 +28,7 @@ async function rateLimitPlugin(app: FastifyInstance): Promise<void> {
     // Count all responses (including 4xx) so login brute-force gets caught.
     skipOnError: false,
     errorResponseBuilder: (req, ctx) => ({
-      type: 'https://pairhub.example.com/errors/rate-limit-exceeded',
+      type: 'https://Pairhub.example.com/errors/rate-limit-exceeded',
       title: 'Too Many Requests',
       status: 429,
       detail: `请求过于频繁，请 ${Math.ceil(ctx.ttl / 1000)} 秒后再试`,

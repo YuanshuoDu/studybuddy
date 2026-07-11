@@ -1,5 +1,5 @@
-{
-  "name": "pairhub-server",
+﻿{
+  "name": "Pairhub-server",
   "version": "0.1.0",
   "description": "Pairhub backend API — Node 20 + Fastify 4 + Prisma 5 + PostgreSQL 16 + Redis 7",
   "private": true,

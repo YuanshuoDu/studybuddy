@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+﻿#!/usr/bin/env bash
 # scripts/lint-wxss.sh — canonical WXSS lint wrapper for the Pairhub
 # miniprogram. Always runs from the repo root and uses the literal glob
 # `miniprogram/**/*.wxss` so the command is reproducible regardless of cwd.

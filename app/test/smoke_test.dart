@@ -1,4 +1,4 @@
-// Pairhub Flutter app — smoke test.
+﻿// Pairhub Flutter app — smoke test.
 //
 // This is a deliberately minimal widget test that exists so the
 // `flutter test` step in CI has at least one passing case. The
@@ -12,12 +12,12 @@ void main() {
     await tester.pumpWidget(
       const MaterialApp(
         home: Scaffold(
-          body: Center(child: Text('pairhub')),
+          body: Center(child: Text('Pairhub')),
         ),
       ),
     );
 
-    expect(find.text('pairhub'), findsOneWidget);
+    expect(find.text('Pairhub'), findsOneWidget);
     expect(find.byType(Scaffold), findsOneWidget);
   });
 }

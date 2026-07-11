@@ -1,6 +1,6 @@
 {
   "navigationBarTitleText": "审核队列",
-  "navigationBarBackgroundColor": "transparent",
+  "navigationBarBackgroundColor": "#0B1020",
   "navigationBarTextStyle": "white",
   "backgroundColor": "#0B1020",
   "enablePullDownRefresh": true,

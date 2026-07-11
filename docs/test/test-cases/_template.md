@@ -1,4 +1,4 @@
-# T-XXX — 用例模板
+﻿# T-XXX — 用例模板
 
 > **模块**：`<module>` / `<feature>`
 > **关联 API**：`<METHOD> <endpoint>`
@@ -10,7 +10,7 @@
 ## TC-XXX-001  用例标题
 - **优先级**：P0 / P1 / P2 / P3
 - **类型**：正向 / 反向 / 边界 / 异常 / 性能 / 安全
-- **关联用户故事**：[#xx](https://github.com/YuanshuoDu/pairhub/issues/xx)
+- **关联用户故事**：[#xx](https://github.com/YuanshuoDu/Pairhub/issues/xx)
 - **前置条件**：
   - 列出所有环境/数据/依赖
 - **步骤**：

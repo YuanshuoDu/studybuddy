@@ -1,4 +1,4 @@
-# ADR-0005: 数据存储地域 — AWS only
+﻿# ADR-0005: 数据存储地域 — AWS only
 
 > **状态**：Accepted · 2026-06-05
 > **决策人**：@杜元朔 · **CTO 提报**：@Oracle Hermes

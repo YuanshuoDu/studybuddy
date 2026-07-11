@@ -1,4 +1,4 @@
-<wxs src="../../wxs/format.wxs" module="fmt" />
+﻿<wxs src="../../wxs/format.wxs" module="fmt" />
 <view class="map-page">
   <!-- 顶部：定位状态 + 半径控制 -->
   <view class="map-header">
@@ -32,7 +32,7 @@
     <view wx:else class="map-placeholder">
       <text class="map-emoji">🗺️</text>
       <view class="map-placeholder-title">Mapbox 视图</view>
-      <view class="map-placeholder-desc">生产环境配置 pairhub.app/m/embed.html 后即可启用</view>
+      <view class="map-placeholder-desc">生产环境配置 Pairhub.app/m/embed.html 后即可启用</view>
     </view>
   </view>
 

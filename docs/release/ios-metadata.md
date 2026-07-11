@@ -1,4 +1,4 @@
-# iOS App Store Connect Metadata — Pairhub
+﻿# iOS App Store Connect Metadata — Pairhub
 
 > **Status**: Template — copy / paste into App Store Connect when the
 > first TestFlight build is ready, then update placeholders.
@@ -15,14 +15,14 @@ external storage once issue #34 monitoring lands).
 | Field | Value |
 |-------|-------|
 | **App name** | Pairhub |
-| **Subtitle** *(30 chars max)* | Find your study buddy abroad |
+| **Subtitle** *(30 chars max)* | Find your Pair Hub abroad |
 | **Primary category** | Education |
 | **Secondary category** | Social Networking |
 | **Age rating** | 4+ |
 | **Content rights** | Contains no third-party content |
-| **Privacy policy URL** | `https://pairhub.example/privacy` *(placeholder — replace with the real URL once #34 monitoring lands and the prod hostname is known)* |
-| **Support URL** | `https://pairhub.example/support` *(placeholder — replace with the real URL; can be a GitHub Issues page for early TestFlight builds)* |
-| **Marketing URL** *(optional)* | `https://pairhub.example` |
+| **Privacy policy URL** | `https://Pairhub.example/privacy` *(placeholder — replace with the real URL once #34 monitoring lands and the prod hostname is known)* |
+| **Support URL** | `https://Pairhub.example/support` *(placeholder — replace with the real URL; can be a GitHub Issues page for early TestFlight builds)* |
+| **Marketing URL** *(optional)* | `https://Pairhub.example` |
 
 ---
 
@@ -31,7 +31,7 @@ external storage once issue #34 monitoring lands).
 *(4000 chars max — current draft is 281 chars; can be expanded for App Store
 submission vs. TestFlight.)*
 
-> Pairhub helps overseas students find a study buddy in 30 seconds.
+> Pairhub helps overseas students find a Pair Hub in 30 seconds.
 > Create or browse activities across five categories — studying,
 > sports, board games, online gaming, and more — then sign up with a
 > single tap. WeChat-style messaging, Apple/Google/WeChat sign-in, and
@@ -74,7 +74,7 @@ submission, swap in this longer pitch:
 *(100 chars max, comma-separated, no spaces after commas.)*
 
 ```
-study buddy,留学生,study group,homeschool,university,留学生搭子,自习,搭子,学习搭子
+Pair Hub,留学生,study group,homeschool,university,留学生搭子,自习,搭子,学习搭子
 ```
 
 Current length: **76 chars** (room to spare — can add 1–2 more terms like
@@ -104,7 +104,7 @@ Current length: **76 chars** (room to spare — can add 1–2 more terms like
 > • Built-in messaging (basic)
 >
 > Found a bug? Tap the gear icon → "Report a Problem" or email
-> support@pairhub.example.
+> support@Pairhub.example.
 
 ---
 
@@ -116,8 +116,8 @@ Connect. Keep them short and action-oriented.
 | Field | Value |
 |-------|-------|
 | **What to test** | Sign in with Apple and Google, browse the activity list, filter by category, create a new activity with a cover image, sign up for an activity, and send a message. |
-| **Test account** *(if needed)* | `tester@pairhub.example` / `PairhubTest2024!` (rotated per release) |
-| **Feedback email** | `beta-feedback@pairhub.example` |
+| **Test account** *(if needed)* | `tester@Pairhub.example` / `PairhubTest2024!` (rotated per release) |
+| **Feedback email** | `beta-feedback@Pairhub.example` |
 | **Marketing opt-in** | No (until App Store launch) |
 
 ---
@@ -166,7 +166,7 @@ on an iPhone 15 / 15 Pro before the App Store submission.
 
 Suggested screenshot order:
 
-1. **Onboarding** — "Find a study buddy in 30 seconds"
+1. **Onboarding** — "Find a Pair Hub in 30 seconds"
 2. **Activity list** — with category filters
 3. **Activity detail** — title / time / place / sign-up CTA
 4. **Create activity** — flow with cover image
@@ -208,7 +208,7 @@ the operator runbook for the iOS / Android releases.
 
 1. Sign in to <https://account.mapbox.com/access-tokens/>
 2. Click **Create a token**
-3. Name it `pairhub-<platform>-public` (e.g. `pairhub-ios-public`)
+3. Name it `Pairhub-<platform>-public` (e.g. `Pairhub-ios-public`)
 4. **Public scopes only** (defaults: `styles:read`, `fonts:read`,
    `vision:read`, optionally `geocoding:read`). Do **NOT** enable any
    secret scopes on this token.
@@ -274,7 +274,7 @@ needed by Gradle to pull the native SDK from
 
 - Rotate the **public** token every 90 days (revoke old + create new).
 - Restrict the public token's allowed URL referrers to
-  `pairhub.app/*` in the Mapbox dashboard.
+  `Pairhub.app/*` in the Mapbox dashboard.
 - The Mapbox **secret** token (Android downloads) should be rotated
   every 6 months; any compromise requires revoking immediately and
   invalidating the old token's `Downloads: Read` scope.

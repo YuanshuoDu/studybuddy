@@ -1,4 +1,4 @@
-# Pairhub — CI 测试矩阵 v1.0
+﻿# Pairhub — CI 测试矩阵 v1.0
 
 > **状态**：v1.0
 > **作者**：@OpenClaw
@@ -6,7 +6,7 @@
 > **关联**：
 > - 测试计划：[`test-plan-v1.0.md`](./test-plan-v1.0.md)
 > - 交付规范：[`../delivery-standards.md`](../delivery-standards.md)
-> - 路线图：[`../../pairhub-plan/cto-roadmap-v1.0.md`](../../pairhub-plan/cto-roadmap-v1.0.md) §4.5、§4.6
+> - 路线图：[`../../Pairhub-plan/cto-roadmap-v1.0.md`](../../Pairhub-plan/cto-roadmap-v1.0.md) §4.5、§4.6
 
 ---
 
@@ -40,7 +40,7 @@
 | `backend-lint` | eslint + prettier | `pnpm install --frozen-lockfile && pnpm lint` | PR + main + tag | 3 min | - |
 | `backend-unit` | vitest | `pnpm test:unit` | PR + main + tag | 5 min | `NODE_ENV=test` |
 | `backend-build` | tsc + esbuild | `pnpm build && pnpm prisma generate` | PR + main + tag | 5 min | - |
-| `backend-docker` | docker buildx | `docker build -t pairhub-api:test .`（仅 build，不推） | PR + main + tag | 8 min | - |
+| `backend-docker` | docker buildx | `docker build -t Pairhub-api:test .`（仅 build，不推） | PR + main + tag | 8 min | - |
 | `backend-integration` | vitest + supertest + 真 PG + 真 Redis | `docker compose -f docker-compose.test.yml up -d && pnpm test:integration && docker compose down` | **main + tag** | 10 min | `DATABASE_URL=postgres://...`, `REDIS_URL=redis://...` |
 | `backend-e2e` | vitest E2E（miniprogram-automator 驱动真小程序 → 后端） | 同上 + automator | **tag** | 20 min | `WECHAT_APPID`（E2E 专用） |
 | `backend-perf` | k6 | `k6 run --out json=perf.json tests/perf/api.js`，P95 > 300ms 失败 | **tag + 周** | 10 min | - |
@@ -163,16 +163,16 @@ backend-test:
 
 README.md 顶部展示：
 ```markdown
-[![Backend CI](https://github.com/YuanshuoDu/pairhub/actions/workflows/backend-ci.yml/badge.svg)](...)
+[![Backend CI](https://github.com/YuanshuoDu/Pairhub/actions/workflows/backend-ci.yml/badge.svg)](...)
 [![MiniProgram CI](...)](...)
 [![Flutter CI](...)](...)
 [![Docs CI](...)](...)
 ```
 
 **Slack / 飞书通知**（DevOps track 接入）：
-- PR 失败 → 推到 `#pairhub-ci` 频道
-- main 失败 → 推到 `#pairhub-oncall`
-- tag 失败 → 推到 `#pairhub-release` + @CTO
+- PR 失败 → 推到 `#Pairhub-ci` 频道
+- main 失败 → 推到 `#Pairhub-oncall`
+- tag 失败 → 推到 `#Pairhub-release` + @CTO
 
 ---
 
@@ -231,7 +231,7 @@ W4 末必须满足：
 - 性能基线：[`performance-baseline.md`](./performance-baseline.md) §0 性能门禁
 - 安全清单：[`security-checklist.md`](./security-checklist.md) §CI 集成
 - 交付规范：[`../delivery-standards.md`](../delivery-standards.md) §2.1 CI 截图
-- CTO 路线图：[`../../pairhub-plan/cto-roadmap-v1.0.md`](../../pairhub-plan/cto-roadmap-v1.0.md) §4.6 DevOps Track
+- CTO 路线图：[`../../Pairhub-plan/cto-roadmap-v1.0.md`](../../Pairhub-plan/cto-roadmap-v1.0.md) §4.6 DevOps Track
 
 ---
 

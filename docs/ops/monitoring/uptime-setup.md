@@ -1,4 +1,4 @@
-# Uptime monitoring (issue #34)
+﻿# Uptime monitoring (issue #34)
 
 External HTTP ping service. The Pairhub API is considered "up"
 when `GET /api/v1/monitoring/liveness` returns 200 within 3 seconds.
@@ -30,9 +30,9 @@ Alternative services we considered but rejected for M3:
 
    | Monitor | URL | Interval | Notes |
    | --- | --- | --- | --- |
-   | `pairhub-api-eu-west` | `https://api.pairhub.app/api/v1/monitoring/liveness` | 1 min | Frankfurt probe |
-   | `pairhub-api-us-east` | same | 1 min | Virginia probe (catches EU-only outages) |
-   | `pairhub-api-ap-southeast` | same | 1 min | Singapore probe (catches EU + US-only outages) |
+   | `Pairhub-api-eu-west` | `https://api.Pairhub.app/api/v1/monitoring/liveness` | 1 min | Frankfurt probe |
+   | `Pairhub-api-us-east` | same | 1 min | Virginia probe (catches EU-only outages) |
+   | `Pairhub-api-ap-southeast` | same | 1 min | Singapore probe (catches EU + US-only outages) |
 
    All 3 should expect HTTP 200 within 3s. Anything else = down.
 
@@ -42,7 +42,7 @@ Alternative services we considered but rejected for M3:
    - **Pro tier**: also gets phone call escalation after 5 min
 
 4. **Status page** (optional, free): Better Uptime can host a
-   `status.pairhub.app` page that shows public uptime. Worth
+   `status.Pairhub.app` page that shows public uptime. Worth
    turning on after the M3 launch when we have paying users.
 
 ## What counts as "down"
@@ -67,14 +67,14 @@ to catch a real outage.
 | DB queries | Better Uptime only does HTTP. Slow-query monitoring lives in Grafana. |
 | Redis cache hit ratio | Same — internal metric, not a health signal |
 | Push token TTL | Operational, not a health signal |
-| Background jobs | Use the `pairhub_background_job_last_run_timestamp` metric + R8 alert rule |
+| Background jobs | Use the `Pairhub_background_job_last_run_timestamp` metric + R8 alert rule |
 
 ## When the alert fires (the playbook)
 
 1. Check the **3 monitor regions** in Better Uptime. If all 3 are
    down → real outage. If only 1 is down → regional issue.
 2. Check **Grafana** for the Pairhub API Overview dashboard. If
-   `pairhub_http_requests_in_flight` is climbing, the process
+   `Pairhub_http_requests_in_flight` is climbing, the process
    is hung. Otherwise look at 5xx rate.
 3. Check **Sentry** for the latest error events. The error is
    probably already there with a stack trace.

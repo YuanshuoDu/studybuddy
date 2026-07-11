@@ -1,4 +1,4 @@
-# Fastfile — Pairhub iOS TestFlight upload
+﻿# Fastfile — Pairhub iOS TestFlight upload
 #
 # Secondary / CI-driven upload path. The PRIMARY upload path is the
 # Xcode → Organizer → Distribute App flow described in app/ios/README.md §4.
@@ -39,7 +39,7 @@ platform :ios do
   PROJECT   = "Runner.xcworkspace"
   SCHEME    = "Runner"
   CONFIG    = "Release"
-  BUNDLE_ID = "com.pairhub.app"
+  BUNDLE_ID = "com.Pairhub.app"
   EXPORT_OPTS = {
     method: "app-store",
     teamID: ENV["APPLE_TEAM_ID"],
@@ -73,7 +73,7 @@ platform :ios do
       # Don't clean derived data every run — speeds up CI.
       clean: false,
       output_directory: "./build",
-      output_name: "pairhub_app.ipa"
+      output_name: "Pairhub_app.ipa"
     )
 
     # Upload to TestFlight. `skip_waiting_for_build_processing: true` returns
@@ -102,10 +102,10 @@ platform :ios do
       skip_package_pkg: true,    # don't even build the .pkg
       skip_package_ipa: false,   # we DO want the .ipa
       output_directory: "./build",
-      output_name: "pairhub_app.ipa"
+      output_name: "Pairhub_app.ipa"
     )
 
-    UI.success("Build OK — .ipa at ./build/pairhub_app.ipa")
+    UI.success("Build OK — .ipa at ./build/Pairhub_app.ipa")
   end
 
   # ------------------------------------------------------------------

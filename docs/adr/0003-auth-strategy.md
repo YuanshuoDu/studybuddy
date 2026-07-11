@@ -1,9 +1,9 @@
-# ADR-0003: 多端登录合并到同一 User（微信 + Apple + Google openid/sub 合并）
+﻿# ADR-0003: 多端登录合并到同一 User（微信 + Apple + Google openid/sub 合并）
 
 > **状态**：✅ Accepted
 > **日期**：2026-06-05
 > **决策人**：@YuanshuoDu（决策人） / @Oracle Hermes（CTO 提报）
-> **关联**：[cto-roadmap-v1.0.md §0 Q1](../../pairhub-plan/cto-roadmap-v1.0.md) · [architecture-v1.0.md §5.1](../architecture-v1.0.md) · [api/v1.md §3](../api/v1.md)
+> **关联**：[cto-roadmap-v1.0.md §0 Q1](../../Pairhub-plan/cto-roadmap-v1.0.md) · [architecture-v1.0.md §5.1](../architecture-v1.0.md) · [api/v1.md §3](../api/v1.md)
 
 ## Context（背景）
 

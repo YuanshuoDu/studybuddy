@@ -1,4 +1,4 @@
-# Privacy Policy
+﻿# Privacy Policy
 
 > English version ｜ 简体中文见 [privacy-policy.zh.md](./privacy-policy.zh.md)
 > Last updated: 2026-06-08
@@ -60,7 +60,7 @@ We use the collected information for:
 - Transport: full-site HTTPS / TLS 1.3
 - Storage: passwords bcrypt (cost = 12), sensitive fields AES-256-GCM
 - Access control: role-based minimal privileges (RBAC), audit logs retained 365 days
-- Vulnerability response: please send to security@pairhub.app, acknowledged within 48h
+- Vulnerability response: please send to security@Pairhub.app, acknowledged within 48h
 
 ## 4. Information Sharing and Disclosure
 
@@ -82,7 +82,7 @@ You have the following rights over your personal information:
 | **Correct** | Profile → Edit |
 | **Delete** | Profile → Settings → Delete Account (30-day full purge) |
 | **Withdraw authorization** | Settings → Privacy → disable feature (same-school / location / phone) |
-| **Complain / Report** | Report button on each activity / profile, or email report@pairhub.app |
+| **Complain / Report** | Report button on each activity / profile, or email report@Pairhub.app |
 | **Data protection complaint** | Cyberspace Administration of China, hotline 12377 |
 
 ## 6. Cookies and Local Storage
@@ -115,7 +115,7 @@ We use the following third-party SDKs, each collecting only the information nece
 
 Pairhub is for **users aged 18 and above**. Registration requires ticking the "I am 18 or older" checkbox.
 
-We **do not** actively collect information from minors. If you find a user under 18, please contact support@pairhub.app, and we will immediately delete their account.
+We **do not** actively collect information from minors. If you find a user under 18, please contact support@Pairhub.app, and we will immediately delete their account.
 
 ## 9. Policy Changes
 
@@ -123,10 +123,10 @@ Updates to this Policy will be notified to you via in-app notice **7 days before
 
 ## 10. Contact Us
 
-- Data Protection Officer: dpo@pairhub.app
-- Customer support: support@pairhub.app
-- Reports: report@pairhub.app
-- Security: security@pairhub.app
+- Data Protection Officer: dpo@Pairhub.app
+- Customer support: support@Pairhub.app
+- Reports: report@Pairhub.app
+- Security: security@Pairhub.app
 - Address: XXX Tech Park, XXX Road, Nanshan District, Shenzhen, China
 
 The final right of interpretation of this Policy belongs to XXX Technology Co., Ltd.

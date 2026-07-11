@@ -1,9 +1,9 @@
-# Pairhub — 系统架构 v1.0
+﻿# Pairhub — 系统架构 v1.0
 
 > **作者**：@Oracle Hermes（CTO, Mavis / architect agent）
 > **决策人**：@YuanshuoDu
 > **生效日期**：2026-06-05
-> **状态**：v1.0 — 与 CTO 总体规划 `pairhub-plan/cto-roadmap-v1.0.md` 对齐
+> **状态**：v1.0 — 与 CTO 总体规划 `Pairhub-plan/cto-roadmap-v1.0.md` 对齐
 > **配套文档**：[`docs/spec-v0.2.md`](./spec-v0.2.md) · [`docs/api/v1.md`](./api/v1.md) · [`docs/adr/`](./adr/)
 > **演进基线**：[`docs/architecture.md`](./architecture.md)（v0.1，仅微信小程序）— 保留作历史参考
 
@@ -805,7 +805,7 @@ flowchart LR
 
 | 文档 | 路径 | 状态 |
 |------|------|------|
-| CTO 总体规划 | `pairhub-plan/cto-roadmap-v1.0.md` | v1.0 已对齐 |
+| CTO 总体规划 | `Pairhub-plan/cto-roadmap-v1.0.md` | v1.0 已对齐 |
 | 需求规格 v0.2 | `docs/spec-v0.2.md` | v0.2 落地 |
 | 架构 v0.1（仅 MP） | `docs/architecture.md` | 历史参考 |
 | **架构 v1.0（本文件）** | `docs/architecture-v1.0.md` | **v1.0 当前** |

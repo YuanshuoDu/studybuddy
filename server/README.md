@@ -1,4 +1,4 @@
-# Pairhub Backend (Scaffold)
+﻿# Pairhub Backend (Scaffold)
 
 > Node.js 20 + TypeScript 5 + Fastify 4 + Prisma 5 + PostgreSQL 16 + Redis 7
 > 配套文档：[docs/spec-v0.2.md](../../docs/spec-v0.2.md), [docs/api/conventions.md](../../docs/api/conventions.md), [docs/server/dev-setup.md](../../docs/server/dev-setup.md), [docs/server/api-style.md](../../docs/server/api-style.md)
@@ -92,9 +92,9 @@ server/
 
 ```bash
 # 多阶段镜像（runtime 镜像 < 200MB）
-docker build -t pairhub-server:latest .
+docker build -t Pairhub-server:latest .
 
-docker run -p 3000:3000 --env-file .env pairhub-server:latest
+docker run -p 3000:3000 --env-file .env Pairhub-server:latest
 ```
 
 或用根目录的 `docker compose`：
